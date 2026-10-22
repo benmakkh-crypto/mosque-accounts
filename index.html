@@ -1,0 +1,1132 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>حسابات الجوامع — بنجلاديش</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* لوحة دفتر حسابات: شريط علوي ثابت ← تبويبات ← سطح العمل. يدعم RTL و LTR */
+:root{
+  --bg:#f4f6f3; --surface:#fff; --sunk:#e9eee9; --line:#d5ddd6; --fg:#17231d; --muted:#5d6e64;
+  --ink:#0d5a48; --ink-soft:#d9ebe4; --on-ink:#fff;
+  --ok:#1f7a45; --ok-bg:#e1f2e7; --warn:#9a5b00; --warn-bg:#fbefd8; --bad:#b3261e; --bad-bg:#fbe3e1;
+  --m1:#0d5a48; --m2:#2f6fa6; --m3:#8a5a12; --m4:#7a3e78;
+  --f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic","Hind Siliguri",Tahoma,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Hind Siliguri",Tahoma,"Segoe UI",sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f1613; --surface:#16201b; --sunk:#1c2822; --line:#2b3a32; --fg:#e4ece7; --muted:#97a89e;
+  --ink:#4fbf9c; --ink-soft:#1d3a31; --on-ink:#06261d;
+  --ok:#6fd39a; --ok-bg:#163223; --warn:#f0b75e; --warn-bg:#3a2a10; --bad:#ff8a80; --bad-bg:#3d1a17;
+  --m1:#4fbf9c; --m2:#78aee0; --m3:#d9a654; --m4:#cf8ccc; color-scheme:dark}}
+html[lang="bn"]{--f-body:"Hind Siliguri","IBM Plex Sans Arabic",sans-serif;--f-display:"Hind Siliguri",sans-serif}
+html[lang="en"]{--f-body:"IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;--f-display:"IBM Plex Sans Arabic",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;padding-top:env(safe-area-inset-top,0px)}
+[hidden]{display:none!important}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:12px 0;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;justify-content:space-between}
+h1{font-family:var(--f-display);font-size:1.25rem;margin:0;text-wrap:balance}
+.sub{color:var(--muted);font-size:.85rem}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:500}
+.btn:hover{background:var(--sunk)}
+.btn.primary{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.small{padding:4px 10px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row-flex{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--bg);padding:5px 12px;border-radius:999px;cursor:pointer;font-size:.88rem;display:inline-flex;align-items:center;gap:6px}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lang button{border:0;background:none;padding:6px 10px;cursor:pointer;font-size:.85rem}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{border:0;background:none;padding:10px 14px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500}
+nav.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--ink)}
+main .wrap{padding-block:20px 60px;display:flex;flex-direction:column;gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.sec-h{font-family:var(--f-display);font-size:1.02rem;margin:0}
+.ph{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.mcard{padding:16px;display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--mc)}
+.mcard h3{margin:0;font-family:var(--f-display);font-size:1.05rem}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.9rem;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;text-align:end}
+.bar{height:8px;background:var(--sunk);border-radius:4px;overflow:hidden;display:flex}
+.bar span{display:block;height:100%}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:1px 9px;border-radius:999px;font-size:.78rem;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.bad{background:var(--bad-bg);color:var(--bad)} .pill.mute{background:var(--sunk);color:var(--muted)}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.totals div{background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.totals .lbl{font-size:.8rem;color:var(--muted)} .totals .val{font-size:1.15rem;font-weight:600}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px}
+.toolbar input[type=search]{flex:1 1 220px;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px}
+.toolbar select{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px}
+.tog{display:inline-flex;gap:6px;align-items:center;font-size:.88rem;color:var(--muted);cursor:pointer}
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.8rem;background:var(--sunk);white-space:nowrap}
+.amt{text-align:end}
+tbody tr.row{cursor:pointer} tbody tr.row:hover{background:var(--sunk)}
+tr.flag td:first-child{box-shadow:inset -3px 0 0 var(--warn)}
+html[dir="ltr"] tr.flag td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
+tfoot td{font-weight:700;background:var(--sunk)}
+.mtag{display:inline-block;padding:0 7px;border-radius:5px;font-size:.75rem;font-weight:600;color:var(--surface);background:var(--mc)}
+.muted{color:var(--muted)} .small{font-size:.8rem}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.notice{padding:10px 14px;border-radius:8px;background:var(--warn-bg);color:var(--warn);font-size:.9rem}
+.notice.info{background:var(--ink-soft);color:var(--fg)}
+dialog{border:0;border-radius:14px;padding:0;width:min(660px,calc(100vw - 24px));background:var(--surface);color:var(--fg);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog.wide{width:min(900px,calc(100vw - 24px))}
+dialog::backdrop{background:rgba(10,20,15,.5)}
+dialog form,dialog .dbody{display:flex;flex-direction:column;gap:14px;padding:20px;max-height:86vh;overflow:auto}
+dialog h2{margin:0;font-family:var(--f-display);font-size:1.1rem}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fgrid .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:.82rem;color:var(--muted);font-weight:500}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;width:100%}
+.field input:disabled,.field select:disabled,.field textarea:disabled{opacity:.75}
+.field .hint{font-size:.76rem;color:var(--muted)}
+.field.req label::after{content:" *";color:var(--bad)}
+fieldset.box{border:1px dashed var(--ink);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;margin:0}
+fieldset.box legend{padding:0 6px;font-weight:600;color:var(--ink)}
+.thumb{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.thumb img{width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.actions{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.actions .r{display:flex;gap:8px}
+.err{color:var(--bad);font-size:.88rem}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:20}
+.pager{display:flex;justify-content:center;padding:12px}
+table.inst td{padding:4px}
+table.inst input,table.inst select{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:6px;width:100%;min-width:90px}
+.mis{padding:14px;display:flex;flex-direction:column;gap:10px;border-top:3px solid var(--mc)}
+.mis h4{margin:0;font-size:1rem}
+.steps{display:flex;flex-wrap:wrap;gap:4px}
+.step{font-size:.72rem;padding:2px 7px;border-radius:5px;border:1px solid var(--line);color:var(--muted)}
+.step.done{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.step.progress{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.note{padding:14px;display:flex;flex-direction:column;gap:6px;border-inline-start:4px solid var(--mc)}
+.note.done{opacity:.6}
+.note .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--muted)}
+.note p{margin:0;white-space:pre-wrap}
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px}
+.login .card{width:min(420px,100%);padding:28px;display:flex;flex-direction:column;gap:16px}
+.login h1{font-size:1.4rem}
+.login input{font-size:1.2rem;letter-spacing:.15em;text-align:center;direction:ltr}
+.seal{width:56px;height:56px;border-radius:14px;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--f-display);font-size:1.6rem}
+/* master statement */
+.stmt th,.stmt td{white-space:nowrap}
+.stmt tbody th{background:none;color:var(--fg);font-size:.88rem;text-align:start}
+.stmt .neg{color:var(--bad);font-weight:600}
+.stmt .pos{color:var(--ok);font-weight:600}
+.viewer img{max-width:100%;border-radius:8px}
+.viewer iframe{width:100%;height:70vh;border:1px solid var(--line);border-radius:8px}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.slot{border:1px dashed var(--line);border-radius:10px;min-height:120px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-align:center;background:var(--bg)}
+.slot.ok{border-style:solid;border-color:var(--ok)}
+.slot img{width:100%;height:90px;object-fit:cover;border-radius:6px}
+@media (max-width:560px){.fgrid{grid-template-columns:1fr}.hide-sm{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  header.top,.noprint,.toolbar,.pager,.btn{display:none!important}
+  body{background:#fff;color:#000;font-size:11px}
+  .panel{border:1px solid #999;break-inside:avoid}
+  main .wrap{padding:0;max-width:none}
+  th{background:#eee!important;color:#000}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ شاشة الدخول ============ -->
+<section class="login" id="loginView" hidden>
+  <form class="panel card" id="fLogin" novalidate>
+    <div class="row-flex" style="justify-content:space-between"><div class="seal">ح</div><div class="lang" data-lang-switch></div></div>
+    <div><h1 data-t="appTitle"></h1><div class="sub" data-t="appSub"></div></div>
+    <div class="field"><label for="loginCode" data-t="loginCode"></label><input id="loginCode" type="password" inputmode="numeric" autocomplete="current-password" required></div>
+    <div class="err" id="loginErr" hidden></div>
+    <button class="btn primary" type="submit" id="loginBtn" data-t="loginBtn"></button>
+    <div id="apiBox" class="notice info" hidden style="display:flex;flex-direction:column;gap:8px">
+      <strong data-t="apiTitle"></strong>
+      <span class="small" data-t="apiHelp"></span>
+      <input id="apiUrl" dir="ltr" placeholder="https://script.google.com/macros/s/…/exec" style="border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;font-size:.85rem;letter-spacing:0;text-align:left">
+      <div class="row-flex"><button class="btn small primary" type="button" id="apiSave" data-t="apiSave"></button><span class="small" id="apiMsg"></span></div>
+    </div>
+    <button class="btn small" type="button" id="apiEdit" data-t="apiChange" style="align-self:center;border:0;background:none;color:var(--muted)" hidden></button>
+  </form>
+</section>
+
+<!-- ============ التطبيق ============ -->
+<div id="appView" hidden>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div><h1 data-t="appTitle"></h1><div class="sub"><span data-t="appSub"></span> · <span id="whoami"></span></div></div>
+      <div class="row-flex">
+        <div class="lang" data-lang-switch></div>
+        <button class="btn small" type="button" id="btnRefresh" data-t="refresh"></button>
+        <button class="btn small" type="button" id="btnLogout" data-t="logout"></button>
+      </div>
+    </div>
+    <div class="row-flex" style="justify-content:space-between">
+      <div class="chips" id="mosqueChips" role="group"></div>
+      <div class="row-flex" id="quickAdd"></div>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+<main><div class="wrap" id="view"></div></main>
+</div>
+
+<!-- ============ نافذة المصروف ============ -->
+<dialog id="dlgExp"><form id="fExp" novalidate>
+  <h2 id="expTitle"></h2>
+  <div class="notice info" id="expMode" hidden></div>
+  <div class="fgrid">
+    <div class="field req"><label for="e_mosque" data-t="mosque"></label><select id="e_mosque" data-lock></select></div>
+    <div class="field req"><label for="e_date" data-t="date"></label><input id="e_date" type="date" data-lock></div>
+    <div class="field req"><label for="e_cat" data-t="category"></label><select id="e_cat" data-lock></select></div>
+    <div class="field"><label for="e_paidby" data-t="paidBy"></label><input id="e_paidby" list="people" data-lock></div>
+    <div class="field req full"><label for="e_desc" data-t="desc"></label><input id="e_desc" data-lock></div>
+    <div class="field"><label for="e_qty" data-t="qty"></label><input id="e_qty" inputmode="decimal" data-lock></div>
+    <div class="field"><label for="e_price" data-t="unitPrice"></label><input id="e_price" inputmode="decimal" data-lock></div>
+    <div class="field req full"><label for="e_total" data-t="totalTk"></label><input id="e_total" inputmode="decimal" data-lock><span class="hint" data-t="autoTotal"></span></div>
+  </div>
+  <fieldset class="box"><legend data-t="invoice"></legend>
+    <div class="fgrid">
+      <div class="field" id="invNoField"><label for="e_inv" data-t="invoiceNo"></label><input id="e_inv" data-inv></div>
+      <div class="field"><label for="e_shop" data-t="shop"></label><input id="e_shop" list="shops" data-inv></div>
+    </div>
+    <label class="small" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="e_noinv" data-lock> <span data-t="noInvoice"></span></label>
+    <div class="thumb" id="e_fileView"></div>
+    <div class="field" id="e_uploadRow"><label for="e_file" data-t="invoiceImage"></label><input id="e_file" type="file" accept="image/*,application/pdf" data-inv><span class="hint" id="e_hint"></span></div>
+  </fieldset>
+  <div class="field"><label for="e_review" data-t="reviewNote"></label><input id="e_review" data-lock></div>
+  <div class="small muted" id="expMeta"></div>
+  <div class="err" id="expErr" hidden></div>
+  <div class="actions"><div><button class="btn danger" type="button" id="expDel" data-t="delete"></button></div>
+    <div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="expSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة الدفعة المستلمة ============ -->
+<dialog id="dlgRec"><form id="fRec" novalidate>
+  <h2 id="recTitle"></h2>
+  <div class="fgrid">
+    <div class="field req"><label for="r_mosque" data-t="mosque"></label><select id="r_mosque"></select></div>
+    <div class="field req"><label for="r_source" data-t="source"></label><select id="r_source"></select></div>
+    <div class="field req"><label for="r_date" data-t="date"></label><input id="r_date" type="date"></div>
+    <div class="field req"><label for="r_amount" data-t="amountTk"></label><input id="r_amount" inputmode="decimal"></div>
+    <div class="field"><label for="r_who" data-t="receiver"></label><input id="r_who" list="people"></div>
+    <div class="field"><label for="r_note" data-t="note"></label><input id="r_note"></div>
+  </div>
+  <fieldset class="box"><legend data-t="receiptDoc"></legend><div class="thumb" id="r_fileView"></div>
+    <div class="field" id="r_uploadRow"><label for="r_file" data-t="invoiceImage"></label><input id="r_file" type="file" accept="image/*,application/pdf"></div></fieldset>
+  <div class="err" id="recErr" hidden></div>
+  <div class="actions"><div><button class="btn danger" type="button" id="recDel" data-t="delete"></button></div>
+    <div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="recSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة اتفاق المعلم ============ -->
+<dialog id="dlgMis" class="wide"><form id="fMis" novalidate>
+  <h2 id="misTitle"></h2>
+  <div class="fgrid">
+    <div class="field req"><label for="mi_mosque" data-t="mosque"></label><select id="mi_mosque"></select></div>
+    <div class="field req"><label for="mi_type" data-t="workType"></label><select id="mi_type"></select></div>
+    <div class="field"><label for="mi_name" data-t="mistryName"></label><input id="mi_name"></div>
+    <div class="field"><label for="mi_phone" data-t="phone"></label><input id="mi_phone" inputmode="tel" dir="ltr"></div>
+    <div class="field"><label for="mi_id" data-t="idNo"></label><input id="mi_id"></div>
+    <div class="field req"><label for="mi_agreed" data-t="agreedTk"></label><input id="mi_agreed" inputmode="decimal"></div>
+    <div class="field"><label for="mi_start" data-t="startDate"></label><input id="mi_start" type="date"></div>
+    <div class="field"><label for="mi_end" data-t="endDate"></label><input id="mi_end" type="date"></div>
+    <div class="field full"><label for="mi_scope" data-t="scope"></label><textarea id="mi_scope" rows="2"></textarea></div>
+    <div class="field full"><label for="mi_notes" data-t="privateInfo"></label><textarea id="mi_notes" rows="2"></textarea></div>
+  </div>
+  <fieldset class="box"><legend data-t="mistryPayments"></legend>
+    <div class="tscroll"><table class="inst"><thead><tr><th data-t="installment"></th><th data-t="planned"></th><th data-t="date"></th><th data-t="paidActual"></th><th data-t="status"></th><th data-t="note"></th><th></th></tr></thead><tbody id="instBody"></tbody>
+    <tfoot><tr><td data-t="total"></td><td class="num" id="instPlanned"></td><td></td><td class="num" id="instPaid"></td><td colspan="3" class="small" id="instLeft"></td></tr></tfoot></table></div>
+    <div class="row-flex" id="instBtns"><button class="btn" type="button" id="instAdd" data-t="addInstallment"></button><button class="btn" type="button" id="instSplit" data-t="splitRest"></button></div>
+  </fieldset>
+  <div class="err" id="misErr" hidden></div>
+  <div class="actions"><div><button class="btn danger" type="button" id="misDel" data-t="delete"></button></div>
+    <div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="misSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة الملاحظة ============ -->
+<dialog id="dlgNote"><form id="fNote" novalidate>
+  <h2 id="noteTitle"></h2>
+  <div class="fgrid">
+    <div class="field"><label for="n_mosque" data-t="concerns"></label><select id="n_mosque"></select></div>
+    <div class="field"><label for="n_kind" data-t="kind"></label><select id="n_kind"></select></div>
+    <div class="field req full"><label for="n_title" data-t="title"></label><input id="n_title"></div>
+    <div class="field full"><label for="n_body" data-t="details"></label><textarea id="n_body" rows="4"></textarea></div>
+    <div class="field"><label for="n_date" data-t="date"></label><input id="n_date" type="date"></div>
+    <div class="field"><label for="n_status" data-t="status"></label><select id="n_status"></select></div>
+  </div>
+  <div class="err" id="noteErr" hidden></div>
+  <div class="actions"><div><button class="btn danger" type="button" id="noteDel" data-t="delete"></button></div>
+    <div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="noteSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة المشروع العام ============ -->
+<dialog id="dlgProj"><form id="fProj" novalidate>
+  <h2 id="projTitle"></h2>
+  <div class="fgrid">
+    <div class="field req"><label for="p_type" data-t="projectType"></label><select id="p_type"></select></div>
+    <div class="field req"><label for="p_date" data-t="date"></label><input id="p_date" type="date"></div>
+    <div class="field req"><label for="p_cost" data-t="costExec"></label><input id="p_cost" inputmode="decimal"></div>
+    <div class="field"><label for="p_fee" data-t="feeOrg"></label><input id="p_fee" inputmode="decimal"></div>
+    <div class="field"><label for="p_donor" data-t="donor"></label><input id="p_donor" list="pdonors"></div>
+    <div class="field"><label for="p_exec" data-t="executor"></label><input id="p_exec" list="pexecs"></div>
+    <div class="field"><label for="p_agency" data-t="agency"></label><input id="p_agency" list="pagencies"></div>
+    <div class="field"><label for="p_ref" data-t="execRef"></label><input id="p_ref"></div>
+    <div class="field"><label for="p_status" data-t="execStatus"></label><select id="p_status"></select></div>
+    <div class="field"><label for="p_paid" data-t="payment"></label><select id="p_paid"></select></div>
+    <div class="field"><label for="p_timing" data-t="timing"></label><select id="p_timing"></select></div>
+    <div class="field"><label for="p_report" data-t="report"></label><select id="p_report"></select></div>
+    <div class="field full"><label for="p_note" data-t="note"></label><input id="p_note"></div>
+  </div>
+  <div class="err" id="projErr" hidden></div>
+  <div class="actions"><div><button class="btn danger" type="button" id="projDel" data-t="delete"></button></div>
+    <div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="projSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة دفعة المشاريع ============ -->
+<dialog id="dlgPPay"><form id="fPPay" novalidate>
+  <h2 id="ppTitle"></h2>
+  <div class="fgrid">
+    <div class="field req"><label for="pp_date" data-t="date"></label><input id="pp_date" type="date"></div>
+    <div class="field req"><label for="pp_amount" data-t="amountTk"></label><input id="pp_amount" inputmode="decimal"></div>
+    <div class="field"><label for="pp_payer" data-t="paidBy"></label><input id="pp_payer" list="people"></div>
+    <div class="field"><label for="pp_note" data-t="note"></label><input id="pp_note"></div>
+  </div>
+  <div class="err" id="ppErr" hidden></div>
+  <div class="actions"><div><button class="btn danger" type="button" id="ppDel" data-t="delete"></button></div>
+    <div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="ppSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة المستخدم ============ -->
+<dialog id="dlgUser"><form id="fUser" novalidate>
+  <h2 id="userTitle"></h2>
+  <div class="fgrid">
+    <div class="field req"><label for="u_name" data-t="userName"></label><input id="u_name"></div>
+    <div class="field req"><label for="u_role" data-t="role"></label><select id="u_role"></select></div>
+    <div class="field full"><label for="u_code" data-t="loginCode"></label><input id="u_code" inputmode="numeric" autocomplete="new-password" dir="ltr"><span class="hint" id="u_codeHint"></span></div>
+  </div>
+  <fieldset class="box"><legend data-t="permissions"></legend><div id="u_perms" class="cols2" style="gap:6px"></div></fieldset>
+  <label class="tog"><input type="checkbox" id="u_active"> <span data-t="activeUser"></span></label>
+  <div class="err" id="userErr" hidden></div>
+  <div class="actions"><div></div><div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" id="userSave" data-t="save"></button></div></div>
+</form></dialog>
+
+<!-- ============ نافذة الميزانيات ============ -->
+<dialog id="dlgCfg"><form id="fCfg" novalidate>
+  <h2 data-t="budgets"></h2><div id="cfgBody" style="display:flex;flex-direction:column;gap:12px"></div>
+  <div class="err" id="cfgErr" hidden></div>
+  <div class="actions"><div></div><div class="r"><button class="btn" type="button" data-close data-t="cancel"></button><button class="btn primary" type="submit" data-t="save"></button></div></div>
+</form></dialog>
+
+<dialog id="dlgView"><div class="dbody"><h2 id="viewTitle"></h2><div class="viewer" id="viewBody"></div>
+  <div class="actions"><div><a id="viewOpen" class="btn" target="_blank" rel="noopener" data-t="openNewTab"></a></div><div class="r"><button class="btn" type="button" data-close data-t="close"></button></div></div></div></dialog>
+
+<dialog id="dlgConfirm"><form method="dialog" style="gap:16px"><h2 id="cfmText"></h2><p class="muted" style="margin:0" data-t="cannotUndo"></p>
+  <div class="actions"><div></div><div class="r"><button class="btn" value="no" data-t="cancel"></button><button class="btn danger" value="yes" data-t="deleteForever"></button></div></div></form></dialog>
+
+<datalist id="people"><option value="بدر الهدى"><option value="مروان"><option value="إدريس"><option value="زبير"></datalist>
+<datalist id="shops"></datalist><datalist id="pdonors"></datalist><datalist id="pexecs"></datalist><datalist id="pagencies"></datalist>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* =====================================================================
+   الإعداد: ضع هنا رابط تطبيق الويب من Apps Script (ينتهي بـ /exec)
+   Settings: paste your Apps Script web app URL (ends with /exec)
+   ===================================================================== */
+const API_URL = "https://script.google.com/macros/s/AKfycbyJh8Fa6IJc9-RyPqLL2YACzZf1a-5sax8CaJA5TMtLq_d6A4G1qjw5l4Nxqkz7FMTN/exec";
+
+/* ============================ الترجمة ============================ */
+const I18N={
+ar:{apiTitle:"اربط الصفحة بالخادم أولاً",apiHelp:"الصق رابط تطبيق الويب من Apps Script (الذي ينتهي بـ /exec) واضغط حفظ. يُطلب مرة واحدة على هذا الجهاز.",apiSave:"حفظ الرابط",apiEcho:"هذا رابط مؤقت من شريط العنوان ولا يعمل. انسخ الرابط من Apps Script: نشر ← إدارة عمليات النشر ← رابط تطبيق الويب (يبدأ بـ script.google.com وينتهي بـ /exec).",apiChange:"تغيير رابط الخادم",apiBad:"الرابط غير صحيح. يجب أن يبدأ بـ https://script.google.com وينتهي بـ /exec",apiChecking:"جاري الفحص…",apiOk:"تم الربط بالخادم ✓",apiFail:"لم يستجب الخادم. تأكد من الرابط وأن النشر لـ \"أي شخص\".",appTitle:"حسابات الجوامع",appSub:"بنجلاديش · 1448هـ / 2026م · المبالغ بالتاكا ৳",loginCode:"رمز الدخول",loginBtn:"دخول",apiMissing:"لم يُضبط رابط Apps Script بعد. ضعه في API_URL داخل index.html.",bad_login:"رمز الدخول غير صحيح.",locked:"محاولات خاطئة كثيرة. انتظر 15 دقيقة ثم حاول.",no_session:"انتهت الجلسة. سجّل الدخول مرة أخرى.",forbidden:"لا تملك صلاحية لهذا الإجراء.",network:"تعذر الاتصال بالخادم. تحقق من الإنترنت ثم أعد المحاولة.",
+refresh:"تحديث",logout:"خروج",allMosques:"كل الجوامع",
+tab_master:"كشف الحسابات الشامل",tab_overview:"نظرة عامة",tab_expenses:"المصروفات والفواتير",tab_receipts:"الدفعات المستلمة",tab_mistry:"المعلمون والاتفاقيات",tab_cats:"ملخص البنود",tab_notes:"الملاحظات",tab_projects:"المشاريع العامة",tab_users:"المستخدمون",tab_entry:"نموذج الإدخال",
+addExpense:"+ مصروف وفاتورة",addReceipt:"+ دفعة مستلمة",
+mosque:"الجامع",date:"التاريخ",category:"البند",paidBy:"صُرف بواسطة",desc:"الصنف / البيان",qty:"الكمية",unitPrice:"سعر الوحدة",totalTk:"المجموع (تاكا)",autoTotal:"يُحسب من الكمية × السعر ويمكن تعديله.",invoice:"الفاتورة",invoiceNo:"رقم الفاتورة",shop:"المحل / المورد",noInvoice:"لا توجد فاتورة لهذا المصروف (أجرة، مواصلات، راتب…)",invoiceImage:"صورة الفاتورة أو PDF",reviewNote:"ملاحظة مراجعة",
+delete:"حذف",cancel:"إلغاء",save:"حفظ",close:"إغلاق",openNewTab:"فتح في نافذة جديدة",cannotUndo:"لا يمكن التراجع عن الحذف.",deleteForever:"حذف نهائياً",
+source:"المصدر",amountTk:"المبلغ (تاكا)",receiver:"المستلم",note:"ملاحظة",receiptDoc:"سند الاستلام",donorSrc:"المتبرع (الدفعات)",councilSrc:"مجلس الحي / أصحاب المسجد",
+workType:"نوع العمل",mistryName:"اسم المعلم / المقاول",phone:"رقم الجوال",idNo:"رقم الهوية",agreedTk:"المبلغ المتفق (تاكا)",startDate:"بداية العمل",endDate:"التسليم المتوقع",scope:"نطاق العمل وتفاصيل الاتفاق",privateInfo:"معلومات خاصة / ملاحظات",mistryPayments:"دفعات المعلم",installment:"الدفعة",planned:"المبلغ المخطط",paidActual:"المدفوع فعلاً",status:"الحالة",total:"المجموع",addInstallment:"+ إضافة دفعة",splitRest:"توزيع الباقي على الدفعات",
+concerns:"تخص",kind:"النوع",title:"العنوان",details:"التفاصيل",general:"عام (كل الجوامع)",projectsGen:"المشاريع العامة",
+projectType:"نوع المشروع",costExec:"التكلفة للمنفذ",feeOrg:"رسوم المؤسسة",donor:"المتبرع",executor:"المنفذ",agency:"الجهة المنفذة",execRef:"مدة / رقم التنفيذ",execStatus:"حالة التنفيذ",payment:"الدفع",timing:"الالتزام بالموعد",report:"التقرير",
+userName:"الاسم",role:"الدور",permissions:"الصلاحيات",activeUser:"المستخدم نشط ويستطيع الدخول",budgets:"ميزانيات الجوامع",
+role_admin:"المشرف العام",role_exec:"المدير التنفيذي",role_staff:"موظف",
+perm_viewAll:"الاطلاع على كل الحسابات",perm_create:"إدخال قيود جديدة",perm_attachInvoice:"إضافة فاتورة لقيد بلا فاتورة",perm_edit:"تعديل القيود",perm_delete:"حذف القيود",perm_master:"كشف الحسابات الشامل",perm_users:"إدارة المستخدمين",
+budget:"الميزانية الإجمالية",received:"المستلم من المتبرع",notReceived:"المتبقي لم يُستلم",spent:"المصروفات",balance:"الرصيد المتبقي",deficit:"العجز",council:"مشاركة مجلس الحي",withCouncil:"المصروف مع المجلس",grandBudget:"المجموع الشامل",
+spentPct:"صُرف {p}% من الميزانية",recvPct:"استُلم {p}%",withInvoice:"{a} من {b} مشتريات لها فاتورة",reviewCount:"{n} للمراجعة",invPct:"{p}% بفواتير",noPurch:"لا مشتريات",
+viewOnly:"لديك صلاحية الاطلاع فقط.",entryOnly:"صلاحيتك الحالية: الاطلاع على نموذج الإدخال فقط. سيفعّل المشرف العام صلاحيات إضافية لاحقاً.",
+search:"ابحث: الصنف، رقم الفاتورة، المحل، المبلغ…",allCats:"كل البنود",onlyNoInv:"مشتريات بلا فاتورة",onlyReview:"تحتاج مراجعة",onlyDup:"مكررات محتملة",entries:"قيد",showMore:"عرض المزيد",noMatch:"لا توجد قيود مطابقة.",
+invHas:"رقم {x}",invFile:"صورة مرفقة",invNotNeeded:"لا تلزم",invMissing:"بلا فاتورة",viewInvoice:"عرض الفاتورة",
+donorPays:"دفعات المتبرع",councilPays:"مشاركة مجلس الحي",noneYet:"لا توجد بعد.",
+newMistry:"+ اتفاق معلم",noAgreement:"لا يوجد اتفاق مسجل",spentNoAgree:"صُرف له في القيود {x} تاكا بدون اتفاق مكتوب.",recordAgreement:"تسجيل الاتفاق",agreed:"المتفق عليه",paidInst:"المدفوع بالدفعات ({a} من {b})",remaining:"الباقي",ledgerSpent:"المصروف في القيود",nextInst:"التالية: {o} بمبلغ {x}",noInst:"لم تُسجّل دفعات بعد.",editPays:"تعديل والدفعات",details2:"التفاصيل",mistryHint:"لكل معلم اتفاق مستقل بدفعات مرقّمة بلا حد. \"المصروف في القيود\" يجمع ما سُجّل في دفتر المصروفات تحت بند المعلم للمقارنة.",
+ist_planned:"مخطط لها",ist_progress:"جاري",ist_done:"تم الدفع",ordinal:"الدفعة {o}",
+newNote:"+ ملاحظة",open:"مفتوحة",done:"تمت المعالجة",all:"الكل",reopen:"إعادة فتح",markDone:"تمت المعالجة",edit:"تعديل",noNotes:"لا توجد ملاحظات. سجّل أي خطأ أو استفسار عن البيانات ليتابعه الفريق.",flagged:"قيود معلَّمة للمراجعة والمكررات",
+projCount:"عدد المشاريع",projTotal:"المجموع الكلي",paidAgency:"المدفوع للجهة المنفذة",newProject:"+ مشروع",agencyPays:"الدفعات للجهة المنفذة",newPay:"+ دفعة",cumulative:"التراكمي",projSearch:"ابحث: المتبرع، المنفذ، الجهة، الرقم…",allTypes:"كل الأنواع",csv:"تنزيل CSV",print:"طباعة",excludedCancelled:"قبل استبعاد الملغي {x}",
+catsTitle:"جمع المصروفات حسب البنود",
+users:"المستخدمون",newUser:"+ مستخدم",lastLogin:"آخر دخول",active:"نشط",inactive:"معطّل",codeHintNew:"6 أرقام أو أكثر. لا تستخدم أرقاماً متسلسلة.",codeHintEdit:"اتركه فارغاً للإبقاء على الرمز الحالي.",code_too_short:"الرمز قصير. استخدم 6 أرقام على الأقل.",code_in_use:"هذا الرمز مستخدم لمستخدم آخر.",code_required:"أدخل رمز دخول للمستخدم الجديد.",
+mStmtTitle:"الكشف الشامل لحسابات الجوامع",mGeneral:"البيان العام للميزانية",mMistry:"اتفاقيات المعلمين ودفعاتهم",mInstallments:"بيان دفعات المتبرع لكل جامع",mInvoices:"توثيق المشتريات بالفواتير",mIssues:"الملاحظات والمكررات في المصروفات والفواتير",mProjects:"المشاريع العامة",purchases:"المشتريات",withInv:"بفاتورة",withoutInv:"بلا فاتورة",amountWithout:"مبلغ بلا فاتورة",asOf:"حتى تاريخ {d}",reason:"السبب",amount:"المبلغ",openNotes:"ملاحظات مفتوحة",
+dup_same:"مكرر محتمل: نفس الجامع والبند والمبلغ والتاريخ مثل القيد #{s}",dup_inv:"رقم الفاتورة {x} مستخدم أيضاً في {m} قيد #{s}",dup_cross:"نفس المبلغ والتاريخ والبند في {m} قيد #{s}",manualFlag:"ملاحظة مراجعة",
+editBudgets:"تعديل الميزانيات",entryTitle:"نموذج الإدخال",entryPreview:"هذا هو النموذج الذي يُستخدم لتسجيل المصروفات والفواتير.",
+saved:"تم الحفظ",deleted:"تم الحذف",uploading:"جاري رفع الملف…",uploaded:"تم رفع الملف. اضغط حفظ لربطه بالقيد.",uploadFail:"تعذر رفع الملف.",fillReq:"أكمل الحقول المطلوبة: {x}",needInvoice:"رقم الفاتورة أو صورتها (أو اختر: لا توجد فاتورة)",dupInvWarn:"رقم الفاتورة {x} مسجّل في قيد آخر ({m} · {d} · {a}). اضغط حفظ مرة أخرى إذا كانت فاتورة مختلفة.",
+newExpense:"تسجيل مصروف جديد",expenseN:"قيد رقم {s} — {m}",attachMode:"صلاحيتك تسمح بإضافة رقم الفاتورة وصورتها فقط لهذا القيد.",readMode:"عرض فقط.",addedBy:"أضافه {u} {d}",editedBy:"· عدّله {u} {d}",
+newReceipt:"تسجيل دفعة مستلمة",editReceipt:"دفعة مستلمة",newMistryT:"اتفاق معلم جديد",mistryT:"اتفاق {t} — {m}",newNoteT:"ملاحظة جديدة",noteT:"ملاحظة",newProjT:"مشروع جديد",projT:"مشروع رقم {n}",ppT:"دفعة للجهة المنفذة",newUserT:"مستخدم جديد",userT:"تعديل مستخدم",
+confirmDelExp:"حذف القيد \"{x}\" بمبلغ {a}؟",confirmDel:"تأكيد الحذف؟",loading:"جاري تحميل الحسابات…",
+paid_yes:"تم",paid_no:"لم يتم",t_ontime:"في الموعد",t_late:"متأخر",rep_done:"مكتمل",rep_none:"لم يُستلم",none:"—"},
+
+en:{apiTitle:"Connect this page to the server first",apiHelp:"Paste the Apps Script web app URL (ending in /exec) and save. Needed once per device.",apiSave:"Save URL",apiEcho:"That is a temporary address-bar link and won't work. Copy the URL from Apps Script: Deploy → Manage deployments → Web app URL (starts with script.google.com, ends with /exec).",apiChange:"Change server URL",apiBad:"Invalid URL. It must start with https://script.google.com and end with /exec",apiChecking:"Checking…",apiOk:"Connected ✓",apiFail:"The server didn't respond. Check the URL and that access is set to \"Anyone\".",appTitle:"Mosque Accounts",appSub:"Bangladesh · 1448 AH / 2026 · amounts in Taka ৳",loginCode:"Access code",loginBtn:"Sign in",apiMissing:"The Apps Script URL is not set yet. Put it in API_URL inside index.html.",bad_login:"Wrong access code.",locked:"Too many wrong attempts. Wait 15 minutes and try again.",no_session:"Your session ended. Please sign in again.",forbidden:"You don't have permission for this action.",network:"Couldn't reach the server. Check the connection and try again.",
+refresh:"Refresh",logout:"Sign out",allMosques:"All mosques",
+tab_master:"Full statement",tab_overview:"Overview",tab_expenses:"Expenses & invoices",tab_receipts:"Received payments",tab_mistry:"Contractors & agreements",tab_cats:"By category",tab_notes:"Notes",tab_projects:"General projects",tab_users:"Users",tab_entry:"Entry form",
+addExpense:"+ Expense & invoice",addReceipt:"+ Received payment",
+mosque:"Mosque",date:"Date",category:"Category",paidBy:"Paid by",desc:"Item / description",qty:"Quantity",unitPrice:"Unit price",totalTk:"Total (Taka)",autoTotal:"Quantity × price, editable.",invoice:"Invoice",invoiceNo:"Invoice number",shop:"Shop / supplier",noInvoice:"This expense has no invoice (wages, transport, salary…)",invoiceImage:"Invoice photo or PDF",reviewNote:"Review note",
+delete:"Delete",cancel:"Cancel",save:"Save",close:"Close",openNewTab:"Open in new tab",cannotUndo:"This can't be undone.",deleteForever:"Delete permanently",
+source:"Source",amountTk:"Amount (Taka)",receiver:"Received by",note:"Note",receiptDoc:"Receipt document",donorSrc:"Donor (installments)",councilSrc:"Neighbourhood council / mosque owners",
+workType:"Type of work",mistryName:"Contractor name",phone:"Mobile",idNo:"ID number",agreedTk:"Agreed amount (Taka)",startDate:"Start date",endDate:"Expected handover",scope:"Scope & agreement details",privateInfo:"Private info / notes",mistryPayments:"Contractor installments",installment:"Installment",planned:"Planned",paidActual:"Actually paid",status:"Status",total:"Total",addInstallment:"+ Add installment",splitRest:"Split remainder",
+concerns:"Concerns",kind:"Type",title:"Title",details:"Details",general:"General (all mosques)",projectsGen:"General projects",
+projectType:"Project type",costExec:"Cost (executor)",feeOrg:"Organisation fee",donor:"Donor",executor:"Executor",agency:"Implementing agency",execRef:"Duration / ref.",execStatus:"Execution status",payment:"Payment",timing:"On schedule",report:"Report",
+userName:"Name",role:"Role",permissions:"Permissions",activeUser:"Active — can sign in",budgets:"Mosque budgets",
+role_admin:"General supervisor",role_exec:"Executive director",role_staff:"Staff",
+perm_viewAll:"View all accounts",perm_create:"Add new entries",perm_attachInvoice:"Attach invoice to entries without one",perm_edit:"Edit entries",perm_delete:"Delete entries",perm_master:"Full statement",perm_users:"Manage users",
+budget:"Total budget",received:"Received from donor",notReceived:"Not yet received",spent:"Expenses",balance:"Balance",deficit:"Deficit",council:"Council contribution",withCouncil:"Spent incl. council",grandBudget:"Grand total",
+spentPct:"{p}% of budget spent",recvPct:"{p}% received",withInvoice:"{a} of {b} purchases have invoices",reviewCount:"{n} to review",invPct:"{p}% invoiced",noPurch:"No purchases",
+viewOnly:"You have view-only access.",entryOnly:"Your current access: view the entry form only. The supervisor will enable more permissions later.",
+search:"Search: item, invoice no., shop, amount…",allCats:"All categories",onlyNoInv:"Purchases without invoice",onlyReview:"Needs review",onlyDup:"Possible duplicates",entries:"entries",showMore:"Show more",noMatch:"No matching entries.",
+invHas:"No. {x}",invFile:"Photo attached",invNotNeeded:"Not required",invMissing:"No invoice",viewInvoice:"View invoice",
+donorPays:"Donor installments",councilPays:"Council contributions",noneYet:"None yet.",
+newMistry:"+ Contractor agreement",noAgreement:"No agreement recorded",spentNoAgree:"{x} Taka paid in the ledger without a written agreement.",recordAgreement:"Record agreement",agreed:"Agreed",paidInst:"Paid in installments ({a} of {b})",remaining:"Remaining",ledgerSpent:"Spent in ledger",nextInst:"Next: {o}, {x}",noInst:"No installments yet.",editPays:"Edit & installments",details2:"Details",mistryHint:"Each contractor has an agreement with unlimited numbered installments. \"Spent in ledger\" sums ledger entries under that trade, for comparison.",
+ist_planned:"Planned",ist_progress:"In progress",ist_done:"Paid",ordinal:"Installment {o}",
+newNote:"+ Note",open:"Open",done:"Resolved",all:"All",reopen:"Reopen",markDone:"Mark resolved",edit:"Edit",noNotes:"No notes. Record any data error or question here for the team.",flagged:"Flagged entries and duplicates",
+projCount:"Projects",projTotal:"Grand total",paidAgency:"Paid to agency",newProject:"+ Project",agencyPays:"Payments to the agency",newPay:"+ Payment",cumulative:"Cumulative",projSearch:"Search: donor, executor, agency, no.…",allTypes:"All types",csv:"Download CSV",print:"Print",excludedCancelled:"{x} before excluding cancelled",
+catsTitle:"Expenses by category",
+users:"Users",newUser:"+ User",lastLogin:"Last sign-in",active:"Active",inactive:"Disabled",codeHintNew:"6+ digits. Avoid sequences like 123456.",codeHintEdit:"Leave empty to keep the current code.",code_too_short:"Code too short. Use at least 6 digits.",code_in_use:"This code belongs to another user.",code_required:"Enter an access code for the new user.",
+mStmtTitle:"Full statement of mosque accounts",mGeneral:"Budget overview",mMistry:"Contractor agreements & installments",mInstallments:"Donor installments per mosque",mInvoices:"Invoice coverage of purchases",mIssues:"Notes and duplicates in expenses & invoices",mProjects:"General projects",purchases:"Purchases",withInv:"With invoice",withoutInv:"Without",amountWithout:"Amount without invoice",asOf:"As of {d}",reason:"Reason",amount:"Amount",openNotes:"Open notes",
+dup_same:"Possible duplicate: same mosque, category, amount and date as entry #{s}",dup_inv:"Invoice no. {x} also used in {m} entry #{s}",dup_cross:"Same amount, date and category in {m} entry #{s}",manualFlag:"Review note",
+editBudgets:"Edit budgets",entryTitle:"Entry form",entryPreview:"This is the form used to record expenses and invoices.",
+saved:"Saved",deleted:"Deleted",uploading:"Uploading…",uploaded:"Uploaded. Press Save to link it to the entry.",uploadFail:"Upload failed.",fillReq:"Fill in: {x}",needInvoice:"invoice number or photo (or tick: no invoice)",dupInvWarn:"Invoice {x} is already used ({m} · {d} · {a}). Press Save again if it's a different invoice.",
+newExpense:"New expense",expenseN:"Entry {s} — {m}",attachMode:"Your access lets you add only the invoice number and photo to this entry.",readMode:"View only.",addedBy:"Added by {u} {d}",editedBy:"· edited by {u} {d}",
+newReceipt:"New received payment",editReceipt:"Received payment",newMistryT:"New contractor agreement",mistryT:"{t} agreement — {m}",newNoteT:"New note",noteT:"Note",newProjT:"New project",projT:"Project {n}",ppT:"Payment to agency",newUserT:"New user",userT:"Edit user",
+confirmDelExp:"Delete \"{x}\" ({a})?",confirmDel:"Confirm delete?",loading:"Loading accounts…",
+paid_yes:"Paid",paid_no:"Unpaid",t_ontime:"On time",t_late:"Late",rep_done:"Complete",rep_none:"Not received",none:"—"},
+
+bn:{apiTitle:"প্রথমে পেজটি সার্ভারের সাথে যুক্ত করুন",apiHelp:"Apps Script ওয়েব অ্যাপের লিংক (/exec দিয়ে শেষ) পেস্ট করে সংরক্ষণ করুন। প্রতি ডিভাইসে একবারই লাগবে।",apiSave:"লিংক সংরক্ষণ",apiEcho:"এটি ঠিকানা বারের অস্থায়ী লিংক, কাজ করবে না। Apps Script থেকে লিংক কপি করুন: Deploy → Manage deployments → Web app URL (script.google.com দিয়ে শুরু, /exec দিয়ে শেষ)।",apiChange:"সার্ভার লিংক পরিবর্তন",apiBad:"লিংক সঠিক নয়। https://script.google.com দিয়ে শুরু ও /exec দিয়ে শেষ হতে হবে",apiChecking:"যাচাই হচ্ছে…",apiOk:"সংযুক্ত হয়েছে ✓",apiFail:"সার্ভার সাড়া দেয়নি। লিংক ও \"Anyone\" অ্যাক্সেস যাচাই করুন।",appTitle:"মসজিদ হিসাব",appSub:"বাংলাদেশ · ১৪৪৮ হি. / ২০২৬ · টাকায় ৳",loginCode:"প্রবেশ কোড",loginBtn:"প্রবেশ করুন",apiMissing:"Apps Script লিংক এখনো দেওয়া হয়নি। index.html-এর API_URL-এ দিন।",bad_login:"প্রবেশ কোড ভুল।",locked:"অনেকবার ভুল চেষ্টা। ১৫ মিনিট পর আবার চেষ্টা করুন।",no_session:"সেশন শেষ হয়েছে। আবার প্রবেশ করুন।",forbidden:"এই কাজের অনুমতি আপনার নেই।",network:"সার্ভারে সংযোগ হয়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।",
+refresh:"রিফ্রেশ",logout:"বের হোন",allMosques:"সব মসজিদ",
+tab_master:"সম্পূর্ণ হিসাব বিবরণী",tab_overview:"সারসংক্ষেপ",tab_expenses:"খরচ ও চালান",tab_receipts:"প্রাপ্ত কিস্তি",tab_mistry:"মিস্ত্রি ও চুক্তি",tab_cats:"খাত অনুযায়ী",tab_notes:"মন্তব্য",tab_projects:"সাধারণ প্রকল্প",tab_users:"ব্যবহারকারী",tab_entry:"এন্ট্রি ফর্ম",
+addExpense:"+ খরচ ও চালান",addReceipt:"+ প্রাপ্ত কিস্তি",
+mosque:"মসজিদ",date:"তারিখ",category:"খাত",paidBy:"পরিশোধকারী",desc:"পণ্য / বিবরণ",qty:"পরিমাণ",unitPrice:"একক মূল্য",totalTk:"মোট (টাকা)",autoTotal:"পরিমাণ × মূল্য, পরিবর্তনযোগ্য।",invoice:"চালান",invoiceNo:"চালান নম্বর",shop:"দোকান / সরবরাহকারী",noInvoice:"এই খরচের চালান নেই (মজুরি, যাতায়াত, বেতন…)",invoiceImage:"চালানের ছবি বা PDF",reviewNote:"পর্যালোচনা মন্তব্য",
+delete:"মুছুন",cancel:"বাতিল",save:"সংরক্ষণ",close:"বন্ধ",openNewTab:"নতুন ট্যাবে খুলুন",cannotUndo:"মুছে ফেলা ফেরানো যাবে না।",deleteForever:"স্থায়ীভাবে মুছুন",
+source:"উৎস",amountTk:"পরিমাণ (টাকা)",receiver:"গ্রহণকারী",note:"মন্তব্য",receiptDoc:"প্রাপ্তি রসিদ",donorSrc:"দাতা (কিস্তি)",councilSrc:"মহল্লা কমিটি / মসজিদ কর্তৃপক্ষ",
+workType:"কাজের ধরন",mistryName:"মিস্ত্রি / ঠিকাদারের নাম",phone:"মোবাইল",idNo:"পরিচয়পত্র নম্বর",agreedTk:"চুক্তির টাকা",startDate:"কাজ শুরু",endDate:"হস্তান্তরের সম্ভাব্য তারিখ",scope:"কাজের পরিধি ও চুক্তির বিবরণ",privateInfo:"ব্যক্তিগত তথ্য / মন্তব্য",mistryPayments:"মিস্ত্রির কিস্তি",installment:"কিস্তি",planned:"পরিকল্পিত",paidActual:"প্রকৃত পরিশোধ",status:"অবস্থা",total:"মোট",addInstallment:"+ কিস্তি যোগ করুন",splitRest:"বাকি টাকা ভাগ করুন",
+concerns:"সংশ্লিষ্ট",kind:"ধরন",title:"শিরোনাম",details:"বিস্তারিত",general:"সাধারণ (সব মসজিদ)",projectsGen:"সাধারণ প্রকল্প",
+projectType:"প্রকল্পের ধরন",costExec:"বাস্তবায়নকারীর খরচ",feeOrg:"প্রতিষ্ঠানের ফি",donor:"দাতা",executor:"বাস্তবায়নকারী",agency:"বাস্তবায়নকারী সংস্থা",execRef:"মেয়াদ / নম্বর",execStatus:"বাস্তবায়নের অবস্থা",payment:"পরিশোধ",timing:"সময়সূচি",report:"প্রতিবেদন",
+userName:"নাম",role:"ভূমিকা",permissions:"অনুমতি",activeUser:"সক্রিয় — প্রবেশ করতে পারবেন",budgets:"মসজিদের বাজেট",
+role_admin:"সাধারণ তত্ত্বাবধায়ক",role_exec:"নির্বাহী পরিচালক",role_staff:"কর্মচারী",
+perm_viewAll:"সব হিসাব দেখা",perm_create:"নতুন এন্ট্রি",perm_attachInvoice:"চালানহীন এন্ট্রিতে চালান যোগ",perm_edit:"এন্ট্রি সম্পাদনা",perm_delete:"এন্ট্রি মুছে ফেলা",perm_master:"সম্পূর্ণ বিবরণী",perm_users:"ব্যবহারকারী ব্যবস্থাপনা",
+budget:"মোট বাজেট",received:"দাতার কাছ থেকে প্রাপ্ত",notReceived:"এখনো অপ্রাপ্ত",spent:"খরচ",balance:"অবশিষ্ট ব্যালেন্স",deficit:"ঘাটতি",council:"কমিটির অংশগ্রহণ",withCouncil:"কমিটিসহ খরচ",grandBudget:"সর্বমোট",
+spentPct:"বাজেটের {p}% খরচ",recvPct:"{p}% প্রাপ্ত",withInvoice:"{b}টি কেনাকাটার মধ্যে {a}টির চালান আছে",reviewCount:"{n}টি পর্যালোচনা",invPct:"{p}% চালানসহ",noPurch:"কেনাকাটা নেই",
+viewOnly:"আপনার শুধু দেখার অনুমতি আছে।",entryOnly:"আপনার বর্তমান অনুমতি: শুধু এন্ট্রি ফর্ম দেখা। তত্ত্বাবধায়ক পরে আরও অনুমতি দেবেন।",
+search:"খুঁজুন: পণ্য, চালান নম্বর, দোকান, টাকা…",allCats:"সব খাত",onlyNoInv:"চালানহীন কেনাকাটা",onlyReview:"পর্যালোচনা প্রয়োজন",onlyDup:"সম্ভাব্য দ্বৈত এন্ট্রি",entries:"এন্ট্রি",showMore:"আরও দেখুন",noMatch:"মিলে যাওয়া কোনো এন্ট্রি নেই।",
+invHas:"নং {x}",invFile:"ছবি সংযুক্ত",invNotNeeded:"প্রয়োজন নেই",invMissing:"চালান নেই",viewInvoice:"চালান দেখুন",
+donorPays:"দাতার কিস্তি",councilPays:"কমিটির অংশগ্রহণ",noneYet:"এখনো নেই।",
+newMistry:"+ মিস্ত্রির চুক্তি",noAgreement:"চুক্তি নথিভুক্ত হয়নি",spentNoAgree:"লিখিত চুক্তি ছাড়া খাতায় {x} টাকা দেওয়া হয়েছে।",recordAgreement:"চুক্তি নথিভুক্ত করুন",agreed:"চুক্তি",paidInst:"কিস্তিতে পরিশোধ ({b}টির {a}টি)",remaining:"বাকি",ledgerSpent:"খাতায় খরচ",nextInst:"পরবর্তী: {o}, {x}",noInst:"এখনো কোনো কিস্তি নেই।",editPays:"সম্পাদনা ও কিস্তি",details2:"বিস্তারিত",mistryHint:"প্রত্যেক মিস্ত্রির আলাদা চুক্তি ও সীমাহীন ক্রমিক কিস্তি। \"খাতায় খরচ\" তুলনার জন্য খরচের খাতা থেকে যোগফল।",
+ist_planned:"পরিকল্পিত",ist_progress:"চলমান",ist_done:"পরিশোধিত",ordinal:"কিস্তি {o}",
+newNote:"+ মন্তব্য",open:"খোলা",done:"সমাধান হয়েছে",all:"সব",reopen:"আবার খুলুন",markDone:"সমাধান হয়েছে",edit:"সম্পাদনা",noNotes:"কোনো মন্তব্য নেই। তথ্যের ভুল বা প্রশ্ন এখানে লিখুন।",flagged:"চিহ্নিত এন্ট্রি ও দ্বৈত এন্ট্রি",
+projCount:"প্রকল্প সংখ্যা",projTotal:"সর্বমোট",paidAgency:"সংস্থাকে পরিশোধ",newProject:"+ প্রকল্প",agencyPays:"সংস্থাকে কিস্তি",newPay:"+ কিস্তি",cumulative:"ক্রমযোজিত",projSearch:"খুঁজুন: দাতা, বাস্তবায়নকারী, সংস্থা, নং…",allTypes:"সব ধরন",csv:"CSV ডাউনলোড",print:"প্রিন্ট",excludedCancelled:"বাতিলসহ {x}",
+catsTitle:"খাত অনুযায়ী খরচ",
+users:"ব্যবহারকারী",newUser:"+ ব্যবহারকারী",lastLogin:"শেষ প্রবেশ",active:"সক্রিয়",inactive:"নিষ্ক্রিয়",codeHintNew:"কমপক্ষে ৬ সংখ্যা। ১২৩৪৫৬-এর মতো ক্রম এড়িয়ে চলুন।",codeHintEdit:"বর্তমান কোড রাখতে খালি রাখুন।",code_too_short:"কোড ছোট। কমপক্ষে ৬ সংখ্যা দিন।",code_in_use:"এই কোড অন্য ব্যবহারকারীর।",code_required:"নতুন ব্যবহারকারীর কোড দিন।",
+mStmtTitle:"মসজিদ হিসাবের সম্পূর্ণ বিবরণী",mGeneral:"বাজেটের সার্বিক বিবরণ",mMistry:"মিস্ত্রির চুক্তি ও কিস্তি",mInstallments:"প্রতিটি মসজিদে দাতার কিস্তি",mInvoices:"কেনাকাটার চালান",mIssues:"খরচ ও চালানে মন্তব্য ও দ্বৈত এন্ট্রি",mProjects:"সাধারণ প্রকল্প",purchases:"কেনাকাটা",withInv:"চালানসহ",withoutInv:"চালানহীন",amountWithout:"চালানহীন টাকা",asOf:"{d} পর্যন্ত",reason:"কারণ",amount:"টাকা",openNotes:"খোলা মন্তব্য",
+dup_same:"সম্ভাব্য দ্বৈত: এন্ট্রি #{s}-এর মতো একই মসজিদ, খাত, টাকা ও তারিখ",dup_inv:"চালান নং {x} {m}-এর এন্ট্রি #{s}-এও আছে",dup_cross:"{m}-এর এন্ট্রি #{s}-এ একই টাকা, তারিখ ও খাত",manualFlag:"পর্যালোচনা মন্তব্য",
+editBudgets:"বাজেট সম্পাদনা",entryTitle:"এন্ট্রি ফর্ম",entryPreview:"খরচ ও চালান নথিভুক্ত করার ফর্ম এটি।",
+saved:"সংরক্ষিত",deleted:"মুছে ফেলা হয়েছে",uploading:"আপলোড হচ্ছে…",uploaded:"আপলোড হয়েছে। এন্ট্রির সাথে যুক্ত করতে সংরক্ষণ চাপুন।",uploadFail:"আপলোড ব্যর্থ।",fillReq:"পূরণ করুন: {x}",needInvoice:"চালান নম্বর বা ছবি (অথবা: চালান নেই)",dupInvWarn:"চালান {x} আগেই আছে ({m} · {d} · {a})। ভিন্ন চালান হলে আবার সংরক্ষণ চাপুন।",
+newExpense:"নতুন খরচ",expenseN:"এন্ট্রি {s} — {m}",attachMode:"আপনি এই এন্ট্রিতে শুধু চালান নম্বর ও ছবি যোগ করতে পারবেন।",readMode:"শুধু দেখা।",addedBy:"যোগ করেছেন {u} {d}",editedBy:"· সম্পাদনা {u} {d}",
+newReceipt:"নতুন প্রাপ্ত কিস্তি",editReceipt:"প্রাপ্ত কিস্তি",newMistryT:"নতুন মিস্ত্রির চুক্তি",mistryT:"{t}-এর চুক্তি — {m}",newNoteT:"নতুন মন্তব্য",noteT:"মন্তব্য",newProjT:"নতুন প্রকল্প",projT:"প্রকল্প {n}",ppT:"সংস্থাকে কিস্তি",newUserT:"নতুন ব্যবহারকারী",userT:"ব্যবহারকারী সম্পাদনা",
+confirmDelExp:"\"{x}\" ({a}) মুছবেন?",confirmDel:"মুছে ফেলা নিশ্চিত?",loading:"হিসাব লোড হচ্ছে…",
+paid_yes:"পরিশোধিত",paid_no:"অপরিশোধিত",t_ontime:"সময়মতো",t_late:"বিলম্বিত",rep_done:"সম্পূর্ণ",rep_none:"পাওয়া যায়নি",none:"—"}
+};
+/* أسماء البنود كما تُحفظ (بالعربية) وترجمتها للعرض */
+const CATS=["اسمنت","بطحاء","خرسان","حديد","البلك","مسامير","أغراض كهرباء","بويا وألوان","أغراض سراميك","السجاد فرشة","معلم بناء","معلم كهرباء","معلم بويا","معلم سراميك","أجرة العمال","أجرة سيارة","المواصلات","مصروفات عامة","رواتب الموظفين","بدر الهدى","مروان"];
+const CAT_T={"اسمنت":["Cement","সিমেন্ট"],"بطحاء":["Sand","বালি"],"خرسان":["Concrete / brick chips","কংক্রিট / খোয়া"],"حديد":["Steel rods","রড / লোহা"],"البلك":["Bricks","ইট / ব্লক"],"مسامير":["Nails","পেরেক"],"أغراض كهرباء":["Electrical materials","বৈদ্যুতিক সামগ্রী"],"بويا وألوان":["Paint","রং"],"أغراض سراميك":["Ceramic materials","টাইলস সামগ্রী"],"السجاد فرشة":["Carpets","কার্পেট"],"معلم بناء":["Mason","রাজমিস্ত্রি"],"معلم كهرباء":["Electrician","ইলেকট্রিশিয়ান"],"معلم بويا":["Painter","রং মিস্ত্রি"],"معلم سراميك":["Tiler","টাইলস মিস্ত্রি"],"أجرة العمال":["Labour wages","শ্রমিক মজুরি"],"أجرة سيارة":["Vehicle hire","গাড়ি ভাড়া"],"المواصلات":["Transport","যাতায়াত"],"مصروفات عامة":["General expenses","সাধারণ খরচ"],"رواتب الموظفين":["Staff salaries","কর্মচারী বেতন"],"بدر الهدى":["Badrul Huda (transport)","বদরুল হুদা (যাতায়াত)"],"مروان":["Marwan (transport)","মারওয়ান (যাতায়াত)"]};
+const PURCHASE=new Set(["اسمنت","بطحاء","خرسان","حديد","البلك","مسامير","أغراض كهرباء","بويا وألوان","أغراض سراميك","السجاد فرشة"]);
+const MTYPES={build:{ar:"معلم البناء",en:"Mason",bn:"রাজমিস্ত্রি",cat:"معلم بناء"},electric:{ar:"معلم الكهرباء",en:"Electrician",bn:"ইলেকট্রিশিয়ান",cat:"معلم كهرباء"},paint:{ar:"معلم البويا",en:"Painter",bn:"রং মিস্ত্রি",cat:"معلم بويا"},ceramic:{ar:"معلم السراميك",en:"Tiler",bn:"টাইলস মিস্ত্রি",cat:"معلم سراميك"},plumbing:{ar:"معلم السباكة",en:"Plumber",bn:"প্লাম্বার"},carpentry:{ar:"النجارة والأبواب",en:"Carpentry & doors",bn:"কাঠমিস্ত্রি"},aluminum:{ar:"الألمنيوم والشبابيك",en:"Aluminium & windows",bn:"অ্যালুমিনিয়াম ও জানালা"},other:{ar:"أعمال أخرى",en:"Other work",bn:"অন্যান্য কাজ"}};
+const PTYPES={"بئر ارتوازي":["Deep tube well","গভীর নলকূপ"],"بئر سطحي":["Shallow well","অগভীর নলকূপ"],"قرآن كريم":["Quran distribution","কুরআন শরীফ বিতরণ"]};
+const PSTAT={"تم التنفيذ":["Completed","সম্পন্ন"],"جاري التنفيذ":["In progress","চলমান"],"لم يبدأ":["Not started","শুরু হয়নি"],"يحتاج متابعة":["Needs follow-up","ফলো-আপ প্রয়োজন"],"ملغي":["Cancelled","বাতিল"]};
+const NKINDS={"ملاحظة":["Note","মন্তব্য"],"خطأ في الإدخال":["Entry error","এন্ট্রি ভুল"],"تصحيح مطلوب":["Correction needed","সংশোধন প্রয়োজন"],"فاتورة ناقصة":["Missing invoice","চালান নেই"],"استفسار":["Question","প্রশ্ন"]};
+const MOSQUE_T={1:["Al-Rahman Mosque","আর-রহমান মসজিদ"],2:["Al-Raheem Mosque","আর-রহিম মসজিদ"],3:["Al-Aziz Mosque","আল-আজিজ মসজিদ"],4:["Al-Jabbar Mosque","আল-জাব্বার মসজিদ"]};
+const ORD_AR=["الأولى","الثانية","الثالثة","الرابعة","الخامسة","السادسة","السابعة","الثامنة","التاسعة","العاشرة","الحادية عشرة","الثانية عشرة","الثالثة عشرة","الرابعة عشرة","الخامسة عشرة","السادسة عشرة","السابعة عشرة","الثامنة عشرة","التاسعة عشرة","العشرون"];
+const ORD_EN=n=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
+
+let LANG="ar";try{LANG=localStorage.getItem("lang")||"ar"}catch(_){}
+if(!I18N[LANG])LANG="ar";
+const t=(k,v)=>{let s=(I18N[LANG]&&I18N[LANG][k])??I18N.ar[k]??k;if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
+const tr=(map,ar)=>LANG==="ar"||!map[ar]?ar:map[ar][LANG==="en"?0:1];
+const catName=c=>tr(CAT_T,c),ptName=p=>tr(PTYPES,p),psName=s=>tr(PSTAT,s),nkName=k=>tr(NKINDS,k);
+const mtName=k=>(MTYPES[k]||MTYPES.other)[LANG];
+const ord=i=>LANG==="ar"?t("ordinal",{o:ORD_AR[i]||String(i+1)}):LANG==="en"?t("ordinal",{o:ORD_EN(i+1)}):t("ordinal",{o:i+1});
+
+/* ============================ الحالة والأدوات ============================ */
+const S={token:null,user:null,mosques:[],exp:new Map(),rec:new Map(),mis:new Map(),notes:new Map(),proj:new Map(),ppay:new Map(),ev:new Map(),trips:new Map(),users:[],
+  mosque:0,tab:null,f:{q:"",cat:"",noinv:false,review:false,dup:false},limit:100,nf:"open",pf:{q:"",type:"",status:""},plimit:100,dupMap:new Map()};
+const $=s=>document.querySelector(s);
+const P=k=>!!(S.user&&S.user.perms&&S.user.perms[k]);
+const fmt=n=>(Math.round((+n||0)*100)/100).toLocaleString("en-US");
+const N=v=>{const x=parseFloat(String(v??"").replace(/[,٬\s]/g,"").replace("٫","."));return isFinite(x)?x:0};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const mosques=()=>S.mosques.slice().sort((a,b)=>a.n-b.n);
+const mObj=n=>S.mosques.find(m=>m.n==n);
+const mName=n=>{const m=mObj(n);if(!m)return "#"+n;if(LANG==="en")return m.name_en||(MOSQUE_T[n]||[])[0]||m.name;if(LANG==="bn")return m.name_bn||(MOSQUE_T[n]||[])[1]||m.name;return m.name};
+const mColor=n=>`var(--m${((n-1)%4)+1})`;
+const hasInv=e=>!!(String(e.invoiceNo||"").trim()||e.invoiceFile);
+const isPur=e=>PURCHASE.has(e.category);
+function toast(x){const el=$("#toast");el.textContent=x;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2800)}
+function showErr(el,x){el.textContent=x;el.hidden=false}
+
+/* ============================ الاتصال بالخادم ============================ */
+const baked=()=>API_URL&&!API_URL.startsWith("PASTE");
+function apiUrl(){if(baked())return API_URL;try{return localStorage.getItem("apiUrl")||""}catch(_){return ""}}
+async function api(action,payload={}){
+  const API=apiUrl();if(!API)throw {code:"api_missing"};
+  let res;
+  try{res=await fetch(API,{method:"POST",body:JSON.stringify({action,token:S.token,...payload}),redirect:"follow"})}
+  catch(e){throw {code:"network"}}
+  let j;try{j=await res.json()}catch(e){throw {code:"network"}}
+  if(!j.ok){if(j.error==="no_session"&&action!=="login"){logout(true)}throw {code:j.error,message:j.message}}
+  return j;
+}
+const errText=e=>{const c=e?.code;if(c==="api_missing")return t("apiTitle");if(c==="invalid"&&I18N.ar[e.message])return t(e.message);return I18N.ar[c]?t(c):(e?.message||t("network"))};
+
+/* ============================ الدخول ============================ */
+function renderLang(){
+  document.documentElement.lang=LANG;document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  document.querySelectorAll("[data-t]").forEach(el=>el.textContent=t(el.dataset.t));
+  document.querySelectorAll("[data-lang-switch]").forEach(w=>w.innerHTML=[["ar","عربي"],["en","EN"],["bn","বাংলা"]].map(([k,l])=>`<button type="button" data-lang="${k}" aria-pressed="${LANG===k}">${l}</button>`).join(""));
+  document.title=t("appTitle");
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b)return;LANG=b.dataset.lang;try{localStorage.setItem("lang",LANG)}catch(_){}renderLang();if(S.user){renderShell();render()}});
+$("#fLogin").addEventListener("submit",async e=>{e.preventDefault();const err=$("#loginErr");err.hidden=true;const btn=$("#loginBtn");btn.disabled=true;
+  try{const r=await api("login",{code:$("#loginCode").value});S.token=r.token;S.user=r.user;try{localStorage.setItem("tok",r.token)}catch(_){}$("#loginCode").value="";await boot()}
+  catch(x){showErr(err,errText(x))}finally{btn.disabled=false}});
+function logout(expired){if(S.token&&!expired)api("logout").catch(()=>{});S.token=null;S.user=null;try{localStorage.removeItem("tok")}catch(_){}
+  $("#appView").hidden=true;$("#loginView").hidden=false;if(expired)showErr($("#loginErr"),t("no_session"))}
+$("#btnLogout").onclick=()=>logout(false);
+$("#btnRefresh").onclick=async()=>{$("#btnRefresh").disabled=true;try{await loadAll();render();toast(t("refresh")+" ✓")}catch(e){toast(errText(e))}finally{$("#btnRefresh").disabled=false}};
+
+async function loadAll(){
+  const d=await api("load");S.user=d.user;S.mosques=d.mosques||[];
+  const fill=(map,arr)=>{map.clear();(arr||[]).forEach(r=>map.set(String(r.id),r))};
+  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);
+  computeDupes();
+}
+async function boot(){
+  $("#loginView").hidden=true;$("#appView").hidden=false;$("#view").innerHTML=`<div class="panel empty">${t("loading")}</div>`;
+  try{await loadAll()}catch(e){if(e.code!=="no_session")$("#view").innerHTML=`<div class="panel empty">${esc(errText(e))}</div>`;return}
+  if(P("users")){try{S.users=(await api("users")).users}catch(_){}}
+  const tabs=allowedTabs();if(!S.tab||!tabs.includes(S.tab))S.tab=tabs[0];
+  renderShell();render();
+}
+
+/* ============================ الهيكل والتبويبات ============================ */
+function allowedTabs(){
+  if(!P("viewAll")){const t=[];if(P("evidence"))t.push("evidence");if(P("trips"))t.push("trips");t.push("entry");return t}
+  const t=[];if(P("master"))t.push("master");t.push("overview","expenses","receipts","mistry","cats","notes","projects","evidence","trips");if(P("users"))t.push("users");return t;
+}
+function renderShell(){
+  renderLang();
+  $("#whoami").textContent=`${S.user.name} — ${t("role_"+S.user.role)}`;
+  $("#tabs").innerHTML=allowedTabs().map(k=>`<button role="tab" type="button" data-tab="${k}" aria-selected="${S.tab===k}">${t("tab_"+k)}${k==="notes"?` <span class="pill warn" id="notesBadge" hidden></span>`:""}</button>`).join("");
+  $("#mosqueChips").innerHTML=[{n:0},...mosques()].map(m=>`<button class="chip" type="button" data-m="${m.n}" aria-pressed="${S.mosque==m.n}">${m.n?`<span class="dot" style="background:${mColor(m.n)}"></span>${esc(mName(m.n))}`:t("allMosques")}</button>`).join("");
+  $("#quickAdd").innerHTML=P("create")&&P("viewAll")?`<button class="btn small" type="button" id="qRec">${t("addReceipt")}</button><button class="btn primary small" type="button" id="qExp">${t("addExpense")}</button>`:"";
+  $("#qExp")&&($("#qExp").onclick=()=>openExp(null));$("#qRec")&&($("#qRec").onclick=()=>openRec(null));
+}
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;S.tab=b.dataset.tab;document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));render()});
+$("#mosqueChips").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;S.mosque=+b.dataset.m;S.limit=100;document.querySelectorAll("#mosqueChips .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==S.mosque));render()});
+function render(){
+  const v=$("#view");
+  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips"].includes(S.tab);
+  ({master:vMaster,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
+  const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&P("edit")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
+  const b=$("#notesBadge");if(b){const c=[...S.notes.values()].filter(n=>(n.status||"open")==="open").length;b.hidden=!c;b.textContent=c}
+}
+
+/* ============================ الحسابات ============================ */
+function stats(n){
+  const ex=[...S.exp.values()].filter(e=>!n||e.mosque==n),rc=[...S.rec.values()].filter(r=>!n||r.mosque==n);
+  const sum=(a,f)=>a.reduce((s,x)=>s+N(x[f]),0);
+  const spent=sum(ex,"total"),donor=sum(rc.filter(r=>r.source!=="council"),"amount"),council=sum(rc.filter(r=>r.source==="council"),"amount");
+  const pur=ex.filter(isPur),purInv=pur.filter(hasInv);
+  const budget=n?N(mObj(n)?.budget):S.mosques.reduce((a,m)=>a+N(m.budget),0);
+  return {ex,rc,spent,donor,council,budget,balance:donor-spent,remaining:budget-donor,deficit:Math.max(0,spent-donor),pur:pur.length,purInv:purInv.length,purAmt:sum(pur,"total"),purInvAmt:sum(purInv,"total"),
+    review:ex.filter(e=>e.review||S.dupMap.has(String(e.id))).length};
+}
+/* اكتشاف المكررات المحتملة */
+function computeDupes(){
+  const M=new Map(),add=(e,r)=>{const k=String(e.id);if(!M.has(k))M.set(k,[]);M.get(k).push(r)};
+  const ex=[...S.exp.values()];
+  const g=new Map();
+  for(const e of ex){if(N(e.total)<500)continue;const k=[e.mosque,e.category,N(e.total),e.date].join("|");if(!g.has(k))g.set(k,[]);g.get(k).push(e)}
+  for(const arr of g.values())if(arr.length>1){arr.sort((a,b)=>a.seq-b.seq);arr.slice(1).forEach(e=>add(e,{k:"dup_same",s:arr[0].seq,m:arr[0].mosque,ref:arr[0].id}))}
+  const gi=new Map();
+  for(const e of ex){const x=String(e.invoiceNo||"").trim();if(!x)continue;const k=x+"|"+(e.shop||"");if(!gi.has(k))gi.set(k,[]);gi.get(k).push(e)}
+  for(const arr of gi.values())if(arr.length>1)arr.forEach(e=>{const o=arr.find(y=>y!==e);add(e,{k:"dup_inv",x:e.invoiceNo,s:o.seq,m:o.mosque,ref:o.id})});
+  const gc=new Map();
+  for(const e of ex){if(N(e.total)<5000||!isPur(e))continue;const k=[e.category,N(e.total),e.date].join("|");if(!gc.has(k))gc.set(k,[]);gc.get(k).push(e)}
+  for(const arr of gc.values()){const ms=new Set(arr.map(e=>e.mosque));if(ms.size>1)arr.forEach(e=>{const o=arr.find(y=>y.mosque!==e.mosque);add(e,{k:"dup_cross",s:o.seq,m:o.mosque,ref:o.id})})}
+  S.dupMap=M;
+}
+const dupText=d=>t(d.k,{s:d.s,m:mName(d.m),x:d.x||""});
+const covPill=(a,b)=>{if(!b)return `<span class="pill mute">${t("noPurch")}</span>`;const p=Math.round(a/b*100);return `<span class="pill ${p>=90?"ok":p>=40?"warn":"bad"}">${t("invPct",{p})}</span>`};
+const signCls=v=>v<0?"neg":v>0?"pos":"";
+
+/* ============================ كشف الحسابات الشامل ============================ */
+function vMaster(v){
+  const ms=mosques(),A=stats(0),S_=ms.map(m=>({m,s:stats(m.n)}));
+  const row=(label,f,cls)=>`<tr><th>${label}</th>${S_.map(({s})=>`<td class="amt num ${cls?cls(f(s)):""}">${fmt(f(s))}</td>`).join("")}<td class="amt num ${cls?cls(f(A)):""}" style="font-weight:700">${fmt(f(A))}</td></tr>`;
+  const head=`<tr><th></th>${ms.map(m=>`<th class="amt"><span class="mtag" style="--mc:${mColor(m.n)}">${m.n}</span> ${esc(mName(m.n))}</th>`).join("")}<th class="amt">${t("total")}</th></tr>`;
+  // المعلمون
+  const types=Object.keys(MTYPES).filter(k=>[...S.mis.values()].some(x=>x.type===k)||(MTYPES[k].cat&&[...S.exp.values()].some(e=>e.category===MTYPES[k].cat)));
+  const misCell=(n,k)=>{const xs=[...S.mis.values()].filter(x=>x.mosque==n&&x.type===k);const ag=xs.reduce((a,x)=>a+N(x.agreed),0),pd=xs.reduce((a,x)=>a+misPaid(x),0);const sp=MTYPES[k].cat?[...S.exp.values()].filter(e=>e.mosque==n&&e.category===MTYPES[k].cat).reduce((a,e)=>a+N(e.total),0):0;
+    if(!ag&&!pd&&!sp)return `<td class="muted">—</td>`;return `<td class="amt small"><div>${t("agreed")}: <span class="num">${fmt(ag)}</span></div><div>${t("ist_done")}: <span class="num">${fmt(pd)}</span></div><div class="${ag-pd<0?"neg":""}">${t("remaining")}: <span class="num">${ag?fmt(ag-pd):"—"}</span></div><div class="muted">${t("ledgerSpent")}: <span class="num">${fmt(sp)}</span></div></td>`};
+  // دفعات المتبرع
+  const donorBy=ms.map(m=>[...S.rec.values()].filter(r=>r.mosque==m.n&&r.source!=="council").sort((a,b)=>(a.date||"").localeCompare(b.date||"")));
+  const maxI=Math.max(0,...donorBy.map(a=>a.length));
+  // المشاكل
+  const issues=[];
+  for(const e of S.exp.values()){const d=S.dupMap.get(String(e.id))||[];d.forEach(x=>issues.push({e,why:dupText(x),sev:"bad"}));if(e.review)issues.push({e,why:e.review,sev:"warn"})}
+  issues.sort((a,b)=>a.e.mosque-b.e.mosque||a.e.seq-b.e.seq);
+  const openNotes=[...S.notes.values()].filter(n=>(n.status||"open")==="open");
+  // المشاريع
+  const pj=[...S.proj.values()],live=pj.filter(p=>p.status!=="ملغي");const pjTot=live.reduce((a,p)=>a+N(p.cost)+N(p.fee),0),pjPaid=[...S.ppay.values()].reduce((a,p)=>a+N(p.amount),0);
+  v.innerHTML=`
+  <div class="row-flex noprint" style="justify-content:space-between"><div><h2 class="sec-h" style="font-size:1.2rem">${t("mStmtTitle")}</h2><div class="small muted">${t("asOf",{d:today()})}</div></div>
+    <div class="row-flex">${P("export")?`<button class="btn primary" type="button" id="btnExport">⬇ ${t("export")}</button>`:""}${P("edit")?`<button class="btn" type="button" id="btnCfg">${t("editBudgets")}</button>`:""}<button class="btn" type="button" id="btnCsv">${t("csv")}</button><button class="btn primary" type="button" onclick="window.print()">${t("print")}</button></div></div>
+  <section class="panel"><div class="ph"><h3 class="sec-h">1 · ${t("mGeneral")}</h3></div><div class="tscroll"><table class="stmt"><thead>${head}</thead><tbody>
+    ${row(t("budget"),s=>s.budget)}${row(t("received"),s=>s.donor)}${row(t("notReceived"),s=>s.remaining)}${row(t("spent"),s=>s.spent)}
+    ${row(t("balance"),s=>s.balance,signCls)}${row(t("deficit"),s=>-s.deficit,v=>v<0?"neg":"")}${row(t("council"),s=>s.council)}${row(t("withCouncil"),s=>s.spent+s.council)}${row(t("grandBudget"),s=>s.budget+s.council)}
+  </tbody></table></div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">2 · ${t("mMistry")}</h3></div><div class="tscroll"><table class="stmt"><thead><tr><th></th>${ms.map(m=>`<th>${esc(mName(m.n))}</th>`).join("")}</tr></thead><tbody>
+    ${types.map(k=>`<tr><th>${esc(mtName(k))}</th>${ms.map(m=>misCell(m.n,k)).join("")}</tr>`).join("")||`<tr><td class="empty">${t("noneYet")}</td></tr>`}</tbody></table></div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">3 · ${t("mInstallments")}</h3></div><div class="tscroll"><table class="stmt"><thead><tr><th>${t("installment")}</th>${ms.map(m=>`<th class="amt">${esc(mName(m.n))}</th>`).join("")}</tr></thead><tbody>
+    ${Array.from({length:maxI},(_,i)=>`<tr><th>${esc(ord(i))}</th>${donorBy.map(a=>a[i]?`<td class="amt"><span class="num">${fmt(a[i].amount)}</span><div class="small muted num">${esc(a[i].date||"")}</div></td>`:`<td class="muted amt">—</td>`).join("")}</tr>`).join("")}</tbody>
+    <tfoot><tr><td>${t("total")}</td>${donorBy.map(a=>`<td class="amt num">${fmt(a.reduce((s,r)=>s+N(r.amount),0))}</td>`).join("")}</tr></tfoot></table></div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">4 · ${t("mInvoices")}</h3></div><div class="tscroll"><table class="stmt"><thead>${head}</thead><tbody>
+    ${row(t("purchases"),s=>s.pur)}${row(t("withInv"),s=>s.purInv)}${row(t("withoutInv"),s=>s.pur-s.purInv,v=>v>0?"neg":"")}${row(t("amountWithout"),s=>s.purAmt-s.purInvAmt,v=>v>0?"neg":"")}
+  </tbody></table></div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">5 · ${t("mIssues")}</h3><span class="small muted">${issues.length} · ${t("openNotes")}: ${openNotes.length}</span></div><div class="tscroll"><table><thead><tr><th>${t("mosque")}</th><th>#</th><th>${t("date")}</th><th>${t("category")}</th><th>${t("desc")}</th><th class="amt">${t("amount")}</th><th>${t("reason")}</th></tr></thead><tbody>
+    ${issues.map(x=>`<tr class="row" data-eid="${esc(x.e.id)}"><td><span class="mtag" style="--mc:${mColor(x.e.mosque)}">${x.e.mosque}</span></td><td class="num">${x.e.seq}</td><td class="num">${esc(x.e.date)}</td><td>${esc(catName(x.e.category))}</td><td>${esc(x.e.desc)}</td><td class="amt num">${fmt(x.e.total)}</td><td style="color:var(--${x.sev})">${esc(x.why)}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">${t("noneYet")}</td></tr>`}
+    ${openNotes.map(n=>`<tr><td>${n.mosque>0?`<span class="mtag" style="--mc:${mColor(n.mosque)}">${n.mosque}</span>`:"—"}</td><td></td><td class="num">${esc(n.date||"")}</td><td>${esc(nkName(n.kind||"ملاحظة"))}</td><td colspan="2">${esc(n.title)}</td><td class="muted">${esc(n.body||"")}</td></tr>`).join("")}
+  </tbody></table></div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">6 · ${t("mProjects")}</h3></div><div class="totals" style="border:0;border-radius:0">
+    <div><span class="lbl">${t("projCount")}</span><span class="val num">${pj.length}</span><span class="small muted">${Object.keys(PTYPES).map(k=>`${esc(ptName(k))}: ${pj.filter(p=>p.type===k).length}`).join(" · ")}</span></div>
+    <div><span class="lbl">${t("projTotal")}</span><span class="val num">${fmt(pjTot)}</span></div><div><span class="lbl">${t("paidAgency")}</span><span class="val num">${fmt(pjPaid)}</span></div>
+    <div><span class="lbl">${t("remaining")}</span><span class="val num ${signCls(pjTot-pjPaid)}">${fmt(pjTot-pjPaid)}</span></div>
+    ${Object.keys(PSTAT).map(s=>{const c=pj.filter(p=>p.status===s).length;return c?`<div><span class="lbl">${esc(psName(s))}</span><span class="val num">${c}</span></div>`:""}).join("")}
+  </div></section>`;
+  v.querySelectorAll("tr[data-eid]").forEach(tr=>tr.onclick=()=>openExp(tr.dataset.eid));
+  $("#btnCfg")&&($("#btnCfg").onclick=openCfg);$("#btnCsv").onclick=exportExpCsv;$("#btnExport")&&($("#btnExport").onclick=e=>doExport(e.currentTarget));
+  if(S.lastExport)v.insertAdjacentHTML("afterbegin",`<div class="notice info">${t("exported")}: <a href="${esc(S.lastExport.url)}" target="_blank" rel="noopener">${esc(S.lastExport.name)}</a></div>`);
+}
+
+/* ============================ نظرة عامة ============================ */
+function vOverview(v){
+  const list=S.mosque?mosques().filter(m=>m.n==S.mosque):mosques(),s=stats(S.mosque);
+  v.innerHTML=`${P("create")||P("edit")?"":`<div class="notice info">${t("viewOnly")}</div>`}
+  <div class="totals"><div><span class="lbl">${t("budget")}</span><span class="val num">${fmt(s.budget)}</span></div><div><span class="lbl">${t("received")}</span><span class="val num">${fmt(s.donor)}</span></div><div><span class="lbl">${t("spent")}</span><span class="val num">${fmt(s.spent)}</span></div><div><span class="lbl">${t("balance")}</span><span class="val num" style="color:${s.balance<0?"var(--bad)":"var(--ok)"}">${fmt(s.balance)}</span></div><div><span class="lbl">${t("withInv")}</span><span class="val num">${fmt(s.purInvAmt)} <span class="small muted">/ ${fmt(s.purAmt)}</span></span></div></div>
+  <div class="grid4">${list.map(m=>{const x=stats(m.n),pS=x.budget?Math.min(100,x.spent/x.budget*100):0,pR=x.budget?Math.min(100,x.donor/x.budget*100):0;
+    return `<article class="panel mcard" style="--mc:${mColor(m.n)}"><div class="row-flex" style="justify-content:space-between"><h3>${esc(mName(m.n))}</h3><span class="small muted">${esc(m.place||"")}</span></div>
+    <dl class="kv"><dt>${t("budget")}</dt><dd class="num">${fmt(x.budget)}</dd><dt>${t("received")}</dt><dd class="num">${fmt(x.donor)}</dd><dt>${t("notReceived")}</dt><dd class="num">${fmt(x.remaining)}</dd><dt>${t("spent")}</dt><dd class="num">${fmt(x.spent)}</dd><dt>${t("balance")}</dt><dd class="num" style="color:${x.balance<0?"var(--bad)":"var(--ok)"};font-weight:600">${fmt(x.balance)}</dd><dt>${t("council")}</dt><dd class="num">${fmt(x.council)}</dd></dl>
+    <div><div class="bar"><span style="width:${pS}%;background:var(--mc)"></span></div><div class="small muted row-flex" style="justify-content:space-between;margin-top:4px"><span>${t("spentPct",{p:Math.round(pS)})}</span><span>${t("recvPct",{p:Math.round(pR)})}</span></div></div>
+    <div class="row-flex">${covPill(x.purInv,x.pur)}<span class="small muted">${t("withInvoice",{a:x.purInv,b:x.pur})}</span>${x.review?`<span class="pill warn">${t("reviewCount",{n:x.review})}</span>`:""}</div>
+    <div class="row-flex"><button class="btn small" type="button" data-go="${m.n}">${t("tab_expenses")}</button><button class="btn small" type="button" data-go="${m.n}" data-noinv="1">${t("onlyNoInv")}</button></div></article>`}).join("")}</div>`;
+  v.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.mosque=+b.dataset.go;S.f={q:"",cat:"",noinv:!!b.dataset.noinv,review:false,dup:false};S.tab="expenses";renderShell();render()});
+}
+
+/* ============================ المصروفات ============================ */
+function filteredExp(){const f=S.f,q=f.q.trim().toLowerCase();
+  return [...S.exp.values()].filter(e=>(!S.mosque||e.mosque==S.mosque)&&(!f.cat||e.category===f.cat)&&(!f.noinv||(isPur(e)&&!hasInv(e)&&!e.noInvoice))&&(!f.review||e.review)&&(!f.dup||S.dupMap.has(String(e.id)))
+   &&(!q||[e.desc,e.category,catName(e.category),e.invoiceNo,e.shop,e.paidBy,e.review,String(e.total)].some(x=>String(x||"").toLowerCase().includes(q))))
+   .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(a.mosque-b.mosque)||((b.seq||0)-(a.seq||0)))}
+function vExpenses(v){
+  const f=S.f,rows=filteredExp(),shown=rows.slice(0,S.limit),sum=rows.reduce((a,e)=>a+N(e.total),0),keep=document.activeElement?.id;
+  v.innerHTML=`<section class="panel"><div class="toolbar">
+    <input type="search" id="fq" placeholder="${esc(t("search"))}" value="${esc(f.q)}">
+    <select id="fcat"><option value="">${t("allCats")}</option>${CATS.map(c=>`<option value="${esc(c)}" ${f.cat===c?"selected":""}>${esc(catName(c))}</option>`).join("")}</select>
+    <label class="tog"><input type="checkbox" id="fnoinv" ${f.noinv?"checked":""}> ${t("onlyNoInv")}</label>
+    <label class="tog"><input type="checkbox" id="frev" ${f.review?"checked":""}> ${t("onlyReview")}</label>
+    <label class="tog"><input type="checkbox" id="fdup" ${f.dup?"checked":""}> ${t("onlyDup")} (${S.dupMap.size})</label>
+    <button class="btn small" type="button" id="expCsv">${t("csv")}</button></div>
+  <div class="tscroll"><table><thead><tr><th>#</th><th>${t("date")}</th>${S.mosque?"":`<th>${t("mosque")}</th>`}<th>${t("category")}</th><th>${t("desc")}</th><th class="hide-sm">${t("qty")}</th><th class="hide-sm amt">${t("unitPrice")}</th><th class="amt">${t("total")}</th><th>${t("invoice")}</th></tr></thead>
+  <tbody>${shown.map(e=>{const d=S.dupMap.get(String(e.id));return `<tr class="row ${e.review||d?"flag":""}" data-eid="${esc(e.id)}" tabindex="0"><td class="num muted">${e.seq??""}</td><td class="num" style="white-space:nowrap">${esc(e.date)}</td>${S.mosque?"":`<td><span class="mtag" style="--mc:${mColor(e.mosque)}">${e.mosque}</span></td>`}<td style="white-space:nowrap">${esc(catName(e.category))}</td>
+    <td style="min-width:180px">${esc(e.desc)}${e.review?`<div class="small" style="color:var(--warn)">⚑ ${esc(e.review)}</div>`:""}${(d||[]).map(x=>`<div class="small" style="color:var(--bad)">⧉ ${esc(dupText(x))}</div>`).join("")}</td>
+    <td class="hide-sm num">${esc(e.qty)}</td><td class="hide-sm amt num">${esc(e.unitPrice)}</td><td class="amt num" style="font-weight:600">${fmt(e.total)}</td><td>${invCell(e)}</td></tr>`}).join("")||`<tr><td colspan="9" class="empty">${t("noMatch")}</td></tr>`}</tbody>
+  <tfoot><tr><td colspan="${S.mosque?6:7}">${t("total")} (${rows.length} ${t("entries")})</td><td class="amt num">${fmt(sum)}</td><td></td></tr></tfoot></table></div>
+  ${rows.length>S.limit?`<div class="pager"><button class="btn" id="more" type="button">${t("showMore")} (${rows.length-S.limit})</button></div>`:""}</section>`;
+  const fq=$("#fq");fq.oninput=()=>{f.q=fq.value;S.limit=100;clearTimeout(fq._t);fq._t=setTimeout(render,200)};if(keep==="fq"){fq.focus();fq.setSelectionRange(fq.value.length,fq.value.length)}
+  $("#fcat").onchange=e=>{f.cat=e.target.value;render()};$("#fnoinv").onchange=e=>{f.noinv=e.target.checked;render()};$("#frev").onchange=e=>{f.review=e.target.checked;render()};$("#fdup").onchange=e=>{f.dup=e.target.checked;render()};
+  $("#more")&&($("#more").onclick=()=>{S.limit+=200;render()});$("#expCsv").onclick=exportExpCsv;
+  v.querySelectorAll("tr[data-eid]").forEach(tr=>{tr.onclick=()=>openExp(tr.dataset.eid);tr.onkeydown=e=>{if(e.key==="Enter")openExp(tr.dataset.eid)}});
+}
+function invCell(e){
+  if(hasInv(e))return `<div style="display:flex;flex-direction:column;gap:2px"><span class="pill ok">${e.invoiceNo?esc(t("invHas",{x:e.invoiceNo})):t("invFile")}</span>${e.shop?`<span class="small muted">${esc(e.shop)}</span>`:""}${e.invoiceFile?`<span class="small" style="color:var(--ink)">📎 ${t("invFile")}</span>`:""}</div>`;
+  if(e.noInvoice||!isPur(e))return `<span class="pill mute">${t("invNotNeeded")}</span>`;
+  return `<span class="pill bad">${t("invMissing")}</span>`;
+}
+
+/* ============================ الدفعات المستلمة ============================ */
+function vReceipts(v){
+  const list=mosques().filter(m=>!S.mosque||m.n==S.mosque);
+  v.innerHTML=`<div class="cols2">${list.map(m=>{const rc=[...S.rec.values()].filter(r=>r.mosque==m.n),s=stats(m.n);
+    const sec=(src,title)=>{const rs=rc.filter(r=>(r.source||"donor")===src).sort((a,b)=>(a.date||"").localeCompare(b.date||""));const tt=rs.reduce((a,r)=>a+N(r.amount),0);
+      return `<div class="tscroll"><table><thead><tr><th colspan="4">${title}</th></tr><tr><th>${t("installment")}</th><th>${t("date")}</th><th>${t("receiver")}</th><th class="amt">${t("amount")}</th></tr></thead><tbody>
+      ${rs.map((r,i)=>`<tr class="row" data-rid="${esc(r.id)}" tabindex="0"><td style="white-space:nowrap">${esc(ord(i))}</td><td class="num">${esc(r.date||"—")}</td><td>${esc(r.receiver||"")}${r.note?` <span class="muted small">· ${esc(r.note)}</span>`:""}${r.file?" 📎":""}</td><td class="amt num">${fmt(r.amount)}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">${t("noneYet")}</td></tr>`}
+      </tbody><tfoot><tr><td colspan="3">${t("total")}</td><td class="amt num">${fmt(tt)}</td></tr></tfoot></table></div>`};
+    return `<section class="panel" style="--mc:${mColor(m.n)};border-top:4px solid var(--mc)"><div class="ph"><h2 class="sec-h">${esc(mName(m.n))}</h2><span class="small muted">${t("budget")} <span class="num">${fmt(m.budget)}</span> · ${t("notReceived")} <span class="num">${fmt(s.remaining)}</span></span></div>${sec("donor",t("donorPays"))}${sec("council",t("councilPays"))}</section>`}).join("")}</div>`;
+  v.querySelectorAll("tr[data-rid]").forEach(tr=>tr.onclick=()=>openRec(tr.dataset.rid));
+}
+
+/* ============================ المعلمون ============================ */
+const misPaid=m=>(m.installments||[]).reduce((a,x)=>a+N(x.amount),0);
+function vMistry(v){
+  const list=mosques().filter(m=>!S.mosque||m.n==S.mosque),order=Object.keys(MTYPES);
+  v.innerHTML=`<div class="row-flex" style="justify-content:space-between"><p class="small muted" style="margin:0;max-width:75ch">${t("mistryHint")}</p>${P("create")?`<button class="btn primary" type="button" id="misNew">${t("newMistry")}</button>`:""}</div>
+  ${list.map(m=>{const ms=[...S.mis.values()].filter(x=>x.mosque==m.n).sort((a,b)=>order.indexOf(a.type)-order.indexOf(b.type)),ex=[...S.exp.values()].filter(e=>e.mosque==m.n);
+    const missing=order.filter(k=>MTYPES[k].cat&&!ms.some(x=>x.type===k)&&ex.some(e=>e.category===MTYPES[k].cat));
+    return `<section class="panel" style="--mc:${mColor(m.n)}"><div class="ph"><h2 class="sec-h"><span class="mtag">${m.n}</span> ${esc(mName(m.n))}</h2><span class="small muted">${t("agreed")} <span class="num">${fmt(ms.reduce((a,x)=>a+N(x.agreed),0))}</span></span></div>
+    <div class="cols2" style="padding:14px">${ms.map(x=>misCard(x,ex)).join("")}
+    ${missing.map(k=>{const sp=ex.filter(e=>e.category===MTYPES[k].cat).reduce((a,e)=>a+N(e.total),0);return `<article class="panel mis" style="border-style:dashed"><div class="row-flex" style="justify-content:space-between"><h4>${esc(mtName(k))}</h4><span class="pill warn">${t("noAgreement")}</span></div><div class="small">${t("spentNoAgree",{x:fmt(sp)})}</div>${P("create")?`<button class="btn small" type="button" data-newmis="${m.n}:${k}">${t("recordAgreement")}</button>`:""}</article>`}).join("")}
+    ${!ms.length&&!missing.length?`<div class="empty">${t("noneYet")}</div>`:""}</div></section>`}).join("")}`;
+  $("#misNew")&&($("#misNew").onclick=()=>openMis(null));
+  v.querySelectorAll("[data-mis]").forEach(b=>b.onclick=()=>openMis(b.dataset.mis));
+  v.querySelectorAll("[data-newmis]").forEach(b=>b.onclick=()=>{const[n,k]=b.dataset.newmis.split(":");openMis(null,{mosque:+n,type:k})});
+}
+function misCard(x,ex){
+  const k=MTYPES[x.type]?x.type:"other",paid=misPaid(x),ag=N(x.agreed),rem=ag-paid,inst=x.installments||[];
+  const sp=MTYPES[k].cat?ex.filter(e=>e.category===MTYPES[k].cat).reduce((a,e)=>a+N(e.total),0):null,next=inst.find(i=>i.status!=="done");
+  return `<article class="panel mis"><div class="row-flex" style="justify-content:space-between;align-items:flex-start"><div><h4>${esc(mtName(k))}${x.name?` — ${esc(x.name)}`:""}</h4><div class="small muted">${x.phone?`<span class="num">${esc(x.phone)}</span> · `:""}${esc(x.scope||"")}</div></div><button class="btn small" type="button" data-mis="${esc(x.id)}">${P("edit")?t("editPays"):t("details2")}</button></div>
+  <dl class="kv"><dt>${t("agreed")}</dt><dd class="num">${fmt(ag)}</dd><dt>${t("paidInst",{a:inst.filter(i=>i.status==="done").length,b:inst.length})}</dt><dd class="num">${fmt(paid)}</dd><dt>${t("remaining")}</dt><dd class="num" style="color:${rem<0?"var(--bad)":"inherit"};font-weight:600">${fmt(rem)}</dd>${sp!==null?`<dt>${t("ledgerSpent")}</dt><dd class="num">${fmt(sp)}</dd>`:""}</dl>
+  <div class="bar"><span style="width:${ag?Math.min(100,paid/ag*100):0}%;background:${paid>ag?"var(--bad)":"var(--mc)"}"></span></div>
+  ${inst.length?`<div class="steps">${inst.map((i,j)=>`<span class="step ${esc(i.status)}" title="${esc(ord(j))} · ${fmt(i.planned||i.amount)} · ${t("ist_"+(i.status||"planned"))}">${j+1}</span>`).join("")}</div>`:`<span class="small muted">${t("noInst")}</span>`}
+  ${next?`<div class="small">${t("nextInst",{o:esc(ord(inst.indexOf(next))),x:fmt(next.planned)})}${next.date?` · <span class="num">${esc(next.date)}</span>`:""}</div>`:""}
+  ${x.notes?`<div class="small muted">${esc(x.notes)}</div>`:""}</article>`;
+}
+
+/* ============================ ملخص البنود ============================ */
+function vCats(v){
+  const ms=mosques().filter(m=>!S.mosque||m.n==S.mosque),all=[...S.exp.values()].filter(e=>!S.mosque||e.mosque==S.mosque);
+  const cats=[...new Set([...CATS,...all.map(e=>e.category)])].filter(c=>all.some(e=>e.category===c));
+  const cell=(c,n)=>{const xs=all.filter(e=>e.category===c&&(!n||e.mosque==n));return {n:xs.length,t:xs.reduce((a,e)=>a+N(e.total),0),inv:xs.filter(hasInv).length}};
+  v.innerHTML=`<section class="panel"><div class="ph"><h2 class="sec-h">${t("catsTitle")}</h2></div><div class="tscroll"><table>
+    <thead><tr><th>${t("category")}</th>${ms.map(m=>`<th class="amt"><span class="mtag" style="--mc:${mColor(m.n)}">${m.n}</span> ${esc(mName(m.n))}</th>`).join("")}${ms.length>1?`<th class="amt">${t("total")}</th>`:""}<th>${t("invoice")}</th></tr></thead>
+    <tbody>${cats.map(c=>{const tot=cell(c,0);return `<tr class="row" data-cat="${esc(c)}"><td style="white-space:nowrap">${esc(catName(c))}</td>${ms.map(m=>{const x=cell(c,m.n);return `<td class="amt"><span class="num">${x.t?fmt(x.t):"—"}</span>${x.n?`<div class="small muted">${x.n} ${t("entries")}</div>`:""}</td>`}).join("")}${ms.length>1?`<td class="amt num" style="font-weight:600">${fmt(tot.t)}</td>`:""}<td>${PURCHASE.has(c)?covPill(tot.inv,tot.n):`<span class="pill mute">${t("invNotNeeded")}</span>`}</td></tr>`}).join("")}</tbody>
+    <tfoot><tr><td>${t("total")}</td>${ms.map(m=>`<td class="amt num">${fmt(all.filter(e=>e.mosque==m.n).reduce((a,e)=>a+N(e.total),0))}</td>`).join("")}${ms.length>1?`<td class="amt num">${fmt(all.reduce((a,e)=>a+N(e.total),0))}</td>`:""}<td></td></tr></tfoot></table></div></section>`;
+  v.querySelectorAll("tr[data-cat]").forEach(tr=>tr.onclick=()=>{S.f={q:"",cat:tr.dataset.cat,noinv:false,review:false,dup:false};S.tab="expenses";renderShell();render()});
+}
+
+/* ============================ الملاحظات ============================ */
+function vNotes(v){
+  const ns=[...S.notes.values()].filter(n=>(!S.mosque||n.mosque==S.mosque||!(n.mosque>0))&&(S.nf==="all"||(n.status||"open")===S.nf)).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const flagged=[...S.exp.values()].filter(e=>(e.review||S.dupMap.has(String(e.id)))&&(!S.mosque||e.mosque==S.mosque)).sort((a,b)=>a.mosque-b.mosque||a.seq-b.seq);
+  v.innerHTML=`<div class="row-flex" style="justify-content:space-between"><div class="chips">${["open","done","all"].map(s=>`<button class="chip" type="button" data-ns="${s}" aria-pressed="${S.nf===s}">${t(s)}</button>`).join("")}</div>${P("create")?`<button class="btn primary" type="button" id="noteNew">${t("newNote")}</button>`:""}</div>
+  <div class="cols2">${ns.map(n=>`<article class="panel note ${n.status==="done"?"done":""}" style="--mc:${n.mosque>0?mColor(n.mosque):"var(--line)"}">
+    <div class="meta"><span class="pill ${/خطأ|تصحيح/.test(n.kind)?"bad":n.kind==="فاتورة ناقصة"?"warn":"mute"}">${esc(nkName(n.kind||"ملاحظة"))}</span><span>${n.mosque>0?esc(mName(n.mosque)):n.mosque==-1?t("projectsGen"):t("general")}</span><span class="num">${esc(n.date||"")}</span>${n.createdBy?`<span>· ${esc(n.createdBy)}</span>`:""}${n.status==="done"?`<span class="pill ok">${t("done")}</span>`:""}</div>
+    <h4 style="margin:0">${esc(n.title)}</h4>${n.body?`<p>${esc(n.body)}</p>`:""}
+    <div class="row-flex">${P("edit")?`<button class="btn small" type="button" data-nt="${esc(n.id)}">${t("edit")}</button><button class="btn small" type="button" data-ntog="${esc(n.id)}">${n.status==="done"?t("reopen"):t("markDone")}</button>`:""}</div></article>`).join("")||`<div class="panel empty">${t("noNotes")}</div>`}</div>
+  <section class="panel"><div class="ph"><h2 class="sec-h">${t("flagged")}</h2><span class="small muted">${flagged.length}</span></div><div class="tscroll"><table><thead><tr><th>${t("mosque")}</th><th>#</th><th>${t("date")}</th><th>${t("category")}</th><th class="amt">${t("amount")}</th><th>${t("reason")}</th></tr></thead><tbody>
+  ${flagged.map(e=>`<tr class="row" data-eid="${esc(e.id)}"><td><span class="mtag" style="--mc:${mColor(e.mosque)}">${e.mosque}</span></td><td class="num">${e.seq}</td><td class="num">${esc(e.date)}</td><td>${esc(catName(e.category))}</td><td class="amt num">${fmt(e.total)}</td><td>${e.review?`<div style="color:var(--warn)">⚑ ${esc(e.review)}</div>`:""}${(S.dupMap.get(String(e.id))||[]).map(x=>`<div style="color:var(--bad)">⧉ ${esc(dupText(x))}</div>`).join("")}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">${t("noneYet")}</td></tr>`}</tbody></table></div></section>`;
+  v.querySelectorAll("[data-ns]").forEach(b=>b.onclick=()=>{S.nf=b.dataset.ns;render()});
+  $("#noteNew")&&($("#noteNew").onclick=()=>openNote(null));
+  v.querySelectorAll("[data-nt]").forEach(b=>b.onclick=()=>openNote(b.dataset.nt));
+  v.querySelectorAll("[data-ntog]").forEach(b=>b.onclick=async()=>{const n=S.notes.get(b.dataset.ntog);b.disabled=true;try{const r=await api("save",{table:"notes",record:{...n,status:n.status==="done"?"open":"done"}});S.notes.set(String(r.record.id),r.record);render()}catch(e){toast(errText(e))}});
+  v.querySelectorAll("tr[data-eid]").forEach(tr=>tr.onclick=()=>openExp(tr.dataset.eid));
+}
+
+/* ============================ المشاريع العامة ============================ */
+const pPill=s=>`<span class="pill ${s==="تم التنفيذ"?"ok":s==="جاري التنفيذ"?"warn":s==="يحتاج متابعة"?"bad":"mute"}">${esc(psName(s||"—"))}</span>`;
+const paidName=p=>p==="تم"?t("paid_yes"):p==="لم يتم"?t("paid_no"):"—",timName=x=>x==="متأخر"?t("t_late"):x==="في الموعد"?t("t_ontime"):"—";
+function vProjects(v){
+  const all=[...S.proj.values()].sort((a,b)=>(a.row||0)-(b.row||0)),live=all.filter(p=>p.status!=="ملغي");
+  const cost=live.reduce((a,p)=>a+N(p.cost),0),fee=live.reduce((a,p)=>a+N(p.fee),0),total=cost+fee,allTot=all.reduce((a,p)=>a+N(p.cost)+N(p.fee),0);
+  const pays=[...S.ppay.values()].sort((a,b)=>(a.date||"").localeCompare(b.date||"")),paid=pays.reduce((a,p)=>a+N(p.amount),0);
+  const types=[...new Set(all.map(p=>p.type))],f=S.pf,q=f.q.trim().toLowerCase(),keep=document.activeElement?.id;
+  const rows=all.filter(p=>(!f.type||p.type===f.type)&&(!f.status||p.status===f.status)&&(!q||[p.donor,p.executor,p.agency,p.type,p.note,String(p.n),p.execRef].some(x=>String(x||"").toLowerCase().includes(q))));
+  v.innerHTML=`<div class="totals"><div><span class="lbl">${t("projCount")}</span><span class="val num">${all.length}</span><span class="small muted">${types.map(x=>`${esc(ptName(x))}: ${all.filter(p=>p.type===x).length}`).join(" · ")}</span></div>
+    <div><span class="lbl">${t("costExec")}</span><span class="val num">${fmt(cost)}</span></div><div><span class="lbl">${t("feeOrg")}</span><span class="val num">${fmt(fee)}</span></div>
+    <div><span class="lbl">${t("projTotal")}</span><span class="val num">${fmt(total)}</span>${allTot!==total?`<span class="small muted">${t("excludedCancelled",{x:fmt(allTot)})}</span>`:""}</div>
+    <div><span class="lbl">${t("paidAgency")}</span><span class="val num">${fmt(paid)}</span></div><div><span class="lbl">${t("remaining")}</span><span class="val num">${fmt(total-paid)}</span></div></div>
+  <div class="chips">${Object.keys(PSTAT).map(s=>{const c=all.filter(p=>p.status===s).length;return c?`<button class="chip" type="button" data-pst="${esc(s)}" aria-pressed="${f.status===s}">${esc(psName(s))} <span class="num">${c}</span></button>`:""}).join("")}</div>
+  <section class="panel"><div class="toolbar"><input type="search" id="pq" placeholder="${esc(t("projSearch"))}" value="${esc(f.q)}">
+    <select id="ptype"><option value="">${t("allTypes")}</option>${types.map(x=>`<option value="${esc(x)}" ${f.type===x?"selected":""}>${esc(ptName(x))}</option>`).join("")}</select>
+    ${P("create")?`<button class="btn primary" type="button" id="projNew">${t("newProject")}</button>`:""}<button class="btn" type="button" id="projCsv">${t("csv")}</button></div>
+  <div class="tscroll"><table><thead><tr><th>#</th><th>${t("projectType")}</th><th>${t("date")}</th><th class="amt">${t("costExec")}</th><th class="amt hide-sm">${t("feeOrg")}</th><th>${t("donor")}</th><th class="hide-sm">${t("executor")}</th><th>${t("execStatus")}</th><th>${t("payment")}</th><th class="hide-sm">${t("timing")}</th><th class="hide-sm">${t("report")}</th></tr></thead>
+  <tbody>${rows.slice(0,S.plimit).map(p=>`<tr class="row" data-pid="${esc(p.id)}" tabindex="0"><td class="num muted">${p.n??""}</td><td style="white-space:nowrap">${esc(ptName(p.type))}${p.execRef?` <span class="small muted num">(${esc(p.execRef)})</span>`:""}${p.note?`<div class="small" style="color:var(--warn)">${esc(p.note)}</div>`:""}</td><td class="num" style="white-space:nowrap">${esc(p.date)}</td><td class="amt num">${fmt(p.cost)}</td><td class="amt num hide-sm">${fmt(p.fee)}</td><td>${esc(p.donor)}</td><td class="hide-sm small">${esc(p.executor)}${p.agency?`<div class="muted">${esc(p.agency)}</div>`:""}</td><td>${pPill(p.status)}</td><td>${p.paid==="تم"?`<span class="pill ok">${t("paid_yes")}</span>`:p.paid?`<span class="pill bad">${t("paid_no")}</span>`:"—"}</td><td class="hide-sm">${p.timing==="متأخر"?`<span class="pill warn">${t("t_late")}</span>`:timName(p.timing)}</td><td class="hide-sm">${p.report?`<span class="pill ok">${t("rep_done")}</span>`:"—"}</td></tr>`).join("")||`<tr><td colspan="11" class="empty">${t("noMatch")}</td></tr>`}</tbody>
+  <tfoot><tr><td colspan="3">${t("total")} (${rows.length})</td><td class="amt num">${fmt(rows.reduce((a,p)=>a+N(p.cost),0))}</td><td class="amt num hide-sm">${fmt(rows.reduce((a,p)=>a+N(p.fee),0))}</td><td colspan="6"></td></tr></tfoot></table></div>
+  ${rows.length>S.plimit?`<div class="pager"><button class="btn" id="pmore" type="button">${t("showMore")}</button></div>`:""}</section>
+  <section class="panel"><div class="ph"><h2 class="sec-h">${t("agencyPays")}</h2>${P("create")?`<button class="btn" type="button" id="ppNew">${t("newPay")}</button>`:""}</div>
+  <div class="tscroll"><table><thead><tr><th>${t("installment")}</th><th>${t("date")}</th><th>${t("paidBy")}</th><th class="amt">${t("amount")}</th><th class="amt">${t("cumulative")}</th></tr></thead><tbody>${(()=>{let c=0;return pays.map((p,k)=>{c+=N(p.amount);return `<tr class="row" data-ppid="${esc(p.id)}" tabindex="0"><td>${esc(ord(k))}</td><td class="num">${esc(p.date)}</td><td>${esc(p.payer)}${p.note?` <span class="muted small">· ${esc(p.note)}</span>`:""}</td><td class="amt num">${fmt(p.amount)}</td><td class="amt num muted">${fmt(c)}</td></tr>`}).join("")})()||`<tr><td colspan="5" class="empty">${t("noneYet")}</td></tr>`}</tbody>
+  <tfoot><tr><td colspan="3">${t("total")}</td><td class="amt num">${fmt(paid)}</td><td></td></tr></tfoot></table></div></section>`;
+  const pq=$("#pq");pq.oninput=()=>{f.q=pq.value;clearTimeout(pq._t);pq._t=setTimeout(render,200)};if(keep==="pq"){pq.focus();pq.setSelectionRange(pq.value.length,pq.value.length)}
+  $("#ptype").onchange=e=>{f.type=e.target.value;render()};
+  v.querySelectorAll("[data-pst]").forEach(b=>b.onclick=()=>{f.status=f.status===b.dataset.pst?"":b.dataset.pst;render()});
+  $("#pmore")&&($("#pmore").onclick=()=>{S.plimit+=200;render()});$("#projNew")&&($("#projNew").onclick=()=>openProj(null));$("#ppNew")&&($("#ppNew").onclick=()=>openPP(null));$("#projCsv").onclick=exportProjCsv;
+  v.querySelectorAll("tr[data-pid]").forEach(tr=>{tr.onclick=()=>openProj(tr.dataset.pid);tr.onkeydown=e=>{if(e.key==="Enter")openProj(tr.dataset.pid)}});
+  v.querySelectorAll("tr[data-ppid]").forEach(tr=>tr.onclick=()=>openPP(tr.dataset.ppid));
+}
+
+/* ============================ المستخدمون ============================ */
+function vUsers(v){
+  v.innerHTML=`<section class="panel"><div class="ph"><h2 class="sec-h">${t("users")}</h2><button class="btn primary" type="button" id="userNew">${t("newUser")}</button></div><div class="tscroll"><table><thead><tr><th>${t("userName")}</th><th>${t("role")}</th><th>${t("permissions")}</th><th>${t("status")}</th><th>${t("lastLogin")}</th></tr></thead><tbody>
+  ${S.users.map(u=>`<tr class="row" data-uid="${esc(u.id)}" tabindex="0"><td style="font-weight:600">${esc(u.name)}</td><td>${t("role_"+u.role)}</td><td class="small">${Object.keys(u.perms||{}).filter(k=>u.perms[k]).map(k=>`<span class="pill ok" style="margin:1px">${t("perm_"+k)}</span>`).join("")||`<span class="pill mute">${t("tab_entry")}</span>`}</td><td>${u.active?`<span class="pill ok">${t("active")}</span>`:`<span class="pill mute">${t("inactive")}</span>`}</td><td class="num small">${esc((u.lastLogin||"").replace("T"," ").slice(0,16))}</td></tr>`).join("")}</tbody></table></div></section>`;
+  $("#userNew").onclick=()=>openUser(null);v.querySelectorAll("tr[data-uid]").forEach(tr=>tr.onclick=()=>openUser(tr.dataset.uid));
+}
+let curU=null;
+const PERM_KEYS=["viewAll","create","attachInvoice","edit","delete","master","users","export","evidence","trips","food"];
+const ROLE_DEF={admin:{viewAll:1,create:1,attachInvoice:1,edit:1,delete:1,master:1,users:1,export:1,evidence:1,trips:1,food:1},exec:{viewAll:1,create:1,attachInvoice:1},staff:{evidence:1,trips:1}};
+function openUser(id){curU=id?S.users.find(u=>u.id===id):null;const u=curU||{name:"",role:"staff",perms:{},active:true};
+  $("#userTitle").textContent=curU?t("userT"):t("newUserT");$("#u_name").value=u.name;$("#u_role").innerHTML=["admin","exec","staff"].map(r=>`<option value="${r}">${t("role_"+r)}</option>`).join("");$("#u_role").value=u.role;
+  $("#u_code").value="";$("#u_codeHint").textContent=curU?t("codeHintEdit"):t("codeHintNew");$("#u_active").checked=u.active!==false;
+  drawPerms(u.perms);$("#userErr").hidden=true;$("#dlgUser").showModal()}
+function drawPerms(p){$("#u_perms").innerHTML=PERM_KEYS.map(k=>`<label class="tog" style="color:var(--fg)"><input type="checkbox" data-perm="${k}" ${p[k]?"checked":""}> ${t("perm_"+k)}</label>`).join("")}
+$("#u_role").addEventListener("change",e=>drawPerms(ROLE_DEF[e.target.value]||{}));
+$("#fUser").addEventListener("submit",async ev=>{ev.preventDefault();const perms={};document.querySelectorAll("#u_perms [data-perm]").forEach(c=>perms[c.dataset.perm]=c.checked);
+  const x={id:curU?.id,name:$("#u_name").value.trim(),role:$("#u_role").value,perms,active:$("#u_active").checked,code:$("#u_code").value.trim()};
+  if(!x.name){showErr($("#userErr"),t("fillReq",{x:t("userName")}));return}
+  $("#userSave").disabled=true;try{await api("saveUser",{user:x});S.users=(await api("users")).users;$("#dlgUser").close();toast(t("saved"));render()}catch(e){showErr($("#userErr"),errText(e))}finally{$("#userSave").disabled=false}});
+
+/* ============================ نموذج الإدخال (للموظفين) ============================ */
+function vEntry(v){
+  v.innerHTML=`<div class="notice info">${t("entryOnly")}</div><section class="panel" style="padding:16px;display:flex;flex-direction:column;gap:10px"><h2 class="sec-h">${t("entryTitle")}</h2><p class="muted" style="margin:0">${t("entryPreview")}</p><div class="row-flex"><button class="btn primary" type="button" id="openForm">${P("create")?t("addExpense"):t("details2")}</button></div></section>`;
+  $("#openForm").onclick=()=>openExp(null);
+}
+
+/* ============================ نافذة المصروف ============================ */
+let cur=null,pend;
+function selects(){
+  const opts=mosques().map(m=>`<option value="${m.n}">${m.n} — ${esc(mName(m.n))}</option>`).join("");
+  ["#e_mosque","#r_mosque","#mi_mosque"].forEach(s=>$(s).innerHTML=opts);
+  $("#e_cat").innerHTML=CATS.map(c=>`<option value="${esc(c)}">${esc(catName(c))}</option>`).join("");
+  $("#shops").innerHTML=[...new Set([...S.exp.values()].map(e=>e.shop).filter(Boolean))].map(s=>`<option value="${esc(s)}">`).join("");
+}
+function fileView(el,file,onRemove){
+  if(!file){el.innerHTML="";return}
+  el.innerHTML=`<button class="btn small" type="button" data-viewfile>📎 ${t("viewInvoice")}</button><span class="small muted">${esc(file.name||"")}</span>${onRemove?`<button type="button" class="btn small" data-rm>✕</button>`:""}`;
+  el.querySelector("[data-viewfile]").onclick=()=>viewFile(file);el.querySelector("[data-rm]")?.addEventListener("click",onRemove);
+}
+async function viewFile(file){
+  $("#viewTitle").textContent=file.name||t("invoice");$("#viewBody").innerHTML=`<div class="empty">${t("loading")}</div>`;$("#viewOpen").hidden=true;$("#dlgView").showModal();
+  try{const r=await api("file",{id:file.id});const bin=atob(r.file.data),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+    const url=URL.createObjectURL(new Blob([arr],{type:r.file.type}));$("#viewOpen").href=url;$("#viewOpen").hidden=false;
+    $("#viewBody").innerHTML=r.file.type.startsWith("image/")?`<img src="${url}" alt="">`:`<iframe src="${url}" title="PDF"></iframe>`}
+  catch(e){$("#viewBody").innerHTML=`<div class="err">${esc(errText(e))}</div>`}
+}
+async function prepUpload(f){
+  // تصغير الصور الكبيرة قبل الرفع
+  if(f.type.startsWith("image/")&&f.size>1.2e6&&!/heic|heif/.test(f.type)){
+    const img=await createImageBitmap(f).catch(()=>null);
+    if(img){const sc=Math.min(1,1800/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=img.width*sc;c.height=img.height*sc;c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      const b=await new Promise(r=>c.toBlob(r,"image/jpeg",.82));if(b)f=new File([b],f.name.replace(/\.\w+$/,"")+".jpg",{type:"image/jpeg"})}}
+  const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});
+  return (await api("upload",{name:f.name,mime:f.type||"application/pdf",data})).file;
+}
+function openExp(id){
+  cur=id?S.exp.get(String(id)):null;pend=undefined;selects();
+  const e=cur||{mosque:S.mosque||1,date:today(),category:"اسمنت"};
+  const canAll=cur?P("edit"):P("create"),attach=!!cur&&!P("edit")&&P("attachInvoice")&&!hasInv(cur);
+  $("#expTitle").textContent=cur?t("expenseN",{s:cur.seq??"",m:mName(cur.mosque)}):t("newExpense");
+  $("#e_mosque").value=e.mosque;$("#e_date").value=e.date||"";
+  if(e.category&&!CATS.includes(e.category))$("#e_cat").insertAdjacentHTML("beforeend",`<option value="${esc(e.category)}">${esc(e.category)}</option>`);
+  $("#e_cat").value=e.category;$("#e_desc").value=e.desc||"";$("#e_qty").value=e.qty||"";$("#e_price").value=e.unitPrice||"";$("#e_total").value=e.total??"";
+  $("#e_inv").value=e.invoiceNo||"";$("#e_shop").value=e.shop||"";$("#e_paidby").value=e.paidBy||"";$("#e_review").value=e.review||"";$("#e_noinv").checked=!!e.noInvoice;$("#e_file").value="";$("#e_hint").textContent="";
+  document.querySelectorAll("#fExp [data-lock]").forEach(el=>el.disabled=!canAll);
+  document.querySelectorAll("#fExp [data-inv]").forEach(el=>el.disabled=!(canAll||attach));
+  fileView($("#e_fileView"),e.invoiceFile,(canAll)?()=>{pend=null;fileView($("#e_fileView"),null)}:null);
+  $("#e_uploadRow").hidden=!(canAll||attach);
+  $("#expMode").hidden=canAll;$("#expMode").textContent=attach?t("attachMode"):cur?t("readMode"):t("entryOnly");
+  $("#expSave").hidden=!(canAll||attach);$("#expDel").hidden=!cur||!P("delete");$("#expErr").hidden=true;delete $("#fExp").dataset.dupOk;
+  $("#expMeta").textContent=cur?(cur.createdBy?t("addedBy",{u:cur.createdBy,d:String(cur.createdAt||"").slice(0,10)}):"")+(cur.updatedBy?" "+t("editedBy",{u:cur.updatedBy,d:String(cur.updatedAt||"").slice(0,10)}):""):"";
+  syncNoInv();$("#dlgExp").showModal();
+}
+function syncNoInv(){const no=$("#e_noinv").checked;$("#invNoField").classList.toggle("req",PURCHASE.has($("#e_cat").value)&&!no)}
+["e_qty","e_price"].forEach(id=>$("#"+id).addEventListener("input",()=>{const q=N($("#e_qty").value),p=N($("#e_price").value);if(q&&p)$("#e_total").value=Math.round(q*p*100)/100}));
+$("#e_cat").addEventListener("change",syncNoInv);$("#e_noinv").addEventListener("change",syncNoInv);
+$("#e_file").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;$("#e_hint").textContent=t("uploading");$("#expSave").disabled=true;
+  try{pend=await prepUpload(f);fileView($("#e_fileView"),pend,()=>{pend=null;fileView($("#e_fileView"),null)});$("#e_hint").textContent=t("uploaded")}catch(e){$("#e_hint").textContent=t("uploadFail")+" "+errText(e)}finally{$("#expSave").disabled=false}});
+$("#fExp").addEventListener("submit",async ev=>{ev.preventDefault();const err=$("#expErr");err.hidden=true;
+  const file=pend===undefined?(cur?.invoiceFile||null):pend;
+  const d={...(cur||{}),mosque:+$("#e_mosque").value,date:$("#e_date").value,category:$("#e_cat").value,desc:$("#e_desc").value.trim(),qty:$("#e_qty").value.trim(),unitPrice:$("#e_price").value.trim(),total:N($("#e_total").value),
+    invoiceNo:$("#e_inv").value.trim(),shop:$("#e_shop").value.trim(),paidBy:$("#e_paidby").value.trim(),review:$("#e_review").value.trim(),noInvoice:$("#e_noinv").checked,invoiceFile:file};
+  const miss=[];if(!d.date)miss.push(t("date"));if(!d.desc)miss.push(t("desc"));if(!d.total)miss.push(t("total"));
+  if(PURCHASE.has(d.category)&&!d.noInvoice&&!d.invoiceNo&&!file)miss.push(t("needInvoice"));
+  if(miss.length&&(P("edit")||!cur)){showErr(err,t("fillReq",{x:miss.join("، ")}));return}
+  if(d.invoiceNo&&!$("#fExp").dataset.dupOk){const dup=[...S.exp.values()].find(x=>x.id!==cur?.id&&String(x.invoiceNo||"").trim()===d.invoiceNo&&(x.shop||"")===(d.shop||""));
+    if(dup){showErr(err,t("dupInvWarn",{x:d.invoiceNo,m:mName(dup.mosque),d:dup.date,a:fmt(dup.total)}));$("#fExp").dataset.dupOk="1";return}}
+  $("#expSave").disabled=true;
+  try{const r=await api("save",{table:"expenses",record:d});S.exp.set(String(r.record.id),r.record);computeDupes();$("#dlgExp").close();toast(t("saved")+(cur?"":` — #${r.record.seq}`));render()}
+  catch(e){showErr(err,errText(e))}finally{$("#expSave").disabled=false}});
+$("#expDel").onclick=()=>delRec("expenses",cur,t("confirmDelExp",{x:cur.desc,a:fmt(cur.total)}),S.exp,"#dlgExp");
+async function delRec(table,rec,msg,map,dlg){if(!rec)return;$(dlg).close();if(!await confirmDel(msg))return;try{await api("delete",{table,id:rec.id});map.delete(String(rec.id));computeDupes();toast(t("deleted"));render()}catch(e){toast(errText(e))}}
+async function confirmDel(text){const d=$("#dlgConfirm");$("#cfmText").textContent=text;d.returnValue="";d.showModal();return new Promise(r=>d.addEventListener("close",()=>r(d.returnValue==="yes"),{once:true}))}
+
+/* ============================ نافذة الدفعة المستلمة ============================ */
+let curR=null,pendR;
+function openRec(id){curR=id?S.rec.get(String(id)):null;pendR=undefined;selects();const r=curR||{mosque:S.mosque||1,source:"donor",date:today()};const can=curR?P("edit"):P("create");
+  $("#recTitle").textContent=curR?t("editReceipt"):t("newReceipt");$("#r_source").innerHTML=`<option value="donor">${t("donorSrc")}</option><option value="council">${t("councilSrc")}</option>`;
+  $("#r_mosque").value=r.mosque;$("#r_source").value=r.source||"donor";$("#r_date").value=r.date||"";$("#r_amount").value=r.amount??"";$("#r_who").value=r.receiver||"";$("#r_note").value=r.note||"";$("#r_file").value="";
+  document.querySelectorAll("#fRec input,#fRec select").forEach(el=>el.disabled=!can);fileView($("#r_fileView"),r.file,can?()=>{pendR=null;fileView($("#r_fileView"),null)}:null);$("#r_uploadRow").hidden=!can;
+  $("#recSave").hidden=!can;$("#recDel").hidden=!curR||!P("delete");$("#recErr").hidden=true;$("#dlgRec").showModal()}
+$("#r_file").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;$("#recSave").disabled=true;try{pendR=await prepUpload(f);fileView($("#r_fileView"),pendR)}catch(e){showErr($("#recErr"),t("uploadFail"))}finally{$("#recSave").disabled=false}});
+$("#fRec").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curR||{}),mosque:+$("#r_mosque").value,source:$("#r_source").value,date:$("#r_date").value,amount:N($("#r_amount").value),receiver:$("#r_who").value.trim(),note:$("#r_note").value.trim(),file:pendR===undefined?(curR?.file||null):pendR};
+  if(!d.amount||!d.date){showErr($("#recErr"),t("fillReq",{x:t("date")+"، "+t("amount")}));return}
+  $("#recSave").disabled=true;try{const r=await api("save",{table:"receipts",record:d});S.rec.set(String(r.record.id),r.record);$("#dlgRec").close();toast(t("saved"));render()}catch(e){showErr($("#recErr"),errText(e))}finally{$("#recSave").disabled=false}});
+$("#recDel").onclick=()=>delRec("receipts",curR,t("confirmDel"),S.rec,"#dlgRec");
+
+/* ============================ نافذة اتفاق المعلم ============================ */
+let curM=null,inst=[];
+function openMis(id,preset){curM=id?S.mis.get(String(id)):null;selects();const x=curM||{mosque:S.mosque||1,type:"paint",installments:[],...preset};const can=curM?P("edit"):P("create");
+  $("#mi_type").innerHTML=Object.keys(MTYPES).map(k=>`<option value="${k}">${esc(mtName(k))}</option>`).join("");
+  $("#misTitle").textContent=curM?t("mistryT",{t:mtName(x.type),m:mName(x.mosque)}):t("newMistryT");
+  $("#mi_mosque").value=x.mosque;$("#mi_type").value=MTYPES[x.type]?x.type:"other";$("#mi_name").value=x.name||"";$("#mi_phone").value=x.phone||"";$("#mi_id").value=x.idNo||"";$("#mi_agreed").value=x.agreed||"";$("#mi_start").value=x.startDate||"";$("#mi_end").value=x.endDate||"";$("#mi_scope").value=x.scope||"";$("#mi_notes").value=x.notes||"";
+  inst=(x.installments||[]).map(i=>({...i}));drawInst(can);
+  document.querySelectorAll("#fMis .fgrid input,#fMis .fgrid select,#fMis .fgrid textarea").forEach(el=>el.disabled=!can);$("#instBtns").hidden=!can;
+  $("#misSave").hidden=!can;$("#misDel").hidden=!curM||!P("delete");$("#misErr").hidden=true;$("#dlgMis").showModal()}
+function drawInst(can=true){
+  $("#instBody").innerHTML=inst.map((i,k)=>`<tr data-k="${k}"><td style="white-space:nowrap">${esc(ord(k))}</td><td><input data-f="planned" inputmode="decimal" value="${i.planned||""}" ${can?"":"disabled"}></td><td><input data-f="date" type="date" value="${esc(i.date||"")}" ${can?"":"disabled"}></td><td><input data-f="amount" inputmode="decimal" value="${i.amount||""}" ${can?"":"disabled"}></td>
+    <td><select data-f="status" ${can?"":"disabled"}>${["planned","progress","done"].map(s=>`<option value="${s}" ${i.status===s?"selected":""}>${t("ist_"+s)}</option>`).join("")}</select></td><td><input data-f="note" value="${esc(i.note||"")}" ${can?"":"disabled"}></td><td>${can?`<button class="btn small" type="button" data-rmk="${k}">✕</button>`:""}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">${t("noInst")}</td></tr>`;
+  sumInst();
+}
+function sumInst(){const p=inst.reduce((a,i)=>a+N(i.planned),0),d=inst.reduce((a,i)=>a+N(i.amount),0),ag=N($("#mi_agreed").value);$("#instPlanned").textContent=fmt(p);$("#instPaid").textContent=fmt(d);$("#instLeft").textContent=ag?`${t("remaining")}: ${fmt(ag-d)}`:""}
+$("#instBody").addEventListener("input",e=>{const tr=e.target.closest("tr[data-k]");if(!tr)return;const i=inst[+tr.dataset.k],f=e.target.dataset.f;i[f]=(f==="planned"||f==="amount")?N(e.target.value):e.target.value;
+  if(f==="status"&&e.target.value==="done"&&!N(i.amount)){i.amount=N(i.planned);tr.querySelector('[data-f="amount"]').value=i.amount||""}
+  if(f==="amount"&&N(i.amount)&&i.status==="planned"){i.status="done";tr.querySelector('[data-f="status"]').value="done"}sumInst()});
+$("#instBody").addEventListener("click",e=>{const b=e.target.closest("[data-rmk]");if(!b)return;inst.splice(+b.dataset.rmk,1);drawInst()});
+$("#instAdd").onclick=()=>{inst.push({planned:0,amount:0,date:"",status:"planned",note:""});drawInst()};
+$("#instSplit").onclick=()=>{const ag=N($("#mi_agreed").value),open=inst.filter(i=>i.status!=="done");if(!ag||!open.length)return;const rest=ag-inst.filter(i=>i.status==="done").reduce((a,i)=>a+N(i.amount),0),each=Math.floor(rest/open.length/1000)*1000;open.forEach((i,k)=>i.planned=k===open.length-1?rest-each*(open.length-1):each);drawInst()};
+$("#mi_agreed").addEventListener("input",sumInst);
+$("#fMis").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curM||{}),mosque:+$("#mi_mosque").value,type:$("#mi_type").value,name:$("#mi_name").value.trim(),phone:$("#mi_phone").value.trim(),idNo:$("#mi_id").value.trim(),agreed:N($("#mi_agreed").value),startDate:$("#mi_start").value,endDate:$("#mi_end").value,scope:$("#mi_scope").value.trim(),notes:$("#mi_notes").value.trim(),
+  installments:inst.map((i,k)=>({n:k+1,planned:N(i.planned),amount:N(i.amount),date:i.date||"",status:i.status||"planned",note:i.note||""}))};
+  if(!d.agreed){showErr($("#misErr"),t("fillReq",{x:t("agreedTk")}));return}
+  $("#misSave").disabled=true;try{const r=await api("save",{table:"mistries",record:d});S.mis.set(String(r.record.id),r.record);$("#dlgMis").close();toast(t("saved"));render()}catch(e){showErr($("#misErr"),errText(e))}finally{$("#misSave").disabled=false}});
+$("#misDel").onclick=()=>delRec("mistries",curM,t("confirmDel"),S.mis,"#dlgMis");
+
+/* ============================ نافذة الملاحظة ============================ */
+let curN=null;
+function openNote(id){curN=id?S.notes.get(String(id)):null;const n=curN||{mosque:S.mosque||0,kind:"ملاحظة",date:today(),status:"open"};const can=curN?P("edit"):P("create");
+  $("#n_mosque").innerHTML=`<option value="0">${t("general")}</option>`+mosques().map(m=>`<option value="${m.n}">${esc(mName(m.n))}</option>`).join("")+`<option value="-1">${t("projectsGen")}</option>`;
+  $("#n_kind").innerHTML=Object.keys(NKINDS).map(k=>`<option value="${esc(k)}">${esc(nkName(k))}</option>`).join("");$("#n_status").innerHTML=`<option value="open">${t("open")}</option><option value="done">${t("done")}</option>`;
+  $("#noteTitle").textContent=curN?t("noteT"):t("newNoteT");$("#n_mosque").value=n.mosque;$("#n_kind").value=n.kind;$("#n_title").value=n.title||"";$("#n_body").value=n.body||"";$("#n_date").value=n.date||"";$("#n_status").value=n.status||"open";
+  document.querySelectorAll("#fNote input,#fNote select,#fNote textarea").forEach(el=>el.disabled=!can);$("#noteSave").hidden=!can;$("#noteDel").hidden=!curN||!P("delete");$("#noteErr").hidden=true;$("#dlgNote").showModal()}
+$("#fNote").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curN||{}),mosque:+$("#n_mosque").value,kind:$("#n_kind").value,title:$("#n_title").value.trim(),body:$("#n_body").value.trim(),date:$("#n_date").value,status:$("#n_status").value};
+  if(!d.title){showErr($("#noteErr"),t("fillReq",{x:t("title")}));return}
+  try{const r=await api("save",{table:"notes",record:d});S.notes.set(String(r.record.id),r.record);$("#dlgNote").close();toast(t("saved"));render()}catch(e){showErr($("#noteErr"),errText(e))}});
+$("#noteDel").onclick=()=>delRec("notes",curN,t("confirmDel"),S.notes,"#dlgNote");
+
+/* ============================ نافذة المشروع ============================ */
+let curP=null;
+function openProj(id){curP=id?S.proj.get(String(id)):null;const p=curP||{date:today(),type:"بئر ارتوازي",cost:38000,fee:2000,status:"لم يبدأ"};const can=curP?P("edit"):P("create");
+  const all=[...S.proj.values()],dl=(sel,k)=>$(sel).innerHTML=[...new Set(all.map(x=>x[k]).filter(Boolean))].map(s=>`<option value="${esc(s)}">`).join("");dl("#pdonors","donor");dl("#pexecs","executor");dl("#pagencies","agency");
+  const types=[...new Set([...Object.keys(PTYPES),...all.map(x=>x.type)])];
+  $("#p_type").innerHTML=types.map(x=>`<option value="${esc(x)}">${esc(ptName(x))}</option>`).join("");$("#p_status").innerHTML=Object.keys(PSTAT).map(s=>`<option value="${esc(s)}">${esc(psName(s))}</option>`).join("");
+  $("#p_paid").innerHTML=`<option value="">—</option><option value="تم">${t("paid_yes")}</option><option value="لم يتم">${t("paid_no")}</option>`;$("#p_timing").innerHTML=`<option value="">—</option><option value="في الموعد">${t("t_ontime")}</option><option value="متأخر">${t("t_late")}</option>`;$("#p_report").innerHTML=`<option value="">${t("rep_none")}</option><option value="مكتمل">${t("rep_done")}</option>`;
+  $("#projTitle").textContent=curP?t("projT",{n:curP.n??""}):t("newProjT");
+  $("#p_type").value=p.type;$("#p_date").value=p.date||"";$("#p_cost").value=p.cost??"";$("#p_fee").value=p.fee??"";$("#p_donor").value=p.donor||"";$("#p_exec").value=p.executor||"";$("#p_agency").value=p.agency||"";$("#p_ref").value=p.execRef||"";$("#p_status").value=p.status||"لم يبدأ";$("#p_paid").value=p.paid||"";$("#p_timing").value=p.timing||"";$("#p_report").value=p.report||"";$("#p_note").value=p.note||"";
+  document.querySelectorAll("#fProj input,#fProj select").forEach(el=>el.disabled=!can);$("#projSave").hidden=!can;$("#projDel").hidden=!curP||!P("delete");$("#projErr").hidden=true;$("#dlgProj").showModal()}
+$("#p_type").addEventListener("change",e=>{if(curP)return;const x=e.target.value;if(x==="بئر سطحي"){$("#p_cost").value=10000;$("#p_fee").value=2000}else if(x==="بئر ارتوازي"){$("#p_cost").value=38000;$("#p_fee").value=2000}});
+$("#fProj").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curP||{}),type:$("#p_type").value,date:$("#p_date").value,cost:N($("#p_cost").value),fee:N($("#p_fee").value),donor:$("#p_donor").value.trim(),executor:$("#p_exec").value.trim(),agency:$("#p_agency").value.trim(),execRef:$("#p_ref").value.trim(),status:$("#p_status").value,paid:$("#p_paid").value,timing:$("#p_timing").value,report:$("#p_report").value,note:$("#p_note").value.trim()};
+  if(!d.type||!d.date||!d.cost){showErr($("#projErr"),t("fillReq",{x:[t("projectType"),t("date"),t("costExec")].join("، ")}));return}
+  $("#projSave").disabled=true;try{const r=await api("save",{table:"projects",record:d});S.proj.set(String(r.record.id),r.record);$("#dlgProj").close();toast(t("saved"));render()}catch(e){showErr($("#projErr"),errText(e))}finally{$("#projSave").disabled=false}});
+$("#projDel").onclick=()=>delRec("projects",curP,t("confirmDel"),S.proj,"#dlgProj");
+let curPP=null;
+function openPP(id){curPP=id?S.ppay.get(String(id)):null;const p=curPP||{date:today()};const can=curPP?P("edit"):P("create");$("#ppTitle").textContent=t("ppT");
+  $("#pp_date").value=p.date||"";$("#pp_amount").value=p.amount??"";$("#pp_payer").value=p.payer||"";$("#pp_note").value=p.note||"";
+  document.querySelectorAll("#fPPay input").forEach(el=>el.disabled=!can);$("#ppSave").hidden=!can;$("#ppDel").hidden=!curPP||!P("delete");$("#ppErr").hidden=true;$("#dlgPPay").showModal()}
+$("#fPPay").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curPP||{}),date:$("#pp_date").value,amount:N($("#pp_amount").value),payer:$("#pp_payer").value.trim(),note:$("#pp_note").value.trim()};
+  if(!d.date||!d.amount){showErr($("#ppErr"),t("fillReq",{x:t("date")+"، "+t("amount")}));return}
+  try{const r=await api("save",{table:"projpay",record:d});S.ppay.set(String(r.record.id),r.record);$("#dlgPPay").close();toast(t("saved"));render()}catch(e){showErr($("#ppErr"),errText(e))}});
+$("#ppDel").onclick=()=>delRec("projpay",curPP,t("confirmDel"),S.ppay,"#dlgPPay");
+
+/* ============================ الميزانيات ============================ */
+function openCfg(){$("#cfgBody").innerHTML=mosques().map(m=>`<div class="field"><label for="cb${m.n}">${esc(mName(m.n))}</label><input id="cb${m.n}" inputmode="decimal" value="${m.budget||""}"></div>`).join("");$("#cfgErr").hidden=true;$("#dlgCfg").showModal()}
+$("#fCfg").addEventListener("submit",async ev=>{ev.preventDefault();try{for(const m of mosques()){const b=N($("#cb"+m.n).value);if(b!==N(m.budget)){const r=await api("save",{table:"mosques",record:{...m,budget:b}});Object.assign(m,r.record)}}$("#dlgCfg").close();toast(t("saved"));render()}catch(e){showErr($("#cfgErr"),errText(e))}});
+
+/* ============================ التصدير ============================ */
+function downloadCsv(name,head,rows){const csv="﻿"+[head,...rows].map(r=>r.map(x=>`"${String(x??"").replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function exportExpCsv(){downloadCsv(`expenses-${today()}.csv`,[t("mosque"),"#",t("date"),t("category"),t("desc"),t("qty"),t("unitPrice"),t("total"),t("invoiceNo"),t("shop"),t("invoiceImage"),t("paidBy"),t("reviewNote"),t("reason")],
+  [...S.exp.values()].filter(e=>!S.mosque||e.mosque==S.mosque).sort((a,b)=>a.mosque-b.mosque||a.seq-b.seq).map(e=>[mName(e.mosque),e.seq,e.date,catName(e.category),e.desc,e.qty,e.unitPrice,e.total,e.invoiceNo,e.shop,e.invoiceFile?"✓":"",e.paidBy,e.review,(S.dupMap.get(String(e.id))||[]).map(dupText).join(" | ")]))}
+function exportProjCsv(){downloadCsv(`projects-${today()}.csv`,["#",t("projectType"),t("date"),t("costExec"),t("feeOrg"),t("donor"),t("executor"),t("agency"),t("execRef"),t("execStatus"),t("payment"),t("timing"),t("report"),t("note")],
+  [...S.proj.values()].sort((a,b)=>a.row-b.row).map(p=>[p.n,ptName(p.type),p.date,p.cost,p.fee,p.donor,p.executor,p.agency,p.execRef,psName(p.status),paidName(p.paid),timName(p.timing),p.report,p.note]))}
+
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
+
+
+/* ============================ الشواهد ومصروفات الموظفين والتصدير ============================ */
+Object.assign(I18N.ar,{tab_evidence:"الشواهد",tab_trips:"مصروفات المشاوير",evDays:"أيام العمل",evMosques:"المساجد التي زارها",evVisits:"عدد الزيارات",evNew:"تسجيل زيارة جديدة",evPhotos:"الصور: 5 صور مختلفة (إلزامي)",evVideos:"مقاطع الفيديو: مقطعان (إلزامي)",photoN:"صورة {n}",videoN:"فيديو {n}",otherMosque:"مسجد آخر",mosqueNameL:"اسم المسجد",place:"المكان / العنوان",evSubmit:"حفظ الزيارة",evNeed:"باقي {p} صور و{v} فيديو",evReady:"جاهز للحفظ",evDup:"هذه الصورة مرفقة مسبقاً. اختر صورة مختلفة.",evDupV:"هذا المقطع مرفق مسبقاً. اختر مقطعاً مختلفاً.",evSaved:"حُفظت الزيارة",evView:"عرض الشواهد",evNone:"لا توجد زيارات بعد.",staff:"الموظف",lastVisit:"آخر زيارة",uploadPct:"جاري الرفع {p}%",videoFail:"تعذر رفع المقطع. جرّب مقطعاً أقصر أو اتصالاً أفضل.",openDrive:"فتح في Drive",remove:"إزالة",tapToAdd:"اضغط للإرفاق",
+need_5_photos:"أرفق 5 صور مختلفة.",need_2_videos:"أرفق مقطعي فيديو.",photo_type:"خانة الصور تقبل الصور فقط.",video_type:"خانة الفيديو تقبل المقاطع فقط.",date_required:"أدخل التاريخ.",mosque_required:"اختر المسجد أو اكتب اسمه.",cost_required:"أدخل تكلفة المشوار.",already_reviewed:"هذا المصروف رُوجع مسبقاً.",export_failed:"تعذر التصدير. حاول مرة أخرى.",upload_failed:"تعذر بدء رفع الملف.",unsupported_type:"نوع الملف غير مدعوم.",too_large:"الملف كبير جداً.",
+trNew:"تسجيل مصروف مشوار",fromPlace:"من",toPlace:"إلى",purpose:"الغرض من المشوار",tripCost:"تكلفة المشوار (ذهاب)",roundTrip:"الإجمالي ذهاباً وإياباً",food:"الأكل والشرب",foodLocked:"مقفلة — تحتاج صلاحية من المشرف العام",trSubmit:"إرسال للاعتماد",st_pending:"بانتظار الاعتماد",st_approved:"معتمد",st_rejected:"مرفوض",approve:"اعتماد",reject:"رفض",trSaved:"أُرسل المصروف للاعتماد",trApproved:"اعتُمد وسُجّل في مصروفات الجامع",trRejected:"رُفض المصروف",trNone:"لا توجد مصروفات بعد.",trPendingCount:"{n} بانتظار الاعتماد",trHint:"لا يدخل المصروف الحسابات إلا بعد اعتماد المشرف العام.",
+perm_export:"تصدير Excel إلى Drive",perm_evidence:"صفحة الشواهد",perm_trips:"مصروفات المشاوير",perm_food:"خانة الأكل والشرب",export:"تصدير Excel إلى Drive",exporting:"جاري التصدير… قد يستغرق دقيقة",exported:"حُفظ الملف في Drive ونُزّل على جهازك",allStaff:"كل الموظفين"});
+Object.assign(I18N.en,{tab_evidence:"Field evidence",tab_trips:"Trip expenses",evDays:"Days worked",evMosques:"Mosques visited",evVisits:"Visits",evNew:"Record a new visit",evPhotos:"Photos: 5 different (required)",evVideos:"Videos: 2 clips (required)",photoN:"Photo {n}",videoN:"Video {n}",otherMosque:"Other mosque",mosqueNameL:"Mosque name",place:"Place / address",evSubmit:"Save visit",evNeed:"{p} photos and {v} videos left",evReady:"Ready to save",evDup:"This photo is already attached. Choose a different one.",evDupV:"This clip is already attached. Choose a different one.",evSaved:"Visit saved",evView:"View evidence",evNone:"No visits yet.",staff:"Staff",lastVisit:"Last visit",uploadPct:"Uploading {p}%",videoFail:"Video upload failed. Try a shorter clip or a better connection.",openDrive:"Open in Drive",remove:"Remove",tapToAdd:"Tap to attach",
+need_5_photos:"Attach 5 different photos.",need_2_videos:"Attach 2 videos.",photo_type:"Photo slots accept images only.",video_type:"Video slots accept videos only.",date_required:"Enter the date.",mosque_required:"Choose the mosque or type its name.",cost_required:"Enter the trip cost.",already_reviewed:"This expense was already reviewed.",export_failed:"Export failed. Try again.",upload_failed:"Couldn't start the upload.",unsupported_type:"File type not supported.",too_large:"File is too large.",
+trNew:"Log a trip expense",fromPlace:"From",toPlace:"To",purpose:"Purpose",tripCost:"Trip cost (one way)",roundTrip:"Round-trip total",food:"Food & drink",foodLocked:"Locked — needs the supervisor's permission",trSubmit:"Submit for approval",st_pending:"Pending",st_approved:"Approved",st_rejected:"Rejected",approve:"Approve",reject:"Reject",trSaved:"Sent for approval",trApproved:"Approved and added to the mosque's expenses",trRejected:"Rejected",trNone:"No trip expenses yet.",trPendingCount:"{n} pending",trHint:"Counted in the accounts only after the supervisor approves.",
+perm_export:"Export Excel to Drive",perm_evidence:"Evidence page",perm_trips:"Trip expenses",perm_food:"Food & drink field",export:"Export Excel to Drive",exporting:"Exporting… this may take a minute",exported:"Saved to Drive and downloaded",allStaff:"All staff"});
+Object.assign(I18N.bn,{tab_evidence:"মাঠের প্রমাণ",tab_trips:"যাতায়াত খরচ",evDays:"কাজের দিন",evMosques:"পরিদর্শিত মসজিদ",evVisits:"পরিদর্শন",evNew:"নতুন পরিদর্শন লিখুন",evPhotos:"ছবি: ৫টি ভিন্ন ছবি (বাধ্যতামূলক)",evVideos:"ভিডিও: ২টি (বাধ্যতামূলক)",photoN:"ছবি {n}",videoN:"ভিডিও {n}",otherMosque:"অন্য মসজিদ",mosqueNameL:"মসজিদের নাম",place:"স্থান / ঠিকানা",evSubmit:"পরিদর্শন সংরক্ষণ",evNeed:"আরও {p}টি ছবি ও {v}টি ভিডিও বাকি",evReady:"সংরক্ষণের জন্য প্রস্তুত",evDup:"এই ছবিটি আগেই যুক্ত। অন্য ছবি দিন।",evDupV:"এই ভিডিওটি আগেই যুক্ত। অন্য ভিডিও দিন।",evSaved:"পরিদর্শন সংরক্ষিত",evView:"প্রমাণ দেখুন",evNone:"এখনো কোনো পরিদর্শন নেই।",staff:"কর্মচারী",lastVisit:"শেষ পরিদর্শন",uploadPct:"আপলোড {p}%",videoFail:"ভিডিও আপলোড ব্যর্থ। ছোট ক্লিপ বা ভালো সংযোগে চেষ্টা করুন।",openDrive:"Drive-এ খুলুন",remove:"সরান",tapToAdd:"যুক্ত করতে চাপুন",
+need_5_photos:"৫টি ভিন্ন ছবি যুক্ত করুন।",need_2_videos:"২টি ভিডিও যুক্ত করুন।",photo_type:"ছবির ঘরে শুধু ছবি।",video_type:"ভিডিওর ঘরে শুধু ভিডিও।",date_required:"তারিখ দিন।",mosque_required:"মসজিদ বাছুন বা নাম লিখুন।",cost_required:"যাতায়াত খরচ দিন।",already_reviewed:"এই খরচ আগেই পর্যালোচিত।",export_failed:"রপ্তানি ব্যর্থ। আবার চেষ্টা করুন।",upload_failed:"আপলোড শুরু করা যায়নি।",unsupported_type:"ফাইলের ধরন সমর্থিত নয়।",too_large:"ফাইলটি খুব বড়।",
+trNew:"যাতায়াত খরচ লিখুন",fromPlace:"থেকে",toPlace:"পর্যন্ত",purpose:"উদ্দেশ্য",tripCost:"এক পথের ভাড়া",roundTrip:"যাওয়া-আসা মোট",food:"খাবার ও পানীয়",foodLocked:"বন্ধ — তত্ত্বাবধায়কের অনুমতি লাগবে",trSubmit:"অনুমোদনের জন্য পাঠান",st_pending:"অপেক্ষমাণ",st_approved:"অনুমোদিত",st_rejected:"প্রত্যাখ্যাত",approve:"অনুমোদন",reject:"প্রত্যাখ্যান",trSaved:"অনুমোদনের জন্য পাঠানো হয়েছে",trApproved:"অনুমোদিত ও মসজিদের খরচে যোগ হয়েছে",trRejected:"প্রত্যাখ্যাত",trNone:"এখনো কোনো খরচ নেই।",trPendingCount:"{n}টি অপেক্ষমাণ",trHint:"তত্ত্বাবধায়কের অনুমোদনের পরই হিসাবে যোগ হবে।",
+perm_export:"Drive-এ Excel রপ্তানি",perm_evidence:"প্রমাণ পাতা",perm_trips:"যাতায়াত খরচ",perm_food:"খাবার ও পানীয় ঘর",export:"Drive-এ Excel রপ্তানি",exporting:"রপ্তানি হচ্ছে… এক মিনিট লাগতে পারে",exported:"Drive-এ সংরক্ষিত ও ডাউনলোড হয়েছে",allStaff:"সব কর্মচারী"});
+
+const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
+const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
+function mosqueSelectHtml(id){return `<select id="${id}">${mosques().map(m=>`<option value="${m.n}">${esc(mName(m.n))}</option>`).join("")}<option value="0">${t("otherMosque")}</option></select>`}
+const EV={photos:[null,null,null,null,null],videos:[null,null],busy:0};
+async function sha256(file){try{const b=await file.arrayBuffer();const h=await crypto.subtle.digest("SHA-256",b);return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(_){return file.name+file.size+file.lastModified}}
+function evSlotHtml(kind,i){const s=EV[kind][i],lbl=t(kind==="photos"?"photoN":"videoN",{n:i+1});
+  let body=`<span class="small muted">${t("tapToAdd")}</span>`;
+  if(s&&s.state==="up")body=`<span class="small">${t("uploadPct",{p:s.pct||0})}</span><div class="bar" style="width:80%"><span style="width:${s.pct||0}%;background:var(--ink)"></span></div>`;
+  if(s&&s.state==="err")body=`<span class="small" style="color:var(--bad)">${esc(s.msg)}</span>`;
+  if(s&&s.state==="ok")body=kind==="photos"&&s.preview?`<img src="${s.preview}" alt="">`:`<span class="pill ok">✓ ${esc(s.file.name.slice(-24))}</span>`;
+  return `<label class="slot ${s&&s.state==="ok"?"ok":""}" for="ev_${kind}_${i}"><b class="small">${lbl}</b>${body}
+    <input type="file" id="ev_${kind}_${i}" data-k="${kind}" data-i="${i}" accept="${kind==="photos"?"image/*":"video/*"}" hidden>
+    ${s&&s.state==="ok"?`<button type="button" class="btn small" data-rmslot="${kind}:${i}">${t("remove")}</button>`:""}</label>`}
+function evNeedText(){const p=EV.photos.filter(s=>s&&s.state==="ok").length,v=EV.videos.filter(s=>s&&s.state==="ok").length;return {p:5-p,v:2-v}}
+function drawSlots(){const w=$("#evSlots");if(!w)return;w.innerHTML=`<fieldset class="box"><legend>${t("evPhotos")}</legend><div class="slots">${EV.photos.map((_,i)=>evSlotHtml("photos",i)).join("")}</div></fieldset>
+  <fieldset class="box"><legend>${t("evVideos")}</legend><div class="slots">${EV.videos.map((_,i)=>evSlotHtml("videos",i)).join("")}</div></fieldset>`;
+  const n=evNeedText(),ok=n.p<=0&&n.v<=0&&!EV.busy;$("#evSave").disabled=!ok;$("#evNeed").textContent=ok?t("evReady"):t("evNeed",{p:Math.max(0,n.p),v:Math.max(0,n.v)});}
+async function uploadVideo(file,onPct){
+  try{const s=await api("videoSession",{name:file.name,mime:file.type||"video/mp4",size:file.size,origin:location.origin});
+    const id=await new Promise((res,rej)=>{const x=new XMLHttpRequest();x.open("PUT",s.uploadUrl);x.upload.onprogress=e=>{if(e.lengthComputable)onPct(Math.round(e.loaded/e.total*100))};
+      x.onload=()=>{if(x.status>=200&&x.status<300){try{res(JSON.parse(x.responseText).id)}catch(e){rej(e)}}else rej(new Error("status "+x.status))};x.onerror=()=>rej(new Error("network"));x.send(file.slice(0,file.size,""))});
+    return (await api("uploadDone",{id})).file;
+  }catch(e){
+    if(file.size<=28*1024*1024){onPct(50);const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
+      return (await api("upload",{kind:"evidence",name:file.name,mime:file.type||"video/mp4",data})).file}
+    throw e}
+}
+async function onSlotFile(input){
+  const kind=input.dataset.k,i=+input.dataset.i,file=input.files[0];if(!file)return;input.value="";
+  if(kind==="photos"&&!file.type.startsWith("image/")){EV[kind][i]={state:"err",msg:t("photo_type")};return drawSlots()}
+  if(kind==="videos"&&!file.type.startsWith("video/")){EV[kind][i]={state:"err",msg:t("video_type")};return drawSlots()}
+  const key=kind==="photos"?await sha256(file):file.name+"|"+file.size+"|"+file.lastModified;
+  if(EV[kind].some((s,j)=>j!==i&&s&&s.key===key)){EV[kind][i]={state:"err",msg:t(kind==="photos"?"evDup":"evDupV")};return drawSlots()}
+  const slot={state:"up",pct:0,key};EV[kind][i]=slot;EV.busy++;drawSlots();
+  try{
+    if(kind==="photos"){slot.pct=30;drawSlots();let f=file;
+      if(f.size>1.2e6&&!/heic|heif/.test(f.type)){const img=await createImageBitmap(f).catch(()=>null);if(img){const sc=Math.min(1,1800/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=img.width*sc;c.height=img.height*sc;c.getContext("2d").drawImage(img,0,0,c.width,c.height);const b=await new Promise(r=>c.toBlob(r,"image/jpeg",.82));if(b)f=new File([b],file.name.replace(/\.\w+$/,"")+".jpg",{type:"image/jpeg"})}}
+      const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});
+      slot.file=(await api("upload",{kind:"evidence",name:f.name,mime:f.type,data})).file;slot.preview=URL.createObjectURL(f);}
+    else slot.file=await uploadVideo(file,p=>{slot.pct=p;drawSlots()});
+    slot.state="ok";
+  }catch(e){slot.state="err";slot.msg=kind==="videos"?t("videoFail"):errText(e)}
+  finally{EV.busy--;drawSlots()}
+}
+document.addEventListener("change",e=>{if(e.target.matches&&e.target.matches("input[data-k][data-i]"))onSlotFile(e.target)});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-rmslot]");if(!b)return;e.preventDefault();const[k,i]=b.dataset.rmslot.split(":");EV[k][+i]=null;drawSlots()});
+
+function vEvidence(v){
+  const all=[...S.ev.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.createdAt||"").localeCompare(a.createdAt||""));
+  const mine=all.filter(x=>x.staffId===S.user.id),canAdd=P("evidence");
+  const byStaff={};all.forEach(x=>{(byStaff[x.staffId]=byStaff[x.staffId]||{name:x.staffName,list:[]}).list.push(x)});
+  const showAll=P("viewAll");const st=evStats(showAll?all.filter(x=>!S.evStaff||x.staffId===S.evStaff):mine);
+  v.innerHTML=`<div class="totals"><div><span class="lbl">${t("evDays")}</span><span class="val num">${st.days}</span></div><div><span class="lbl">${t("evMosques")}</span><span class="val num">${st.mosques}</span></div><div><span class="lbl">${t("evVisits")}</span><span class="val num">${st.visits}</span></div><div><span class="lbl">${t("lastVisit")}</span><span class="val num">${esc(st.last)}</span></div></div>
+  ${showAll&&Object.keys(byStaff).length?`<div class="grid4">${Object.entries(byStaff).map(([id,s])=>{const x=evStats(s.list);return `<button type="button" class="panel mcard" data-evstaff="${esc(id)}" style="--mc:var(--ink);text-align:start;cursor:pointer;${S.evStaff===id?"outline:2px solid var(--ink)":""}"><h3>${esc(s.name)}</h3><dl class="kv"><dt>${t("evDays")}</dt><dd class="num">${x.days}</dd><dt>${t("evMosques")}</dt><dd class="num">${x.mosques}</dd><dt>${t("evVisits")}</dt><dd class="num">${x.visits}</dd><dt>${t("lastVisit")}</dt><dd class="num">${esc(x.last)}</dd></dl></button>`}).join("")}</div>`:""}
+  ${canAdd?`<section class="panel" style="padding:16px;display:flex;flex-direction:column;gap:12px"><h2 class="sec-h">${t("evNew")}</h2>
+    <div class="fgrid"><div class="field req"><label for="ev_date">${t("date")}</label><input id="ev_date" type="date" value="${today()}"></div>
+    <div class="field req"><label for="ev_mosque">${t("mosque")}</label>${mosqueSelectHtml("ev_mosque")}</div>
+    <div class="field" id="ev_otherWrap" hidden><label for="ev_other">${t("mosqueNameL")}</label><input id="ev_other"></div>
+    <div class="field"><label for="ev_place">${t("place")}</label><input id="ev_place"></div>
+    <div class="field full"><label for="ev_note">${t("note")}</label><input id="ev_note"></div></div>
+    <div id="evSlots" style="display:flex;flex-direction:column;gap:12px"></div>
+    <div class="err" id="evErr" hidden></div>
+    <div class="row-flex" style="justify-content:space-between"><span class="small muted" id="evNeed"></span><button class="btn primary" type="button" id="evSave">${t("evSubmit")}</button></div></section>`:""}
+  <section class="panel"><div class="ph"><h2 class="sec-h">${t("evVisits")}</h2>${showAll?`<button type="button" class="btn small" data-evstaff="">${t("allStaff")}</button>`:""}</div><div class="tscroll"><table><thead><tr><th>${t("date")}</th>${showAll?`<th>${t("staff")}</th>`:""}<th>${t("mosque")}</th><th>${t("place")}</th><th>📷 / 🎥</th><th></th></tr></thead><tbody>
+  ${(showAll?all.filter(x=>!S.evStaff||x.staffId===S.evStaff):mine).map(x=>`<tr><td class="num">${esc(x.date)}</td>${showAll?`<td>${esc(x.staffName)}</td>`:""}<td>${esc(mosqueLabel(x))}</td><td>${esc(x.place||"")}${x.note?`<div class="small muted">${esc(x.note)}</div>`:""}</td><td class="num">${(x.photos||[]).length} / ${(x.videos||[]).length}</td><td><button class="btn small" type="button" data-evview="${esc(x.id)}">${t("evView")}</button></td></tr>`).join("")||`<tr><td colspan="6" class="empty">${t("evNone")}</td></tr>`}
+  </tbody></table></div></section>`;
+  v.querySelectorAll("[data-evstaff]").forEach(b=>b.onclick=()=>{S.evStaff=b.dataset.evstaff||null;render()});
+  v.querySelectorAll("[data-evview]").forEach(b=>b.onclick=()=>viewEvidence(S.ev.get(b.dataset.evview)));
+  if(canAdd){$("#ev_mosque").onchange=e=>{$("#ev_otherWrap").hidden=e.target.value!=="0"};drawSlots();
+    $("#evSave").onclick=async()=>{const err=$("#evErr");err.hidden=true;const rec={date:$("#ev_date").value,mosque:+$("#ev_mosque").value,mosqueName:$("#ev_other").value.trim(),place:$("#ev_place").value.trim(),note:$("#ev_note").value.trim(),
+      photos:EV.photos.filter(s=>s&&s.state==="ok").map(s=>s.file),videos:EV.videos.filter(s=>s&&s.state==="ok").map(s=>s.file)};
+      $("#evSave").disabled=true;try{const r=await api("saveEvidence",{record:rec});S.ev.set(String(r.record.id),r.record);EV.photos=[null,null,null,null,null];EV.videos=[null,null];toast(t("evSaved"));render()}catch(e){showErr(err,errText(e));$("#evSave").disabled=false}}}
+}
+async function viewEvidence(x){
+  $("#viewTitle").textContent=`${x.staffName} · ${x.date} · ${mosqueLabel(x)}`;$("#viewOpen").hidden=true;
+  $("#viewBody").innerHTML=`<div class="slots">${(x.photos||[]).map((p,i)=>`<div class="slot" id="evp${i}"><span class="small muted">${t("loading")}</span></div>`).join("")}</div><div class="row-flex" style="margin-top:10px">${(x.videos||[]).map((p,i)=>`<span id="evv${i}" class="small muted">${t("videoN",{n:i+1})}…</span>`).join("")}</div>`;
+  $("#dlgView").showModal();
+  (x.photos||[]).forEach(async(p,i)=>{try{const r=await api("file",{id:p.id});const el=$("#evp"+i);if(r.file.data){const bin=atob(r.file.data),a=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)a[k]=bin.charCodeAt(k);const u=URL.createObjectURL(new Blob([a],{type:r.file.type}));el.innerHTML=`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt=""></a>`}else el.innerHTML=`<a href="${esc(r.file.driveUrl)}" target="_blank" rel="noopener">${t("openDrive")}</a>`}catch(e){$("#evp"+i).textContent=errText(e)}});
+  (x.videos||[]).forEach(async(p,i)=>{try{const r=await api("file",{id:p.id});$("#evv"+i).outerHTML=`<a class="btn small" href="${esc(r.file.driveUrl||"#")}" target="_blank" rel="noopener">🎥 ${t("videoN",{n:i+1})} — ${t("openDrive")}</a>`}catch(e){$("#evv"+i).textContent=errText(e)}});
+}
+
+/* مصروفات المشاوير */
+const trPill=s=>`<span class="pill ${s==="approved"?"ok":s==="rejected"?"bad":"warn"}">${t("st_"+(s||"pending"))}</span>`;
+function vTrips(v){
+  const all=[...S.trips.values()].sort((a,b)=>(a.status==="pending"?0:1)-(b.status==="pending"?0:1)||(b.date||"").localeCompare(a.date||""));
+  const canReview=P("edit"),canAdd=P("trips"),list=canReview||P("viewAll")?all:all.filter(x=>x.staffId===S.user.id);
+  const pend=list.filter(x=>x.status==="pending").length,sum=list.filter(x=>x.status==="approved").reduce((a,x)=>a+N(x.roundTrip)+N(x.food),0);
+  v.innerHTML=`<div class="notice info">${t("trHint")}</div>
+  ${canAdd?`<section class="panel" style="padding:16px;display:flex;flex-direction:column;gap:12px"><h2 class="sec-h">${t("trNew")}</h2>
+    <div class="fgrid"><div class="field req"><label for="tr_date">${t("date")}</label><input id="tr_date" type="date" value="${today()}"></div>
+    <div class="field req"><label for="tr_mosque">${t("mosque")}</label>${mosqueSelectHtml("tr_mosque")}</div>
+    <div class="field" id="tr_otherWrap" hidden><label for="tr_other">${t("mosqueNameL")}</label><input id="tr_other"></div>
+    <div class="field"><label for="tr_from">${t("fromPlace")}</label><input id="tr_from"></div><div class="field"><label for="tr_to">${t("toPlace")}</label><input id="tr_to"></div>
+    <div class="field full"><label for="tr_purpose">${t("purpose")}</label><input id="tr_purpose"></div>
+    <div class="field req"><label for="tr_cost">${t("tripCost")}</label><input id="tr_cost" inputmode="decimal"></div>
+    <div class="field"><label for="tr_round">${t("roundTrip")}</label><input id="tr_round" disabled></div>
+    <div class="field"><label for="tr_food">${t("food")} ${P("food")?"":"🔒"}</label><input id="tr_food" inputmode="decimal" ${P("food")?"":"disabled"} placeholder="${P("food")?"":esc(t("foodLocked"))}">${P("food")?"":`<span class="hint">${t("foodLocked")}</span>`}</div>
+    <div class="field"><label for="tr_note">${t("note")}</label><input id="tr_note"></div></div>
+    <div class="err" id="trErr" hidden></div><div class="row-flex" style="justify-content:flex-end"><button class="btn primary" type="button" id="trSave">${t("trSubmit")}</button></div></section>`:""}
+  <section class="panel"><div class="ph"><h2 class="sec-h">${t("tab_trips")}</h2><span class="small">${pend?`<span class="pill warn">${t("trPendingCount",{n:pend})}</span> `:""}${t("st_approved")}: <span class="num">${fmt(sum)}</span></span></div><div class="tscroll"><table><thead><tr><th>${t("date")}</th>${canReview||P("viewAll")?`<th>${t("staff")}</th>`:""}<th>${t("mosque")}</th><th>${t("fromPlace")} ← ${t("toPlace")}</th><th class="amt">${t("tripCost")}</th><th class="amt">${t("roundTrip")}</th><th class="amt">${t("food")}</th><th>${t("status")}</th>${canReview?"<th></th>":""}</tr></thead><tbody>
+  ${list.map(x=>`<tr><td class="num">${esc(x.date)}</td>${canReview||P("viewAll")?`<td>${esc(x.staffName)}</td>`:""}<td>${esc(mosqueLabel(x))}</td><td>${esc([x.fromPlace,x.toPlace].filter(Boolean).join(" ← "))}${x.purpose?`<div class="small muted">${esc(x.purpose)}</div>`:""}</td><td class="amt num">${fmt(x.tripCost)}</td><td class="amt num" style="font-weight:600">${fmt(x.roundTrip)}</td><td class="amt num">${N(x.food)?fmt(x.food):"—"}</td><td>${trPill(x.status)}${x.reviewedBy?`<div class="small muted">${esc(x.reviewedBy)}</div>`:""}</td>
+    ${canReview?`<td>${x.status==="pending"?`<div class="row-flex"><button class="btn small primary" type="button" data-trok="${esc(x.id)}">${t("approve")}</button><button class="btn small danger" type="button" data-trno="${esc(x.id)}">${t("reject")}</button></div>`:""}</td>`:""}</tr>`).join("")||`<tr><td colspan="9" class="empty">${t("trNone")}</td></tr>`}
+  </tbody></table></div></section>`;
+  if(canAdd){$("#tr_mosque").onchange=e=>{$("#tr_otherWrap").hidden=e.target.value!=="0"};$("#tr_cost").oninput=()=>{const c=N($("#tr_cost").value);$("#tr_round").value=c?fmt(c*2):""};
+    $("#trSave").onclick=async()=>{const err=$("#trErr");err.hidden=true;const rec={date:$("#tr_date").value,mosque:+$("#tr_mosque").value,mosqueName:$("#tr_other").value.trim(),fromPlace:$("#tr_from").value.trim(),toPlace:$("#tr_to").value.trim(),purpose:$("#tr_purpose").value.trim(),tripCost:N($("#tr_cost").value),food:P("food")?N($("#tr_food").value):0,note:$("#tr_note").value.trim()};
+      if(!rec.tripCost){showErr(err,t("cost_required"));return}$("#trSave").disabled=true;try{const r=await api("saveTrip",{record:rec});S.trips.set(String(r.record.id),r.record);toast(t("trSaved"));render()}catch(e){showErr(err,errText(e));$("#trSave").disabled=false}}}
+  const review=async(id,ok,b)=>{b.disabled=true;try{const r=await api("reviewTrip",{id,approve:ok});S.trips.set(String(r.record.id),r.record);(r.expenses||[]).forEach(e=>e&&S.exp.set(String(e.id),e));computeDupes();toast(ok?t("trApproved"):t("trRejected"));render()}catch(e){toast(errText(e));b.disabled=false}};
+  v.querySelectorAll("[data-trok]").forEach(b=>b.onclick=()=>review(b.dataset.trok,true,b));
+  v.querySelectorAll("[data-trno]").forEach(b=>b.onclick=()=>review(b.dataset.trno,false,b));
+}
+
+/* التصدير */
+async function doExport(btn){
+  btn.disabled=true;toast(t("exporting"));
+  try{const r=await api("exportXlsx");const bin=atob(r.data),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);
+    const l=document.createElement("a");l.href=URL.createObjectURL(new Blob([a],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));l.download=r.file.name;document.body.appendChild(l);l.click();l.remove();
+    S.lastExport=r.file;toast(t("exported"));render()}
+  catch(e){toast(errText(e))}finally{btn.disabled=false}
+}
+
+/* ============================ البدء ============================ */
+(async()=>{
+  renderLang();
+  const showApi=v=>{$("#apiBox").hidden=!v;$("#apiEdit").hidden=v||baked();$("#apiUrl").value=apiUrl()};
+  showApi(!apiUrl());
+  $("#apiEdit").onclick=()=>showApi(true);
+  $("#apiSave").onclick=async()=>{const u=$("#apiUrl").value.trim(),m=$("#apiMsg");
+    if(/googleusercontent/.test(u)){m.style.color="var(--bad)";m.textContent=t("apiEcho");return}
+    if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(u)){m.style.color="var(--bad)";m.textContent=t("apiBad");return}
+    m.style.color="";m.textContent=t("apiChecking");
+    try{const r=await fetch(u,{redirect:"follow"});const j=await r.json();if(!j.ok)throw 0;try{localStorage.setItem("apiUrl",u)}catch(_){}m.style.color="var(--ok)";m.textContent=t("apiOk");setTimeout(()=>showApi(false),900)}
+    catch(e){m.style.color="var(--bad)";m.textContent=t("apiFail")}};
+  try{S.token=localStorage.getItem("tok")}catch(_){}
+  if(S.token){try{await boot();return}catch(_){}}
+  $("#loginView").hidden=false;
+})();
+</script>
+</body>
+</html>
