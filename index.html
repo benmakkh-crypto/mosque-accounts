@@ -324,8 +324,10 @@ table.inst input,table.inst select{border:1px solid var(--line);background:var(-
 @keyframes spin4{from{transform:rotateX(64deg) rotateZ(45deg)}to{transform:rotateX(64deg) rotateZ(405deg)}}
 @keyframes spin2{from{transform:rotateY(60deg) rotateZ(0)}to{transform:rotateY(60deg) rotateZ(-360deg)}}
 @keyframes spin3{from{transform:rotateX(-50deg) rotateY(20deg) rotateZ(0)}to{transform:rotateX(-50deg) rotateY(20deg) rotateZ(360deg)}}
-.login .skyline{position:absolute;inset:auto 0 0 0;height:min(24vh,200px);opacity:.9;pointer-events:none}
+.login .skyline{position:absolute;inset:auto 0 0 0;height:min(22vh,190px);opacity:.95;pointer-events:none}
 .login .skyline svg{position:absolute;bottom:0;width:100%;height:100%}
+.login .skyline svg.mosque{width:clamp(200px,24vw,340px);height:auto;inset-inline-start:5%;bottom:14px}
+@media (max-width:640px){.login .skyline svg.mosque{inset-inline-start:50%;transform:translateX(50%);bottom:10px}html[dir=ltr] .login .skyline svg.mosque{transform:translateX(-50%)}}
 .login .stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1.5px 1.5px at 20% 30%,rgba(255,255,255,.7),transparent),radial-gradient(1px 1px at 70% 20%,rgba(255,255,255,.6),transparent),radial-gradient(1.5px 1.5px at 85% 45%,rgba(243,210,122,.8),transparent),radial-gradient(1px 1px at 35% 12%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 55% 40%,rgba(255,255,255,.4),transparent),radial-gradient(1.5px 1.5px at 10% 55%,rgba(255,255,255,.5),transparent);animation:twinkle 5s ease-in-out infinite alternate}
 @keyframes twinkle{to{opacity:.5}}
 .login .card{position:relative;z-index:2;width:min(430px,100%);padding:30px;display:flex;flex-direction:column;gap:18px;border-radius:26px;
@@ -385,11 +387,12 @@ html[dir="rtl"] .stmt tbody th{background:linear-gradient(270deg,var(--sunk),tra
   <div class="orbit" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <div class="skyline"><svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
 <path fill="rgba(52,195,155,.12)" d="M0 200C150 150 300 170 420 190S700 150 860 175 1100 160 1200 180V260H0Z"/>
-<circle cx="860" cy="70" r="26" fill="rgba(243,210,122,.85)"/><circle cx="872" cy="62" r="24" fill="#08493d"/>
+<path fill="#021713" d="M0 236C200 224 400 240 600 232S1000 222 1200 236V260H0Z"/>
+</svg><svg class="mosque" viewBox="380 0 440 262" aria-hidden="true">
+<circle cx="404" cy="52" r="18" fill="rgba(243,210,122,.85)"/><circle cx="412" cy="46" r="16" fill="#0a4f45"/>
 <path fill="#021713" d="M520 170C520 116 556 86 600 74C644 86 680 116 680 170ZM597 74V44h6v30ZM440 260V78h18v182ZM742 260V78h18v182ZM436 78L449 40L462 78ZM738 78L751 40L764 78ZM475 170C475 146 492 132 505 128C518 132 535 146 535 170ZM665 170C665 146 682 132 695 128C708 132 725 146 725 170ZM470 170H730V260H470Z"/>
 <g fill="rgba(243,210,122,.75)"><path d="M500 250v-38a12 12 0 0124 0v38z"/><path d="M546 250v-38a12 12 0 0124 0v38z"/><path d="M588 250v-38a12 12 0 0124 0v38z"/><path d="M630 250v-38a12 12 0 0124 0v38z"/><path d="M676 250v-38a12 12 0 0124 0v38z"/></g>
 <circle cx="600" cy="40" r="6" fill="rgba(243,210,122,.9)"/>
-<path fill="#021713" d="M0 236C200 224 400 240 600 232S1000 222 1200 236V260H0Z"/>
 </svg></div>
   <form class="card" id="fLogin" novalidate data-tilt>
     <div class="row-flex" style="justify-content:space-between"><div class="seal"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="#06352f"><path d="M20 5c1.2 2 .6 3.4 0 4 6 1.5 10 6.5 10 13v2H10v-2c0-6.5 4-11.5 10-13-.6-.6-1.2-2 0-4z"/><rect x="4" y="13" width="3" height="18" rx="1"/><rect x="33" y="13" width="3" height="18" rx="1"/><path d="M5.5 8.5l2.2 4.5H3.3zM34.5 8.5l2.2 4.5h-4.4z"/><rect x="3" y="25" width="34" height="8" rx="1.5"/></g><path fill="#fbe39c" d="M17.5 33v-4a2.5 2.5 0 015 0v4z"/></svg></div><div class="lang" data-lang-switch></div></div>
