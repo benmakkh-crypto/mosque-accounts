@@ -420,6 +420,70 @@ table.acc tfoot td{color:#fff;background:linear-gradient(180deg,#e0353b,#a8141a)
 .ledger-tabs{display:flex;gap:8px;flex-wrap:wrap}
 table.acc .neg{color:var(--bad);font-weight:800} table.acc .pos{color:var(--ok);font-weight:800}
 
+
+/* ===== توثيق الآبار ===== */
+nav.tabs button[data-tab="wells"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 10h14M7 10v10h10V10'/%3E%3Cpath d='M12 3v7M9 6l3-3 3 3'/%3E%3Cpath d='M10 14h4'/%3E%3C/svg%3E")}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;perspective:1400px}
+.wcard{position:relative;padding:18px;display:flex;flex-direction:column;gap:12px;overflow:hidden;cursor:pointer;text-align:start;border:1px solid var(--line2);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.wcard:hover{box-shadow:var(--sh2);transform:translateY(-4px)}
+.wcard::before{content:"";position:absolute;inset:0 0 auto;height:6px;background:var(--wc)}
+.wcard[data-st="done"]{--wc:linear-gradient(90deg,#15803d,#3fd98a)}
+.wcard[data-st="prog"]{--wc:linear-gradient(90deg,#2563c9,#74a7f2)}
+.wcard[data-st="none"]{--wc:linear-gradient(90deg,#9aa8a2,#c9d3cf)}
+.wcard h3{margin:0;font-family:var(--f-display);font-size:1.05rem}
+.wtop{display:flex;gap:14px;align-items:center}
+.wring{--p:0;--rc:var(--ink);width:74px;height:74px;flex:none;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--rc) calc(var(--p)*1%),color-mix(in srgb,var(--rc) 14%,var(--sunk)) 0);
+  box-shadow:inset 0 2px 3px rgba(255,255,255,.5),0 4px 0 color-mix(in srgb,var(--rc) 40%,#000),0 12px 20px -8px rgba(0,0,0,.35)}
+.wring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:linear-gradient(180deg,var(--surface),var(--surface2));box-shadow:inset 0 2px 5px rgba(0,0,0,.12)}
+.wring b{position:relative;z-index:1;color:var(--fg);text-shadow:none;font-family:var(--f-num);font-size:1rem}
+.wring.big{width:150px;height:150px}.wring.big::after{inset:16px}.wring.big b{font-size:1.9rem}
+.sdots{display:flex;gap:4px;flex-wrap:wrap}
+.sdots i{width:22px;height:8px;border-radius:999px;background:var(--sunk);box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
+.sdots i.on{background:linear-gradient(180deg,#3fd98a,#15803d);box-shadow:0 2px 0 #0f5f2d}
+.sdots i.cur{background:linear-gradient(180deg,#9cc2ff,#2563c9);box-shadow:0 2px 0 #1b4a96;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55}}
+.wprog{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.wprog .mini{width:64px;height:8px;border-radius:999px;background:var(--sunk);overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.15)}
+.wprog .mini span{display:block;height:100%;border-radius:999px}
+/* الخط الزمني للمراحل */
+.timeline{display:flex;flex-direction:column;gap:16px;position:relative;padding-inline-start:34px}
+.timeline::before{content:"";position:absolute;inset-block:10px;inset-inline-start:15px;width:4px;border-radius:4px;background:linear-gradient(180deg,var(--ok),var(--line))}
+.stage{position:relative;padding:16px;display:flex;flex-direction:column;gap:12px}
+.stage .snum{position:absolute;inset-inline-start:-36px;top:14px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;font-family:var(--f-num);
+  background:linear-gradient(180deg,#b8c4bf,#8a9893);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 3px 0 #5e6b66,0 8px 14px -6px rgba(0,0,0,.4);z-index:1}
+.stage[data-st="done"] .snum{background:linear-gradient(180deg,#3fd98a,#15803d);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 3px 0 #0f5f2d,0 8px 14px -6px rgba(0,0,0,.4)}
+.stage[data-st="cur"] .snum{background:linear-gradient(180deg,#9cc2ff,#2563c9);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 3px 0 #1b4a96,0 0 0 6px color-mix(in srgb,#2563c9 22%,transparent)}
+.stage[data-st="done"]{border-inline-start:4px solid #15803d}
+.stage[data-st="cur"]{border-inline-start:4px solid #2563c9}
+.stage h4{margin:0;font-size:1rem;font-family:var(--f-display)}
+.media{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.media .pic{aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:var(--sunk);display:grid;place-items:center;box-shadow:0 3px 0 var(--line),0 10px 18px -10px rgba(0,0,0,.35);border:0;padding:0;cursor:zoom-in}
+.media .pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.media .pic:hover img{transform:scale(1.06)}
+.media .vd{aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#06362f,#0a5462);color:#fff;display:grid;place-items:center;font-weight:700;border:0;cursor:pointer;box-shadow:0 3px 0 #04261f,0 10px 18px -10px rgba(0,0,0,.45);font-size:.85rem;text-decoration:none}
+.media iframe{width:100%;aspect-ratio:16/10;border:0;border-radius:12px;grid-column:1/-1;background:#000}
+.linkbox{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,var(--gold-soft),color-mix(in srgb,var(--gold-soft) 40%,var(--surface)));border:1px solid color-mix(in srgb,var(--gold) 35%,transparent)}
+.linkbox input{flex:1 1 260px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);direction:ltr;font-size:.8rem}
+/* صفحة المتبرع */
+.donor{min-height:100vh;color:#eaf7f2;background:var(--pattern),radial-gradient(900px 500px at 85% 0%,rgba(243,210,122,.22),transparent 60%),linear-gradient(160deg,#031f1a,#08493d 55%,#073c48);padding-bottom:60px}
+.donor .dtop{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px max(16px,4vw)}
+.donor .dlogo{width:120px;height:82px;background:var(--logo) center/contain no-repeat;filter:drop-shadow(0 8px 10px rgba(0,0,0,.4))}
+.donor .dwrap{max-width:980px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column;gap:22px}
+.donor .dhero{border-radius:26px;padding:26px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;color:var(--fg);
+  background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(240,248,245,.95));box-shadow:inset 0 1px 0 #fff,0 8px 0 rgba(3,31,26,.45),0 40px 80px -24px rgba(0,0,0,.6)}
+@media (prefers-color-scheme:dark){.donor .dhero{background:linear-gradient(160deg,#12241e,#0c1a16)}}
+.donor .dhero h1{font-size:1.6rem;margin:0 0 6px}
+.donor .dhero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.donor .dhero .meta span{padding:5px 12px;border-radius:999px;background:var(--sunk);font-size:.85rem;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.donor .thanks{text-align:center;color:rgba(234,247,242,.85);font-family:var(--f-display);font-size:1.05rem}
+.donor .timeline::before{background:linear-gradient(180deg,#3fd98a,rgba(255,255,255,.2))}
+.donor .stage{color:var(--fg)}
+@media (max-width:640px){.donor .dhero{grid-template-columns:1fr;text-align:center}.donor .dhero .meta{justify-content:center}.donor .dhero .wring{margin:auto}}
+#lightbox{position:fixed;inset:0;z-index:40;background:rgba(2,15,12,.88);display:grid;place-items:center;padding:16px;cursor:zoom-out}
+#lightbox img{max-width:100%;max-height:92vh;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+
 @media print{
   header.top,.noprint,.toolbar,.pager,.btn,.hero{display:none!important}
   body{background:#fff!important;color:#000;font-size:11px}
@@ -462,6 +526,8 @@ table.acc .neg{color:var(--bad);font-weight:800} table.acc .pos{color:var(--ok);
     <button class="btn small" type="button" id="apiEdit" data-t="apiChange" style="align-self:center;border:0;background:none;color:var(--muted)" hidden></button>
   </form>
 </section>
+
+<section id="donorView" hidden></section>
 
 <!-- ============ التطبيق ============ -->
 <div id="appView" hidden>
@@ -812,7 +878,7 @@ function renderLang(){
   document.querySelectorAll("[data-lang-switch]").forEach(w=>w.innerHTML=[["ar","عربي"],["en","EN"],["bn","বাংলা"]].map(([k,l])=>`<button type="button" data-lang="${k}" aria-pressed="${LANG===k}">${l}</button>`).join(""));
   document.title=t("appTitle");
 }
-document.addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b)return;LANG=b.dataset.lang;try{localStorage.setItem("lang",LANG)}catch(_){}renderLang();if(S.user){renderShell();render()}});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-lang]");if(!b)return;LANG=b.dataset.lang;try{localStorage.setItem("lang",LANG)}catch(_){}renderLang();if(S.donorData){drawDonor(S.donorTok);return}if(S.user){renderShell();render()}});
 $("#fLogin").addEventListener("submit",async e=>{e.preventDefault();const err=$("#loginErr");err.hidden=true;const btn=$("#loginBtn");btn.disabled=true;
   try{const r=await api("login",{code:$("#loginCode").value});S.token=r.token;S.user=r.user;try{localStorage.setItem("tok",r.token)}catch(_){}$("#loginCode").value="";await boot()}
   catch(x){showErr(err,errText(x))}finally{btn.disabled=false}});
@@ -824,7 +890,7 @@ $("#btnRefresh").onclick=async()=>{$("#btnRefresh").disabled=true;try{await load
 async function loadAll(){
   const d=await api("load");S.user=d.user;S.mosques=d.mosques||[];
   const fill=(map,arr)=>{map.clear();(arr||[]).forEach(r=>map.set(String(r.id),r))};
-  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];
+  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
   computeDupes();
 }
 async function boot(){
@@ -837,8 +903,8 @@ async function boot(){
 
 /* ============================ الهيكل والتبويبات ============================ */
 function allowedTabs(){
-  if(!P("viewAll")){const t=[];if(P("evidence")||P("evidenceView"))t.push("evidence");if(P("trips"))t.push("trips");if(P("evidence")||P("trips")||!P("evidenceView"))t.push("entry");return t}
-  const t=[];if(P("master"))t.push("master","accounts");t.push("overview","expenses","receipts","mistry","cats","notes","projects","evidence","trips");if(P("users"))t.push("users");return t;
+  if(!P("viewAll")){const t=[];if(P("projDocs"))t.push("wells");if(P("evidence")||P("evidenceView"))t.push("evidence");if(P("trips"))t.push("trips");if(P("evidence")||P("trips")||!(P("evidenceView")||P("projDocs")))t.push("entry");return t}
+  const t=[];if(P("master"))t.push("master","accounts");t.push("overview","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips");if(P("users"))t.push("users");return t;
 }
 function renderShell(){
   renderLang();
@@ -854,8 +920,8 @@ $("#projChip").addEventListener("click",()=>{S.tab="projects";document.querySele
 $("#mosqueChips").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;S.mosque=+b.dataset.m;S.limit=100;document.querySelectorAll("#mosqueChips .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==S.mosque));render()});
 function render(){
   const v=$("#view");
-  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
-  ({master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
+  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
+  ({wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
   const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&P("edit")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
   const b=$("#notesBadge");if(b){const c=[...S.notes.values()].filter(n=>(n.status||"open")==="open").length;b.hidden=!c;b.textContent=c}
 }
@@ -1070,9 +1136,9 @@ function vProjects(v){
   <section class="panel"><div class="toolbar"><input type="search" id="pq" placeholder="${esc(t("projSearch"))}" value="${esc(f.q)}">
     <select id="ptype"><option value="">${t("allTypes")}</option>${types.map(x=>`<option value="${esc(x)}" ${f.type===x?"selected":""}>${esc(ptName(x))}</option>`).join("")}</select>
     ${P("create")?`<button class="btn primary" type="button" id="projNew">${t("newProject")}</button>`:""}<button class="btn" type="button" id="projCsv">${t("csv")}</button></div>
-  <div class="tscroll"><table><thead><tr><th>#</th><th>${t("projectType")}</th><th>${t("date")}</th><th class="amt">${t("costExec")}</th><th class="amt hide-sm">${t("feeOrg")}</th><th>${t("donor")}</th><th class="hide-sm">${t("executor")}</th><th>${t("execStatus")}</th><th>${t("payment")}</th><th class="hide-sm">${t("timing")}</th><th class="hide-sm">${t("report")}</th></tr></thead>
-  <tbody>${rows.slice(0,S.plimit).map(p=>`<tr class="row" data-pid="${esc(p.id)}" tabindex="0"><td class="num muted">${p.n??""}</td><td style="white-space:nowrap">${esc(ptName(p.type))}${p.execRef?` <span class="small muted num">(${esc(p.execRef)})</span>`:""}${p.note?`<div class="small" style="color:var(--warn)">${esc(p.note)}</div>`:""}</td><td class="num" style="white-space:nowrap">${esc(p.date)}</td><td class="amt num">${fmt(p.cost)}</td><td class="amt num hide-sm">${fmt(p.fee)}</td><td>${esc(p.donor)}</td><td class="hide-sm small">${esc(p.executor)}${p.agency?`<div class="muted">${esc(p.agency)}</div>`:""}</td><td>${pPill(p.status)}</td><td>${p.paid==="تم"?`<span class="pill ok">${t("paid_yes")}</span>`:p.paid?`<span class="pill bad">${t("paid_no")}</span>`:"—"}</td><td class="hide-sm">${p.timing==="متأخر"?`<span class="pill warn">${t("t_late")}</span>`:timName(p.timing)}</td><td class="hide-sm">${p.report?`<span class="pill ok">${t("rep_done")}</span>`:"—"}</td></tr>`).join("")||`<tr><td colspan="11" class="empty">${t("noMatch")}</td></tr>`}</tbody>
-  <tfoot><tr><td colspan="3">${t("total")} (${rows.length})</td><td class="amt num">${fmt(rows.reduce((a,p)=>a+N(p.cost),0))}</td><td class="amt num hide-sm">${fmt(rows.reduce((a,p)=>a+N(p.fee),0))}</td><td colspan="6"></td></tr></tfoot></table></div>
+  <div class="tscroll"><table><thead><tr><th>#</th><th>${t("projectType")}</th><th>${t("date")}</th><th class="amt">${t("costExec")}</th><th class="amt hide-sm">${t("feeOrg")}</th><th>${t("donor")}</th><th class="hide-sm">${t("executor")}</th><th>${t("execStatus")}</th><th>${t("payment")}</th><th class="hide-sm">${t("timing")}</th><th class="hide-sm">${t("report")}</th><th>${t("wDocs")}</th></tr></thead>
+  <tbody>${rows.slice(0,S.plimit).map(p=>`<tr class="row" data-pid="${esc(p.id)}" tabindex="0"><td class="num muted">${p.n??""}</td><td style="white-space:nowrap">${esc(ptName(p.type))}${p.execRef?` <span class="small muted num">(${esc(p.execRef)})</span>`:""}${p.note?`<div class="small" style="color:var(--warn)">${esc(p.note)}</div>`:""}</td><td class="num" style="white-space:nowrap">${esc(p.date)}</td><td class="amt num">${fmt(p.cost)}</td><td class="amt num hide-sm">${fmt(p.fee)}</td><td>${esc(p.donor)}</td><td class="hide-sm small">${esc(p.executor)}${p.agency?`<div class="muted">${esc(p.agency)}</div>`:""}</td><td>${pPill(p.status)}</td><td>${p.paid==="تم"?`<span class="pill ok">${t("paid_yes")}</span>`:p.paid?`<span class="pill bad">${t("paid_no")}</span>`:"—"}</td><td class="hide-sm">${p.timing==="متأخر"?`<span class="pill warn">${t("t_late")}</span>`:timName(p.timing)}</td><td class="hide-sm">${p.report?`<span class="pill ok">${t("rep_done")}</span>`:"—"}</td><td>${isWell(p)?`<button type="button" class="btn small" data-wgo="${esc(p.id)}">${wProgHtml(p)}</button>`:`<span class="muted">—</span>`}</td></tr>`).join("")||`<tr><td colspan="12" class="empty">${t("noMatch")}</td></tr>`}</tbody>
+  <tfoot><tr><td colspan="3">${t("total")} (${rows.length})</td><td class="amt num">${fmt(rows.reduce((a,p)=>a+N(p.cost),0))}</td><td class="amt num hide-sm">${fmt(rows.reduce((a,p)=>a+N(p.fee),0))}</td><td colspan="7"></td></tr></tfoot></table></div>
   ${rows.length>S.plimit?`<div class="pager"><button class="btn" id="pmore" type="button">${t("showMore")}</button></div>`:""}</section>
   <section class="panel"><div class="ph"><h2 class="sec-h">${t("agencyPays")}</h2>${P("create")?`<button class="btn" type="button" id="ppNew">${t("newPay")}</button>`:""}</div>
   <div class="tscroll"><table><thead><tr><th>${t("installment")}</th><th>${t("date")}</th><th>${t("paidBy")}</th><th class="amt">${t("amount")}</th><th class="amt">${t("cumulative")}</th></tr></thead><tbody>${(()=>{let c=0;return pays.map((p,k)=>{c+=N(p.amount);return `<tr class="row" data-ppid="${esc(p.id)}" tabindex="0"><td>${esc(ord(k))}</td><td class="num">${esc(p.date)}</td><td>${esc(p.payer)}${p.note?` <span class="muted small">· ${esc(p.note)}</span>`:""}</td><td class="amt num">${fmt(p.amount)}</td><td class="amt num muted">${fmt(c)}</td></tr>`}).join("")})()||`<tr><td colspan="5" class="empty">${t("noneYet")}</td></tr>`}</tbody>
@@ -1081,6 +1147,7 @@ function vProjects(v){
   $("#ptype").onchange=e=>{f.type=e.target.value;render()};
   v.querySelectorAll("[data-pst]").forEach(b=>b.onclick=()=>{f.status=f.status===b.dataset.pst?"":b.dataset.pst;render()});
   $("#pmore")&&($("#pmore").onclick=()=>{S.plimit+=200;render()});$("#projNew")&&($("#projNew").onclick=()=>openProj(null));$("#ppNew")&&($("#ppNew").onclick=()=>openPP(null));$("#projCsv").onclick=exportProjCsv;
+  v.querySelectorAll("[data-wgo]").forEach(b=>b.onclick=e=>{e.stopPropagation();S.wellOpen=b.dataset.wgo;WS.n=0;S.tab="wells";document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));render();scrollTo(0,0)});
   v.querySelectorAll("tr[data-pid]").forEach(tr=>{tr.onclick=()=>openProj(tr.dataset.pid);tr.onkeydown=e=>{if(e.key==="Enter")openProj(tr.dataset.pid)}});
   v.querySelectorAll("tr[data-ppid]").forEach(tr=>tr.onclick=()=>openPP(tr.dataset.ppid));
 }
@@ -1092,10 +1159,10 @@ function vUsers(v){
   $("#userNew").onclick=()=>openUser(null);v.querySelectorAll("tr[data-uid]").forEach(tr=>tr.onclick=()=>openUser(tr.dataset.uid));
 }
 let curU=null;
-const PERM_KEYS=["viewAll","create","attachInvoice","edit","delete","master","users","export","evidence","evidenceView","trips","food"];
-const ROLE_DEF={admin:{viewAll:1,create:1,attachInvoice:1,edit:1,delete:1,master:1,users:1,export:1,evidence:1,evidenceView:1,trips:1,food:1},exec:{viewAll:1,create:1,attachInvoice:1,evidenceView:1},staff:{evidence:1,trips:1},monitor:{evidenceView:1}};
+const PERM_KEYS=["viewAll","create","attachInvoice","edit","delete","master","users","export","evidence","evidenceView","trips","food","projDocs"];
+const ROLE_DEF={admin:{viewAll:1,create:1,attachInvoice:1,edit:1,delete:1,master:1,users:1,export:1,evidence:1,evidenceView:1,trips:1,food:1,projDocs:1},exec:{viewAll:1,create:1,attachInvoice:1,evidenceView:1},staff:{evidence:1,trips:1},monitor:{evidenceView:1},projStaff:{projDocs:1}};
 function openUser(id){curU=id?S.users.find(u=>u.id===id):null;const u=curU||{name:"",role:"staff",perms:{},active:true};
-  $("#userTitle").textContent=curU?t("userT"):t("newUserT");$("#u_name").value=u.name;$("#u_role").innerHTML=["admin","exec","staff","monitor"].map(r=>`<option value="${r}">${t("role_"+r)}</option>`).join("");$("#u_role").value=u.role;
+  $("#userTitle").textContent=curU?t("userT"):t("newUserT");$("#u_name").value=u.name;$("#u_role").innerHTML=["admin","exec","staff","projStaff","monitor"].map(r=>`<option value="${r}">${t("role_"+r)}</option>`).join("");$("#u_role").value=u.role;
   $("#u_code").value="";$("#u_codeHint").textContent=curU?t("codeHintEdit"):t("codeHintNew");$("#u_active").checked=u.active!==false;
   drawPerms(u.perms);$("#userErr").hidden=true;$("#dlgUser").showModal()}
 function drawPerms(p){$("#u_perms").innerHTML=PERM_KEYS.map(k=>`<label class="tog" style="color:var(--fg)"><input type="checkbox" data-perm="${k}" ${p[k]?"checked":""}> ${t("perm_"+k)}</label>`).join("")}
@@ -1345,6 +1412,184 @@ Object.assign(I18N.en,{role_monitor:"Evidence monitor",perm_evidenceView:"View a
 Object.assign(I18N.bn,{role_monitor:"প্রমাণ পর্যবেক্ষক",perm_evidenceView:"সব প্রমাণ দেখা",tab_accounts:"মসজিদের হিসাব",accTitle:"মসজিদের হিসাব — সাধারণ ব্যয়",adminOnly:"শুধু সাধারণ তত্ত্বাবধায়ক",accBudget:"প্রতি মসজিদের বাজেট সারাংশ",accLedger:"সব ক্রয় ও ব্যয়",
   calTitle:"দৈনিক প্রমাণ আপলোড ট্র্যাকার",cal_ok:"সম্পূর্ণ আপলোড (৫ ছবি + ২ ভিডিও)",cal_part:"অসম্পূর্ণ আপলোড",cal_miss:"আপলোড হয়নি",cal_off:"শুক্রবার (ছুটি)",cal_fut:"আগামী দিন",calPrev:"আগের মাস",calNext:"পরের মাস"});
 
+/* ============================ توثيق الآبار بالمراحل ============================ */
+const WSTAGES=[
+ {ar:"مرحلة اختيار المكان",en:"Site selection",bn:"স্থান নির্বাচন",p:2,v:1},
+ {ar:"مرحلة تجهيز المكان للحفر باليد",en:"Preparing the site for hand digging",bn:"হাতে খননের জন্য স্থান প্রস্তুত",p:2,v:1},
+ {ar:"مرحلة الحفر بالدريل الكهربائية",en:"Drilling with the electric rig",bn:"বৈদ্যুতিক ড্রিল দিয়ে খনন",p:2,v:1},
+ {ar:"مرحلة إدخال المواسير أبو أربعة بوصة",en:"Installing the 4-inch pipes",bn:"৪ ইঞ্চি পাইপ স্থাপন",p:2,v:1},
+ {ar:"مرحلة إدخال المواسير أبو البوصة مع المضخة الكهربائية",en:"Installing the 1-inch pipes with the electric pump",bn:"বৈদ্যুতিক পাম্পসহ ১ ইঞ্চি পাইপ স্থাপন",p:2,v:1},
+ {ar:"مرحلة بناء البنيان (بالطوب)",en:"Brick construction",bn:"ইট দিয়ে নির্মাণ",p:2,v:1},
+ {ar:"مرحلة التلييس",en:"Plastering",bn:"প্লাস্টার",p:2,v:1},
+ {ar:"مرحلة ضرب الدهان (البويا)",en:"Painting",bn:"রং করা",p:2,v:1},
+ {ar:"مرحلة الافتتاحية",en:"Opening ceremony",bn:"উদ্বোধন",p:3,v:3}];
+const stName=i=>WSTAGES[i][LANG]||WSTAGES[i].ar;
+const isWell=p=>/^بئر/.test(String(p&&p.type||""));
+const wDone=w=>w&&w.stages?WSTAGES.filter((_,i)=>w.stages[String(i+1)]).length:0;
+const wState=w=>{const d=wDone(w);return d>=9?"done":d>0||w?"prog":"none"};
+const wColor=s=>s==="done"?"#15803d":s==="prog"?"#2563c9":"#9aa8a2";
+const donorLink=w=>w&&w.token?`${location.origin}${location.pathname}?w=${w.token}`:"";
+function wProgHtml(p){const w=S.wells.get(String(p.id)),d=wDone(w),s=wState(w);
+  return `<span class="wprog" title="${esc(t("wStagesDone",{d}))}"><span class="mini"><span style="width:${d/9*100}%;background:${wColor(s)}"></span></span><b class="num small" style="color:${wColor(s)}">${d}/9</b></span>`}
+const WS={n:0,photos:[],videos:[],busy:0};
+const FCACHE=new Map();
+
+function vWells(v){
+  if(S.wellOpen&&S.proj.has(String(S.wellOpen)))return vWellDetail(v,S.proj.get(String(S.wellOpen)));
+  S.wellOpen=null;
+  const all=[...S.proj.values()].filter(isWell).sort((a,b)=>(a.row||0)-(b.row||0)),f=S.wf||(S.wf={q:"",st:""}),q=f.q.trim().toLowerCase(),keep=document.activeElement?.id;
+  const cnt={done:0,prog:0,none:0};all.forEach(p=>cnt[wState(S.wells.get(String(p.id)))]++);
+  const rows=all.filter(p=>{const w=S.wells.get(String(p.id));return (!f.st||wState(w)===f.st)&&(!q||[p.donor,p.executor,p.agency,p.type,p.execRef,String(p.n),w&&w.wellName,w&&w.wellNo].some(x=>String(x||"").toLowerCase().includes(q)))});
+  v.innerHTML=`<div class="totals"><div><span class="lbl">${t("wTotal")}</span><span class="val num">${all.length}</span></div><div style="--tc:#15803d"><span class="lbl">${t("wDoneN")}</span><span class="val num" style="color:#15803d">${cnt.done}</span></div><div style="--tc:#2563c9"><span class="lbl">${t("wProgN")}</span><span class="val num" style="color:#2563c9">${cnt.prog}</span></div><div style="--tc:#9aa8a2"><span class="lbl">${t("wNoneN")}</span><span class="val num">${cnt.none}</span></div></div>
+  <section class="panel"><div class="toolbar"><input type="search" id="wq" placeholder="${esc(t("projSearch"))}" value="${esc(f.q)}">
+    <div class="chips">${[["",t("allTypes")],["done",t("wDoneN")],["prog",t("wProgN")],["none",t("wNoneN")]].map(([k,l])=>`<button type="button" class="chip" data-wst="${k}" aria-pressed="${f.st===k}">${l}</button>`).join("")}</div></div></section>
+  <div class="wgrid">${rows.map(p=>{const w=S.wells.get(String(p.id)),d=wDone(w),s=wState(w),cur=d<9?d:-1;
+    return `<button type="button" class="panel wcard" data-st="${s}" data-wopen="${esc(p.id)}"><div class="wtop"><div class="wring" style="--p:${Math.round(d/9*100)};--rc:${wColor(s)}"><b>${d}/9</b></div>
+      <div style="min-width:0"><h3>${esc(w&&w.wellName||ptName(p.type)+" #"+(p.n??""))}</h3><div class="small muted">${esc(ptName(p.type))}${w&&w.wellNo?` · ${t("wNo")} <span class="num">${esc(w.wellNo)}</span>`:p.execRef?` · <span class="num">${esc(p.execRef)}</span>`:""}</div>
+      <div class="small">${t("donor")}: <b>${esc(p.donor||"—")}</b></div></div></div>
+      <div class="sdots">${WSTAGES.map((_,i)=>`<i class="${w&&w.stages&&w.stages[String(i+1)]?"on":i===cur&&w?"cur":""}" title="${esc(stName(i))}"></i>`).join("")}</div>
+      <div class="row-flex" style="justify-content:space-between"><span class="pill ${s==="done"?"ok":s==="prog"?"warn":"mute"}">${s==="done"?t("wDone"):s==="prog"?(d<9&&w?esc(t("wNext",{s:stName(d)})):t("wProg")):t("wNone")}</span><span class="small muted num">${esc(w&&w.startDate||p.date||"")}</span></div></button>`}).join("")||`<div class="panel empty">${t("noMatch")}</div>`}</div>`;
+  const wq=$("#wq");wq.oninput=()=>{f.q=wq.value;clearTimeout(wq._t);wq._t=setTimeout(render,200)};if(keep==="wq"){wq.focus();wq.setSelectionRange(wq.value.length,wq.value.length)}
+  v.querySelectorAll("[data-wst]").forEach(b=>b.onclick=()=>{f.st=b.dataset.wst;render()});
+  v.querySelectorAll("[data-wopen]").forEach(b=>b.onclick=()=>{S.wellOpen=b.dataset.wopen;WS.n=0;render();scrollTo(0,0)});
+}
+
+function vWellDetail(v,p){
+  const w=S.wells.get(String(p.id)),can=P("projDocs")||P("edit"),d=wDone(w),s=wState(w),link=donorLink(w);
+  const head=`<div class="row-flex noprint" style="justify-content:space-between"><button class="btn" type="button" id="wBack">${LANG==="ar"?"→":"←"} ${t("wBack")}</button>${link?`<a class="btn primary" href="${esc(link)}" target="_blank" rel="noopener">${t("wPreview")}</a>`:""}</div>
+  <section class="hero" style="grid-template-columns:auto 1fr"><div class="wring big" style="--p:${Math.round(d/9*100)};--rc:${s==="done"?"#3fd98a":"#f3d27a"}"><b>${Math.round(d/9*100)}%</b></div>
+    <div><h2>${esc(w&&w.wellName||ptName(p.type))}</h2><p>${esc(ptName(p.type))} · ${t("donor")}: ${esc(p.donor||"—")}${p.agency?" · "+esc(p.agency):""}</p>
+    <div class="hstats"><div class="hstat"><b class="num">${esc(w&&w.wellNo||p.execRef||"—")}</b><span>${t("wNo")}</span></div><div class="hstat"><b class="num">${esc(w&&w.startDate||"—")}</b><span>${t("wStartD")}</span></div><div class="hstat"><b class="num">${esc(w&&w.endDate||"—")}</b><span>${t("wEndD")}</span></div><div class="hstat"><b class="num">${d}/9</b><span>${t("wStages")}</span></div></div></div></section>`;
+  const form=can?`<section class="panel" style="padding:16px;display:flex;flex-direction:column;gap:12px"><h3 class="sec-h">${t(w?"wInfo":"wStart")}</h3>
+    <div class="fgrid"><div class="field req"><label for="w_name">${t("wName")}</label><input id="w_name" value="${esc(w?w.wellName:"")}" placeholder="${esc(ptName(p.type)+" — "+(p.donor||""))}"></div>
+    <div class="field"><label for="w_no">${t("wNo")}</label><input id="w_no" value="${esc(w?w.wellNo:(p.execRef||""))}"></div>
+    <div class="field"><label for="w_start">${t("wStartD")}</label><input id="w_start" type="date" value="${esc(w?w.startDate:"")}"></div>
+    <div class="field"><label for="w_end">${t("wEndD")}</label><input id="w_end" type="date" value="${esc(w?w.endDate:"")}"></div></div>
+    <div class="small muted">${t("wFolderHint")}</div><div class="err" id="wErr" hidden></div>
+    <div class="row-flex" style="justify-content:flex-end"><button class="btn primary" type="button" id="wSave">${t(w?"save":"wStartBtn")}</button></div></section>`:"";
+  const linkBox=w&&link?`<div class="linkbox"><b>🔗 ${t("wLink")}</b><input id="wLinkInp" readonly value="${esc(link)}"><button class="btn small" type="button" id="wCopy">${t("wCopy")}</button>
+    <a class="btn small primary" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(t("wShareMsg",{d:p.donor||"",n:w.wellName||""})+"\n"+link)}">${t("wWhats")}</a></div>`:"";
+  const stages=w?`<div class="timeline">${WSTAGES.map((st,i)=>{const n=i+1,sd=w.stages&&w.stages[String(n)],state=sd?"done":i===d?"cur":"todo";
+    return `<section class="panel stage" data-st="${state}"><span class="snum">${n}</span>
+      <div class="row-flex" style="justify-content:space-between"><h4>${esc(stName(i))}</h4><span class="pill ${sd?"ok":state==="cur"?"warn":"mute"}">${sd?`✓ ${esc(sd.date||"")}`:state==="cur"?t("wCurrent"):t("wPending")}</span></div>
+      <div class="small muted">${t("wNeed",{p:st.p,v:st.v})}${sd&&sd.by?` · ${esc(sd.by)}`:""}</div>
+      ${sd?`${sd.note?`<p style="margin:0">${esc(sd.note)}</p>`:""}<div class="media">${sd.photos.map(f=>`<button type="button" class="pic" data-fid="${esc(f.id)}"><span class="small muted">…</span></button>`).join("")}${sd.videos.map((f,k)=>`<button type="button" class="vd" data-vid="${esc(f.id)}">▶ ${t("videoN",{n:k+1})}</button>`).join("")}</div>`:""}
+      ${can?(WS.n===n?wsEditor(n):`<div><button class="btn small${sd?"":" primary"}" type="button" data-wedit="${n}">${sd?t("wReplace"):t("wAdd")}</button></div>`):""}</section>`}).join("")}</div>`
+    :`<div class="panel empty">${can?t("wStartFirst"):t("wNotStarted")}</div>`;
+  v.innerHTML=head+linkBox+form+stages;
+  $("#wBack").onclick=()=>{S.wellOpen=null;WS.n=0;render()};
+  $("#wCopy")&&($("#wCopy").onclick=async()=>{try{await navigator.clipboard.writeText(link);toast(t("wCopied"))}catch(_){$("#wLinkInp").select();document.execCommand("copy");toast(t("wCopied"))}});
+  $("#wSave")&&($("#wSave").onclick=async()=>{const err=$("#wErr");err.hidden=true;const rec={projectId:p.id,wellName:$("#w_name").value.trim(),wellNo:$("#w_no").value.trim(),startDate:$("#w_start").value,endDate:$("#w_end").value};
+    if(!rec.wellName){showErr(err,t("fillReq",{x:t("wName")}));return}$("#wSave").disabled=true;
+    try{const r=await api("saveWell",{record:rec});S.wells.set(String(p.id),r.well);toast("✓ "+t("save"));render()}catch(e){showErr(err,errText(e));$("#wSave").disabled=false}});
+  v.querySelectorAll("[data-wedit]").forEach(b=>b.onclick=()=>{const n=+b.dataset.wedit,st=WSTAGES[n-1];WS.n=n;WS.photos=Array(st.p).fill(null);WS.videos=Array(Math.max(st.v,2)).fill(null);WS.busy=0;render()});
+  if(w&&WS.n)bindWs(w);
+  loadMedia(v,id=>api("file",{id}));
+}
+function wsSlot(kind,i){const s=WS[kind][i],st=WSTAGES[WS.n-1],req=kind==="photos"?i<st.p:i<st.v,lbl=t(kind==="photos"?"photoN":"videoN",{n:i+1})+(req?" *":` (${t("optional")})`);
+  let body=`<span class="small muted">${t("tapToAdd")}</span>`;
+  if(s&&s.state==="up")body=`<span class="small">${t("uploadPct",{p:s.pct||0})}</span><div class="bar" style="width:80%"><span style="width:${s.pct||0}%;background:var(--ink)"></span></div>`;
+  if(s&&s.state==="err")body=`<span class="small" style="color:var(--bad)">${esc(s.msg)}</span>`;
+  if(s&&s.state==="ok")body=kind==="photos"&&s.preview?`<img src="${s.preview}" alt="">`:`<span class="pill ok">✓ ${esc(s.file.name.slice(-22))}</span>`;
+  return `<label class="slot ${s&&s.state==="ok"?"ok":""}" for="ws_${kind}_${i}"><b class="small">${lbl}</b>${body}<input type="file" id="ws_${kind}_${i}" data-wk="${kind}" data-wi="${i}" accept="${kind==="photos"?"image/*":"video/*"}" hidden></label>`}
+function wsEditor(n){const st=WSTAGES[n-1];
+  return `<div class="ws" style="display:flex;flex-direction:column;gap:12px"><fieldset class="box"><legend>${t("wPhotosL",{n:st.p})}</legend><div class="slots" id="wsP">${WS.photos.map((_,i)=>wsSlot("photos",i)).join("")}</div></fieldset>
+    <fieldset class="box"><legend>${t("wVideosL",{n:st.v})}</legend><div class="slots" id="wsV">${WS.videos.map((_,i)=>wsSlot("videos",i)).join("")}</div></fieldset>
+    <div class="fgrid"><div class="field"><label for="ws_date">${t("date")}</label><input id="ws_date" type="date" value="${today()}"></div><div class="field"><label for="ws_note">${t("note")}</label><input id="ws_note"></div></div>
+    <div class="err" id="wsErr" hidden></div><div class="row-flex" style="justify-content:space-between"><span class="small muted" id="wsNeed"></span><div class="row-flex"><button class="btn" type="button" id="wsCancel">${t("cancel")}</button><button class="btn primary" type="button" id="wsSave">${t("wSaveStage")}</button></div></div></div>`}
+function wsRefresh(){const st=WSTAGES[WS.n-1];if(!st)return;const P_=$("#wsP"),V_=$("#wsV");if(P_)P_.innerHTML=WS.photos.map((_,i)=>wsSlot("photos",i)).join("");if(V_)V_.innerHTML=WS.videos.map((_,i)=>wsSlot("videos",i)).join("");
+  const p=WS.photos.filter(s=>s&&s.state==="ok").length,vv=WS.videos.filter(s=>s&&s.state==="ok").length,ok=p>=st.p&&vv>=st.v&&!WS.busy;
+  const b=$("#wsSave");if(b)b.disabled=!ok;const nd=$("#wsNeed");if(nd)nd.textContent=ok?t("evReady"):t("evNeed",{p:Math.max(0,st.p-p),v:Math.max(0,st.v-vv)})}
+function bindWs(w){
+  const box=document.querySelector(".ws");if(!box)return;wsRefresh();
+  box.addEventListener("change",e=>{const inp=e.target.closest("[data-wk]");if(inp)wsFile(inp,w)});
+  $("#wsCancel").onclick=()=>{WS.n=0;render()};
+  $("#wsSave").onclick=async()=>{const err=$("#wsErr");err.hidden=true;$("#wsSave").disabled=true;
+    const rec={photos:WS.photos.filter(s=>s&&s.state==="ok").map(s=>s.file),videos:WS.videos.filter(s=>s&&s.state==="ok").map(s=>s.file),date:$("#ws_date").value,note:$("#ws_note").value.trim()};
+    try{const r=await api("saveStage",{wellId:w.id,stage:WS.n,record:rec});S.wells.set(String(r.well.projectId),r.well);WS.n=0;toast(t("wStageSaved"));render()}catch(e){showErr(err,errText(e));$("#wsSave").disabled=false}};
+}
+async function wsFile(input,w){
+  const kind=input.dataset.wk,i=+input.dataset.wi,file=input.files[0];if(!file)return;input.value="";
+  if(kind==="photos"&&!file.type.startsWith("image/")){WS[kind][i]={state:"err",msg:t("photo_type")};return wsRefresh()}
+  if(kind==="videos"&&!file.type.startsWith("video/")){WS[kind][i]={state:"err",msg:t("video_type")};return wsRefresh()}
+  const key=kind==="photos"?await sha256(file):file.name+"|"+file.size+"|"+file.lastModified;
+  if(WS[kind].some((s,j)=>j!==i&&s&&s.key===key)){WS[kind][i]={state:"err",msg:t(kind==="photos"?"evDup":"evDupV")};return wsRefresh()}
+  const slot={state:"up",pct:0,key};WS[kind][i]=slot;WS.busy++;wsRefresh();const stage=WS.n;
+  try{
+    if(kind==="photos"){slot.pct=30;wsRefresh();let f=file;
+      if(f.size>1.2e6&&!/heic|heif/.test(f.type)){const img=await createImageBitmap(f).catch(()=>null);if(img){const sc=Math.min(1,1800/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=img.width*sc;c.height=img.height*sc;c.getContext("2d").drawImage(img,0,0,c.width,c.height);const b=await new Promise(r=>c.toBlob(r,"image/jpeg",.82));if(b)f=new File([b],file.name.replace(/\.\w+$/,"")+".jpg",{type:"image/jpeg"})}}
+      const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});
+      slot.file=(await api("wellUpload",{wellId:w.id,stage,name:`${stage}-${f.name}`,mime:f.type,data})).file;slot.preview=URL.createObjectURL(f)}
+    else slot.file=await wellVideo(w,stage,file,p=>{slot.pct=p;wsRefresh()});
+    slot.state="ok";
+  }catch(e){slot.state="err";slot.msg=kind==="videos"?t("videoFail"):errText(e)}
+  finally{WS.busy--;wsRefresh()}
+}
+async function wellVideo(w,stage,file,onPct){
+  try{const s=await api("wellVideoSession",{wellId:w.id,stage,name:`${stage}-${file.name}`,mime:file.type||"video/mp4",size:file.size,origin:location.origin});
+    const id=await new Promise((res,rej)=>{const x=new XMLHttpRequest();x.open("PUT",s.uploadUrl);x.upload.onprogress=e=>{if(e.lengthComputable)onPct(Math.round(e.loaded/e.total*100))};
+      x.onload=()=>{if(x.status>=200&&x.status<300){try{res(JSON.parse(x.responseText).id)}catch(e){rej(e)}}else rej(new Error("status "+x.status))};x.onerror=()=>rej(new Error("network"));x.send(file.slice(0,file.size,""))});
+    return (await api("wellUploadDone",{wellId:w.id,id})).file;
+  }catch(e){
+    if(file.size<=28*1024*1024){onPct(50);const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
+      return (await api("wellUpload",{wellId:w.id,stage,name:`${stage}-${file.name}`,mime:file.type||"video/mp4",data})).file}
+    throw e}
+}
+/* تحميل الصور والفيديو عند الحاجة (للمستخدم وللمتبرع) */
+function loadMedia(root,getter){
+  root.querySelectorAll(".pic[data-fid]").forEach(async el=>{const id=el.dataset.fid;
+    try{let u=FCACHE.get(id);if(!u){const r=await getter(id);if(r.file.data){const bin=atob(r.file.data),a=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)a[k]=bin.charCodeAt(k);u=URL.createObjectURL(new Blob([a],{type:r.file.type}))}else u=r.file.driveUrl;FCACHE.set(id,u)}
+      el.innerHTML=`<img src="${u}" alt="" loading="lazy">`;el.onclick=()=>{const lb=document.createElement("div");lb.id="lightbox";lb.innerHTML=`<img src="${u}" alt="">`;lb.onclick=()=>lb.remove();document.body.appendChild(lb)}}
+    catch(e){el.innerHTML=`<span class="small" style="color:var(--bad)">⚠</span>`}});
+  root.querySelectorAll(".vd[data-vid]").forEach(el=>el.onclick=async()=>{const id=el.dataset.vid;el.disabled=true;
+    try{const r=await getter(id);const url=r.file.previewUrl||r.file.driveUrl;const fr=document.createElement("iframe");fr.src=url;fr.allow="autoplay; fullscreen";fr.allowFullscreen=true;el.closest(".media").appendChild(fr);
+      const a=document.createElement("a");a.className="vd";a.href=r.file.driveUrl;a.target="_blank";a.rel="noopener";a.textContent="↗ "+t("openDrive");el.replaceWith(a)}catch(e){el.textContent=errText(e);el.disabled=false}});
+}
+
+/* ============================ صفحة المتبرع (رابط عام) ============================ */
+async function renderDonor(token){
+  $("#loginView").hidden=true;$("#appView").hidden=true;const dv=$("#donorView");dv.hidden=false;renderLang();
+  dv.innerHTML=`<div class="donor"><div class="dtop"><div class="dlogo" role="img" aria-label="شركة الأمة للخدمات الإنسانية"></div><div class="lang" data-lang-switch></div></div><div class="dwrap"><div class="panel empty">${t("loading")}</div></div></div>`;renderLang();
+  let d;try{d=await api("publicWell",{w:token})}catch(e){dv.querySelector(".dwrap").innerHTML=`<div class="panel empty">${t("wLinkBad")}</div>`;return}
+  S.donorData=d;drawDonor(token);
+}
+function drawDonor(token){
+  const d=S.donorData,dv=$("#donorView");if(!d)return;const done=d.stages.filter(s=>s.done).length,pct=Math.round(done/9*100),cur=done<9?done:-1;
+  document.title=`${d.well.wellName||ptName(d.project.type)} — ${t("appTitle")}`;
+  dv.querySelector(".dwrap").innerHTML=`<section class="dhero"><div><div class="small muted">${t("dProject")}</div><h1>${esc(d.well.wellName||ptName(d.project.type))}</h1>
+    <div>${esc(ptName(d.project.type))}${d.project.donor?` · ${t("dDonor")}: <b>${esc(d.project.donor)}</b>`:""}</div>
+    <div class="meta">${d.well.wellNo?`<span>${t("wNo")}: <b class="num">${esc(d.well.wellNo)}</b></span>`:""}${d.well.startDate?`<span>${t("wStartD")}: <b class="num">${esc(d.well.startDate)}</b></span>`:""}${d.well.endDate?`<span>${t("wEndD")}: <b class="num">${esc(d.well.endDate)}</b></span>`:""}<span>${t("wStagesDone",{d:done})}</span></div></div>
+    <div class="wring big" style="--p:${pct};--rc:${done>=9?"#15803d":"#c99a2e"}"><b>${pct}%</b></div></section>
+    ${done>=9?`<div class="notice info" style="text-align:center;font-weight:700">🎉 ${t("dComplete")}</div>`:""}
+    <div class="timeline">${d.stages.map((s,i)=>{const state=s.done?"done":i===cur?"cur":"todo";return `<section class="panel stage" data-st="${state}"><span class="snum">${s.n}</span>
+      <div class="row-flex" style="justify-content:space-between"><h4>${esc(stName(i))}</h4><span class="pill ${s.done?"ok":state==="cur"?"warn":"mute"}">${s.done?`✓ ${esc(s.date||"")}`:state==="cur"?t("wCurrent"):t("wPending")}</span></div>
+      ${s.note?`<p style="margin:0">${esc(s.note)}</p>`:""}
+      ${s.done?`<div class="media">${s.photos.map(id=>`<button type="button" class="pic" data-fid="${esc(id)}"><span class="small muted">…</span></button>`).join("")}${s.videos.map((id,k)=>`<button type="button" class="vd" data-vid="${esc(id)}">▶ ${t("videoN",{n:k+1})}</button>`).join("")}</div>`:""}</section>`}).join("")}</div>
+    <div class="thanks">${t("dThanks")}</div>`;
+  loadMedia(dv,id=>api("publicFile",{w:token,id}));
+}
+Object.assign(I18N.ar,{wStartD:"تاريخ البدء",wEndD:"تاريخ الانتهاء",tab_wells:"توثيق الآبار",role_projStaff:"موظف المشاريع العامة",perm_projDocs:"توثيق مراحل الآبار",wTotal:"عدد الآبار",wDoneN:"مكتملة",wProgN:"جارية",wNoneN:"لم يبدأ توثيقها",wDone:"اكتمل التوثيق",wProg:"جاري",wNone:"لم يبدأ",wNext:"التالية: {s}",
+  wStagesDone:"اكتملت {d} من 9 مراحل",wNo:"رقم البئر",wName:"اسم البئر",wStages:"المراحل",wBack:"كل الآبار",wPreview:"معاينة صفحة المتبرع",wInfo:"بيانات البئر",wStart:"بدء توثيق البئر",wStartBtn:"إنشاء ملف البئر",
+  wFolderHint:"يُنشأ مجلد خاص في Drive باسم: اسم البئر - رقم البئر - تاريخ البدء - تاريخ الانتهاء، وداخله مجلد لكل مرحلة.",wLink:"رابط المتبرع",wCopy:"نسخ",wCopied:"تم نسخ الرابط",wWhats:"إرسال واتساب",
+  wShareMsg:"السلام عليكم {d}، هذا رابط متابعة مشروعكم ({n}) بالصور والفيديو لكل مرحلة:",wCurrent:"المرحلة الحالية",wPending:"لم تبدأ",wNeed:"المطلوب: {p} صور مختلفة + {v} فيديو",wReplace:"تعديل التوثيق",wAdd:"إضافة التوثيق",
+  wStartFirst:"أدخل بيانات البئر أعلاه لبدء التوثيق.",wNotStarted:"لم يبدأ توثيق هذا البئر بعد.",optional:"اختياري",wPhotosL:"الصور: {n} مختلفة (إلزامي)",wVideosL:"الفيديو: {n} على الأقل (إلزامي)",wSaveStage:"حفظ المرحلة",wStageSaved:"تم حفظ المرحلة",
+  wDocs:"التوثيق",wLinkBad:"الرابط غير صحيح أو انتهت صلاحيته.",dProject:"مشروعكم الخيري",dDonor:"بتبرع من",dComplete:"اكتمل المشروع بحمد الله وتم افتتاحه",dThanks:"جزاكم الله خيراً وجعله في ميزان حسناتكم — شركة الأمة للخدمات الإنسانية",
+  need_2_photos:"أرفق صورتين مختلفتين.",need_3_photos:"أرفق 3 صور مختلفة.",need_1_video:"أرفق مقطع فيديو واحداً على الأقل.",need_3_videos:"أرفق 3 مقاطع فيديو.",not_found:"غير موجود"});
+Object.assign(I18N.en,{wStartD:"Start date",wEndD:"End date",tab_wells:"Well documentation",role_projStaff:"Projects officer",perm_projDocs:"Document well stages",wTotal:"Wells",wDoneN:"Completed",wProgN:"In progress",wNoneN:"Not started",wDone:"Fully documented",wProg:"In progress",wNone:"Not started",wNext:"Next: {s}",
+  wStagesDone:"{d} of 9 stages done",wNo:"Well no.",wName:"Well name",wStages:"Stages",wBack:"All wells",wPreview:"Preview donor page",wInfo:"Well details",wStart:"Start documenting this well",wStartBtn:"Create well file",
+  wFolderHint:"A Drive folder is created named: well name - well no. - start date - end date, with a sub-folder for each stage.",wLink:"Donor link",wCopy:"Copy",wCopied:"Link copied",wWhats:"Send on WhatsApp",
+  wShareMsg:"Assalamu alaikum {d}, here is the link to follow your project ({n}) with photos and videos of every stage:",wCurrent:"Current stage",wPending:"Not started",wNeed:"Required: {p} different photos + {v} video(s)",wReplace:"Edit documentation",wAdd:"Add documentation",
+  wStartFirst:"Enter the well details above to start.",wNotStarted:"This well has not been documented yet.",optional:"optional",wPhotosL:"Photos: {n} different (required)",wVideosL:"Videos: at least {n} (required)",wSaveStage:"Save stage",wStageSaved:"Stage saved",
+  wDocs:"Docs",wLinkBad:"This link is invalid or has expired.",dProject:"Your charity project",dDonor:"Donated by",dComplete:"The project is complete and has been opened, praise be to God",dThanks:"May God reward you — Al-Ummah Humanitarian Services",
+  need_2_photos:"Attach 2 different photos.",need_3_photos:"Attach 3 different photos.",need_1_video:"Attach at least 1 video.",need_3_videos:"Attach 3 videos.",not_found:"Not found"});
+Object.assign(I18N.bn,{wStartD:"শুরুর তারিখ",wEndD:"শেষের তারিখ",tab_wells:"নলকূপ নথিভুক্তি",role_projStaff:"প্রকল্প কর্মকর্তা",perm_projDocs:"নলকূপের ধাপ নথিভুক্তি",wTotal:"নলকূপ",wDoneN:"সম্পন্ন",wProgN:"চলমান",wNoneN:"শুরু হয়নি",wDone:"সম্পূর্ণ নথিভুক্ত",wProg:"চলমান",wNone:"শুরু হয়নি",wNext:"পরবর্তী: {s}",
+  wStagesDone:"৯টির মধ্যে {d}টি ধাপ সম্পন্ন",wNo:"নলকূপ নং",wName:"নলকূপের নাম",wStages:"ধাপ",wBack:"সব নলকূপ",wPreview:"দাতার পাতা দেখুন",wInfo:"নলকূপের তথ্য",wStart:"নথিভুক্তি শুরু করুন",wStartBtn:"নলকূপ ফাইল তৈরি",
+  wFolderHint:"Drive-এ একটি ফোল্ডার তৈরি হবে: নাম - নং - শুরুর তারিখ - শেষের তারিখ, প্রতিটি ধাপের জন্য সাব-ফোল্ডারসহ।",wLink:"দাতার লিংক",wCopy:"কপি",wCopied:"লিংক কপি হয়েছে",wWhats:"হোয়াটসঅ্যাপে পাঠান",
+  wShareMsg:"আসসালামু আলাইকুম {d}, আপনার প্রকল্প ({n}) প্রতিটি ধাপের ছবি ও ভিডিওসহ দেখার লিংক:",wCurrent:"বর্তমান ধাপ",wPending:"শুরু হয়নি",wNeed:"প্রয়োজন: {p}টি ভিন্ন ছবি + {v}টি ভিডিও",wReplace:"সম্পাদনা",wAdd:"নথি যোগ করুন",
+  wStartFirst:"শুরু করতে উপরে নলকূপের তথ্য দিন।",wNotStarted:"এই নলকূপের নথিভুক্তি এখনো শুরু হয়নি।",optional:"ঐচ্ছিক",wPhotosL:"ছবি: {n}টি ভিন্ন (আবশ্যক)",wVideosL:"ভিডিও: অন্তত {n}টি (আবশ্যক)",wSaveStage:"ধাপ সংরক্ষণ",wStageSaved:"ধাপ সংরক্ষিত",
+  wDocs:"নথি",wLinkBad:"লিংকটি সঠিক নয় বা মেয়াদ শেষ।",dProject:"আপনার দাতব্য প্রকল্প",dDonor:"দাতা",dComplete:"আলহামদুলিল্লাহ, প্রকল্প সম্পন্ন ও উদ্বোধন হয়েছে",dThanks:"আল্লাহ আপনাকে উত্তম প্রতিদান দিন — আল-উম্মাহ মানবিক সেবা",
+  need_2_photos:"২টি ভিন্ন ছবি যুক্ত করুন।",need_3_photos:"৩টি ভিন্ন ছবি যুক্ত করুন।",need_1_video:"অন্তত ১টি ভিডিও যুক্ত করুন।",need_3_videos:"৩টি ভিডিও যুক্ত করুন।",not_found:"পাওয়া যায়নি"});
+
 const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
 const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
 function mosqueSelectHtml(id){return `<select id="${id}">${mosques().map(m=>`<option value="${m.n}">${esc(mName(m.n))}</option>`).join("")}<option value="0">${t("otherMosque")}</option></select>`}
@@ -1471,6 +1716,7 @@ async function doExport(btn){
 /* ============================ البدء ============================ */
 (async()=>{
   renderLang();
+  const wTok=new URLSearchParams(location.search).get("w");if(wTok){S.donorTok=wTok;S.token=null;return renderDonor(wTok)}
   const showApi=v=>{$("#apiBox").hidden=!v;$("#apiEdit").hidden=v||baked();$("#apiUrl").value=apiUrl()};
   showApi(!apiUrl());
   $("#apiEdit").onclick=()=>showApi(true);
