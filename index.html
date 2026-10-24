@@ -525,6 +525,21 @@ html[dir="rtl"] .evweek[open]>summary::before{transform:rotate(-90deg)}
 .evvisit{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-radius:12px;background:var(--sunk)}
 .evvisit .btn{margin-inline-start:auto}
 
+/* ===== مصفوفة الصلاحيات والطلبات ===== */
+nav.tabs button[data-tab="access"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 018 0v4'/%3E%3C/svg%3E")}
+table.pmatrix{font-size:.84rem}
+table.pmatrix th,table.pmatrix td{text-align:center;vertical-align:middle;padding:6px}
+table.pmatrix tbody th{text-align:start;background:var(--sunk);color:var(--fg);white-space:nowrap}
+.pm-cell{display:inline-flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font-size:.68rem;color:var(--muted);line-height:1.2;max-width:84px}
+.pm-cell input{width:18px;height:18px;accent-color:var(--ink)}
+.pm-col{border:0;background:none;font:inherit;font-weight:700;color:var(--ink);cursor:pointer;text-decoration:underline dotted}
+.reqlist,.acclist{display:flex;flex-direction:column;gap:10px;padding:12px 16px 16px}
+.req,.accrow{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--surface);box-shadow:var(--sh1);border-inline-start:5px solid var(--warn)}
+.req-approved{border-inline-start-color:var(--ok);opacity:.85}.req-rejected{border-inline-start-color:var(--bad);opacity:.75}
+.req-h,.acc-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.reqnote{flex:1 1 180px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--surface)}
+.accrow{border-inline-start-color:var(--c2)}.acc-full{border-inline-start-color:var(--ok)}
+
 /* ===== تطبيق الجوال ===== */
 .installbtn{background:linear-gradient(180deg,#fdeab0,var(--gold2) 45%,var(--gold));color:#2f2204;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 0 #8f6a15,0 8px 16px -6px rgba(0,0,0,.35)}
 .installsteps{display:flex;flex-direction:column;gap:10px}
@@ -774,7 +789,7 @@ svg.chart .dot{stroke:var(--surface);stroke-width:2}
 </form></dialog>
 
 <!-- ============ نافذة المستخدم ============ -->
-<dialog id="dlgUser"><form id="fUser" novalidate>
+<dialog id="dlgUser" class="wide"><form id="fUser" novalidate>
   <h2 id="userTitle"></h2>
   <div class="fgrid">
     <div class="field req"><label for="u_name" data-t="userName"></label><input id="u_name"></div>
@@ -994,7 +1009,7 @@ $("#btnRefresh").onclick=async()=>{$("#btnRefresh").disabled=true;try{await load
 async function loadAll(){
   const d=await api("load");S.user=d.user;S.mosques=d.mosques||[];
   const fill=(map,arr)=>{map.clear();(arr||[]).forEach(r=>map.set(String(r.id),r))};
-  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.evFolders=d.evFolders||{};S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
+  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.evFolders=d.evFolders||{};S.requests=d.requests||[];S.myRequests=d.myRequests||[];S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
   computeDupes();
 }
 async function boot(){
@@ -1007,16 +1022,18 @@ async function boot(){
 
 /* ============================ الهيكل والتبويبات ============================ */
 function allowedTabs(){
-  if(!P("viewAll")){const t=[];if(P("projDocs"))t.push("wells");if(P("evidence")||P("evidenceView"))t.push("evidence");if(P("trips"))t.push("trips");if(P("evidence")||P("trips")||!(P("evidenceView")||P("projDocs")))t.push("entry");return t}
-  const t=[];if(P("master"))t.push("master","accounts");t.push("overview","charts","excess","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips");if(P("users"))t.push("users");return t;
+  const t=["master","accounts","overview","charts","excess","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips"].filter(k=>PG(k,"v")||((k==="evidence"||k==="trips"||k==="wells")&&PG(k,"a")));
+  if(PG("users","v"))t.push("users");else t.push("access");
+  if(!t.some(k=>!["access","evidence","trips","wells"].includes(k))&&(PG("evidence","a")||PG("trips","a")||t.length<=1))t.splice(t.length-1,0,"entry");
+  return t;
 }
 function renderShell(){
   renderLang();
   $("#whoami").textContent=`${S.user.name} — ${t("role_"+S.user.role)}`;
   $("#tabs").innerHTML=allowedTabs().map(k=>`<button role="tab" type="button" data-tab="${k}" aria-selected="${S.tab===k}">${t("tab_"+k)}${k==="notes"?` <span class="pill warn" id="notesBadge" hidden></span>`:""}</button>`).join("");
   $("#mosqueChips").innerHTML=[{n:0},...mosques()].map(m=>`<button class="chip" type="button" data-m="${m.n}" aria-pressed="${S.mosque==m.n}">${m.n?`<span class="dot" style="background:${mColor(m.n)}"></span>${esc(mName(m.n))}`:t("allMosques")}</button>`).join("");
-  const pc=$("#projChip");pc.hidden=!P("viewAll");pc.textContent=t("tab_projects");pc.setAttribute("aria-pressed",S.tab==="projects");
-  $("#quickAdd").innerHTML=P("create")&&P("viewAll")?`${P("receipts")?`<button class="btn small" type="button" id="qRec">${t("addReceipt")}</button>`:""}<button class="btn primary small" type="button" id="qExp">${t("addExpense")}</button>`:"";
+  const pc=$("#projChip");pc.hidden=!PG("projects","v");pc.textContent=t("tab_projects");pc.setAttribute("aria-pressed",S.tab==="projects");
+  $("#quickAdd").innerHTML=`${PG("receipts","a")?`<button class="btn small" type="button" id="qRec">${t("addReceipt")}</button>`:""}${PG("expenses","a")?`<button class="btn primary small" type="button" id="qExp">${t("addExpense")}</button>`:""}`;
   $("#qExp")&&($("#qExp").onclick=()=>openExp(null));$("#qRec")&&($("#qRec").onclick=()=>openRec(null));
 }
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;S.tab=b.dataset.tab;document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));render()});
@@ -1024,9 +1041,10 @@ $("#projChip").addEventListener("click",()=>{S.tab="projects";document.querySele
 $("#mosqueChips").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;S.mosque=+b.dataset.m;S.limit=100;document.querySelectorAll("#mosqueChips .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==S.mosque));render()});
 function render(){
   const v=$("#view");
-  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells","charts","excess"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
-  ({charts:vCharts,excess:vExcess,wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
-  const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&P("edit")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
+  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells","charts","excess","access"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
+  ({access:vAccess,charts:vCharts,excess:vExcess,wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
+  const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&PG("trips","e")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
+  const ub=document.querySelector('#tabs [data-tab="users"]');if(ub){const n=(S.requests||[]).filter(r=>r.status==="pending").length;ub.textContent=t("tab_users")+(n?` (${n})`:"")}
   const b=$("#notesBadge");if(b){const c=[...S.notes.values()].filter(n=>(n.status||"open")==="open").length;b.hidden=!c;b.textContent=c}
 }
 
@@ -1171,12 +1189,12 @@ function vReceipts(v){
 const misPaid=m=>(m.installments||[]).reduce((a,x)=>a+N(x.amount),0);
 function vMistry(v){
   const list=mosques().filter(m=>!S.mosque||m.n==S.mosque),order=Object.keys(MTYPES);
-  v.innerHTML=`<div class="row-flex" style="justify-content:space-between"><p class="small muted" style="margin:0;max-width:75ch">${t("mistryHint")}</p>${P("create")?`<button class="btn primary" type="button" id="misNew">${t("newMistry")}</button>`:""}</div>
+  v.innerHTML=`<div class="row-flex" style="justify-content:space-between"><p class="small muted" style="margin:0;max-width:75ch">${t("mistryHint")}</p>${PG("mistry","a")?`<button class="btn primary" type="button" id="misNew">${t("newMistry")}</button>`:""}</div>
   ${list.map(m=>{const ms=[...S.mis.values()].filter(x=>x.mosque==m.n).sort((a,b)=>order.indexOf(a.type)-order.indexOf(b.type)),ex=[...S.exp.values()].filter(e=>e.mosque==m.n);
     const missing=order.filter(k=>MTYPES[k].cat&&!ms.some(x=>x.type===k)&&ex.some(e=>e.category===MTYPES[k].cat));
     return `<section class="panel" style="--mc:${mColor(m.n)}"><div class="ph"><h2 class="sec-h"><span class="mtag">${m.n}</span> ${esc(mName(m.n))}</h2><span class="small muted">${t("agreed")} <span class="num">${fmt(ms.reduce((a,x)=>a+N(x.agreed),0))}</span></span></div>
     <div class="cols2" style="padding:14px">${ms.map(x=>misCard(x,ex)).join("")}
-    ${missing.map(k=>{const sp=ex.filter(e=>e.category===MTYPES[k].cat).reduce((a,e)=>a+N(e.total),0);return `<article class="panel mis" style="border-style:dashed"><div class="row-flex" style="justify-content:space-between"><h4>${esc(mtName(k))}</h4><span class="pill warn">${t("noAgreement")}</span></div><div class="small">${t("spentNoAgree",{x:fmt(sp)})}</div>${P("create")?`<button class="btn small" type="button" data-newmis="${m.n}:${k}">${t("recordAgreement")}</button>`:""}</article>`}).join("")}
+    ${missing.map(k=>{const sp=ex.filter(e=>e.category===MTYPES[k].cat).reduce((a,e)=>a+N(e.total),0);return `<article class="panel mis" style="border-style:dashed"><div class="row-flex" style="justify-content:space-between"><h4>${esc(mtName(k))}</h4><span class="pill warn">${t("noAgreement")}</span></div><div class="small">${t("spentNoAgree",{x:fmt(sp)})}</div>${PG("mistry","a")?`<button class="btn small" type="button" data-newmis="${m.n}:${k}">${t("recordAgreement")}</button>`:""}</article>`}).join("")}
     ${!ms.length&&!missing.length?`<div class="empty">${t("noneYet")}</div>`:""}</div></section>`}).join("")}`;
   $("#misNew")&&($("#misNew").onclick=()=>openMis(null));
   v.querySelectorAll("[data-mis]").forEach(b=>b.onclick=()=>openMis(b.dataset.mis));
@@ -1185,7 +1203,7 @@ function vMistry(v){
 function misCard(x,ex){
   const k=MTYPES[x.type]?x.type:"other",paid=misPaid(x),ag=N(x.agreed),rem=ag-paid,inst=x.installments||[];
   const sp=MTYPES[k].cat?ex.filter(e=>e.category===MTYPES[k].cat).reduce((a,e)=>a+N(e.total),0):null,next=inst.find(i=>i.status!=="done");
-  return `<article class="panel mis"><div class="row-flex" style="justify-content:space-between;align-items:flex-start"><div><h4>${esc(mtName(k))}${x.name?` — ${esc(x.name)}`:""}</h4><div class="small muted">${x.phone?`<span class="num">${esc(x.phone)}</span> · `:""}${esc(x.scope||"")}</div></div><button class="btn small" type="button" data-mis="${esc(x.id)}">${P("edit")?t("editPays"):t("details2")}</button></div>
+  return `<article class="panel mis"><div class="row-flex" style="justify-content:space-between;align-items:flex-start"><div><h4>${esc(mtName(k))}${x.name?` — ${esc(x.name)}`:""}</h4><div class="small muted">${x.phone?`<span class="num">${esc(x.phone)}</span> · `:""}${esc(x.scope||"")}</div></div><button class="btn small" type="button" data-mis="${esc(x.id)}">${PG("mistry","e")?t("editPays"):t("details2")}</button></div>
   <dl class="kv"><dt>${t("agreed")}</dt><dd class="num">${fmt(ag)}</dd><dt>${t("paidInst",{a:inst.filter(i=>i.status==="done").length,b:inst.length})}</dt><dd class="num">${fmt(paid)}</dd><dt>${t("remaining")}</dt><dd class="num" style="color:${rem<0?"var(--bad)":"inherit"};font-weight:600">${fmt(rem)}</dd>${sp!==null?`<dt>${t("ledgerSpent")}</dt><dd class="num">${fmt(sp)}</dd>`:""}</dl>
   <div class="bar"><span style="width:${ag?Math.min(100,paid/ag*100):0}%;background:${paid>ag?"var(--bad)":"var(--mc)"}"></span></div>
   ${inst.length?`<div class="steps">${inst.map((i,j)=>`<span class="step ${esc(i.status)}" title="${esc(ord(j))} · ${fmt(i.planned||i.amount)} · ${t("ist_"+(i.status||"planned"))}">${j+1}</span>`).join("")}</div>`:`<span class="small muted">${t("noInst")}</span>`}
@@ -1209,11 +1227,11 @@ function vCats(v){
 function vNotes(v){
   const ns=[...S.notes.values()].filter(n=>(!S.mosque||n.mosque==S.mosque||!(n.mosque>0))&&(S.nf==="all"||(n.status||"open")===S.nf)).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   const flagged=[...S.exp.values()].filter(e=>(e.review||S.dupMap.has(String(e.id)))&&(!S.mosque||e.mosque==S.mosque)).sort((a,b)=>a.mosque-b.mosque||a.seq-b.seq);
-  v.innerHTML=`<div class="row-flex" style="justify-content:space-between"><div class="chips">${["open","done","all"].map(s=>`<button class="chip" type="button" data-ns="${s}" aria-pressed="${S.nf===s}">${t(s)}</button>`).join("")}</div>${P("create")?`<button class="btn primary" type="button" id="noteNew">${t("newNote")}</button>`:""}</div>
+  v.innerHTML=`<div class="row-flex" style="justify-content:space-between"><div class="chips">${["open","done","all"].map(s=>`<button class="chip" type="button" data-ns="${s}" aria-pressed="${S.nf===s}">${t(s)}</button>`).join("")}</div>${PG("notes","a")?`<button class="btn primary" type="button" id="noteNew">${t("newNote")}</button>`:""}</div>
   <div class="cols2">${ns.map(n=>`<article class="panel note ${n.status==="done"?"done":""}" style="--mc:${n.mosque>0?mColor(n.mosque):"var(--line)"}">
     <div class="meta"><span class="pill ${/خطأ|تصحيح/.test(n.kind)?"bad":n.kind==="فاتورة ناقصة"?"warn":"mute"}">${esc(nkName(n.kind||"ملاحظة"))}</span><span>${n.mosque>0?esc(mName(n.mosque)):n.mosque==-1?t("projectsGen"):t("general")}</span><span class="num">${esc(n.date||"")}</span>${n.createdBy?`<span>· ${esc(n.createdBy)}</span>`:""}${n.status==="done"?`<span class="pill ok">${t("done")}</span>`:""}</div>
     <h4 style="margin:0">${esc(n.title)}</h4>${n.body?`<p>${esc(n.body)}</p>`:""}
-    <div class="row-flex">${P("edit")?`<button class="btn small" type="button" data-nt="${esc(n.id)}">${t("edit")}</button><button class="btn small" type="button" data-ntog="${esc(n.id)}">${n.status==="done"?t("reopen"):t("markDone")}</button>`:""}</div></article>`).join("")||`<div class="panel empty">${t("noNotes")}</div>`}</div>
+    <div class="row-flex">${PG("notes","e")?`<button class="btn small" type="button" data-nt="${esc(n.id)}">${t("edit")}</button><button class="btn small" type="button" data-ntog="${esc(n.id)}">${n.status==="done"?t("reopen"):t("markDone")}</button>`:""}</div></article>`).join("")||`<div class="panel empty">${t("noNotes")}</div>`}</div>
   <section class="panel"><div class="ph"><h2 class="sec-h">${t("flagged")}</h2><span class="small muted">${flagged.length}</span></div><div class="tscroll"><table><thead><tr><th>${t("mosque")}</th><th>#</th><th>${t("date")}</th><th>${t("category")}</th><th class="amt">${t("amount")}</th><th>${t("reason")}</th></tr></thead><tbody>
   ${flagged.map(e=>`<tr class="row" data-eid="${esc(e.id)}"><td><span class="mtag" style="--mc:${mColor(e.mosque)}">${e.mosque}</span></td><td class="num">${e.seq}</td><td class="num">${esc(e.date)}</td><td>${esc(catName(e.category))}</td><td class="amt num">${fmt(e.total)}</td><td>${e.review?`<div style="color:var(--warn)">⚑ ${esc(e.review)}</div>`:""}${(S.dupMap.get(String(e.id))||[]).map(x=>`<div style="color:var(--bad)">⧉ ${esc(dupText(x))}</div>`).join("")}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">${t("noneYet")}</td></tr>`}</tbody></table></div></section>`;
   v.querySelectorAll("[data-ns]").forEach(b=>b.onclick=()=>{S.nf=b.dataset.ns;render()});
@@ -1239,12 +1257,12 @@ function vProjects(v){
   <div class="chips">${Object.keys(PSTAT).map(s=>{const c=all.filter(p=>p.status===s).length;return c?`<button class="chip" type="button" data-pst="${esc(s)}" aria-pressed="${f.status===s}">${esc(psName(s))} <span class="num">${c}</span></button>`:""}).join("")}</div>
   <section class="panel"><div class="toolbar"><input type="search" id="pq" placeholder="${esc(t("projSearch"))}" value="${esc(f.q)}">
     <select id="ptype"><option value="">${t("allTypes")}</option>${types.map(x=>`<option value="${esc(x)}" ${f.type===x?"selected":""}>${esc(ptName(x))}</option>`).join("")}</select>
-    ${P("create")?`<button class="btn primary" type="button" id="projNew">${t("newProject")}</button>`:""}<button class="btn" type="button" id="projCsv">${t("csv")}</button></div>
+    ${PG("projects","a")?`<button class="btn primary" type="button" id="projNew">${t("newProject")}</button>`:""}<button class="btn" type="button" id="projCsv">${t("csv")}</button></div>
   <div class="tscroll"><table><thead><tr><th>#</th><th>${t("projectType")}</th><th>${t("date")}</th><th class="amt">${t("costExec")}</th><th class="amt hide-sm">${t("feeOrg")}</th><th>${t("donor")}</th><th class="hide-sm">${t("executor")}</th><th>${t("execStatus")}</th><th>${t("payment")}</th><th class="hide-sm">${t("timing")}</th><th class="hide-sm">${t("report")}</th><th>${t("wDocs")}</th></tr></thead>
   <tbody>${rows.slice(0,S.plimit).map(p=>`<tr class="row" data-pid="${esc(p.id)}" tabindex="0"><td class="num muted">${p.n??""}</td><td style="white-space:nowrap">${catOfType(p.type).icon} ${esc(ptName(p.type))}${p.execRef?` <span class="small muted num">(${esc(p.execRef)})</span>`:""}${p.note?`<div class="small" style="color:var(--warn)">${esc(p.note)}</div>`:""}</td><td class="num" style="white-space:nowrap">${esc(p.date)}</td><td class="amt num">${fmt(p.cost)}</td><td class="amt num hide-sm">${fmt(p.fee)}</td><td>${esc(p.donor)}</td><td class="hide-sm small">${esc(p.executor)}${p.agency?`<div class="muted">${esc(p.agency)}</div>`:""}</td><td>${pPill(p.status)}</td><td>${p.paid==="تم"?`<span class="pill ok">${t("paid_yes")}</span>`:p.paid?`<span class="pill bad">${t("paid_no")}</span>`:"—"}</td><td class="hide-sm">${p.timing==="متأخر"?`<span class="pill warn">${t("t_late")}</span>`:timName(p.timing)}</td><td class="hide-sm">${p.report?`<span class="pill ok">${t("rep_done")}</span>`:"—"}</td><td>${S.wells.has(String(p.id))||canDoc()?`<button type="button" class="btn small" data-wgo="${esc(p.id)}">${wProgHtml(p)}</button>`:`<span class="muted">—</span>`}</td></tr>`).join("")||`<tr><td colspan="12" class="empty">${t("noMatch")}</td></tr>`}</tbody>
   <tfoot><tr><td colspan="3">${t("total")} (${rows.length})</td><td class="amt num">${fmt(rows.reduce((a,p)=>a+N(p.cost),0))}</td><td class="amt num hide-sm">${fmt(rows.reduce((a,p)=>a+N(p.fee),0))}</td><td colspan="7"></td></tr></tfoot></table></div>
   ${rows.length>S.plimit?`<div class="pager"><button class="btn" id="pmore" type="button">${t("showMore")}</button></div>`:""}</section>
-  <section class="panel"><div class="ph"><h2 class="sec-h">${t("agencyPays")}</h2>${P("create")?`<button class="btn" type="button" id="ppNew">${t("newPay")}</button>`:""}</div>
+  <section class="panel"><div class="ph"><h2 class="sec-h">${t("agencyPays")}</h2>${PG("projects","a")?`<button class="btn" type="button" id="ppNew">${t("newPay")}</button>`:""}</div>
   <div class="tscroll"><table><thead><tr><th>${t("installment")}</th><th>${t("date")}</th><th>${t("paidBy")}</th><th class="amt">${t("amount")}</th><th class="amt">${t("cumulative")}</th></tr></thead><tbody>${(()=>{let c=0;return pays.map((p,k)=>{c+=N(p.amount);return `<tr class="row" data-ppid="${esc(p.id)}" tabindex="0"><td>${esc(ord(k))}</td><td class="num">${esc(p.date)}</td><td>${esc(p.payer)}${p.note?` <span class="muted small">· ${esc(p.note)}</span>`:""}</td><td class="amt num">${fmt(p.amount)}</td><td class="amt num muted">${fmt(c)}</td></tr>`}).join("")})()||`<tr><td colspan="5" class="empty">${t("noneYet")}</td></tr>`}</tbody>
   <tfoot><tr><td colspan="3">${t("total")}</td><td class="amt num">${fmt(paid)}</td><td></td></tr></tfoot></table></div></section>`;
   const pq=$("#pq");pq.oninput=()=>{f.q=pq.value;clearTimeout(pq._t);pq._t=setTimeout(render,200)};if(keep==="pq"){pq.focus();pq.setSelectionRange(pq.value.length,pq.value.length)}
@@ -1259,7 +1277,8 @@ function vProjects(v){
 /* ============================ المستخدمون ============================ */
 function vUsers(v){
   v.innerHTML=`<section class="panel"><div class="ph"><h2 class="sec-h">${t("users")}</h2><button class="btn primary" type="button" id="userNew">${t("newUser")}</button></div><div class="tscroll"><table><thead><tr><th>${t("userName")}</th><th>${t("role")}</th><th>${t("permissions")}</th><th>${t("status")}</th><th>${t("lastLogin")}</th></tr></thead><tbody>
-  ${S.users.map(u=>`<tr class="row" data-uid="${esc(u.id)}" tabindex="0"><td style="font-weight:600">${esc(u.name)}</td><td>${t("role_"+u.role)}</td><td class="small">${Object.keys(u.perms||{}).filter(k=>u.perms[k]).map(k=>`<span class="pill ok" style="margin:1px">${t("perm_"+k)}</span>`).join("")||`<span class="pill mute">${t("tab_entry")}</span>`}</td><td>${u.active?`<span class="pill ok">${t("active")}</span>`:`<span class="pill mute">${t("inactive")}</span>`}</td><td class="num small">${esc((u.lastLogin||"").replace("T"," ").slice(0,16))}</td></tr>`).join("")}</tbody></table></div></section>`;
+  ${S.users.map(u=>`<tr class="row" data-uid="${esc(u.id)}" tabindex="0"><td style="font-weight:600">${esc(u.name)}</td><td>${t("role_"+u.role)}</td><td class="small">${permSummary(u)}</td><td>${u.active?`<span class="pill ok">${t("active")}</span>`:`<span class="pill mute">${t("inactive")}</span>`}</td><td class="num small">${esc((u.lastLogin||"").replace("T"," ").slice(0,16))}</td></tr>`).join("")}</tbody></table></div></section>`;
+  v.insertAdjacentHTML("afterbegin",requestsHtml());bindRequests(v);
   $("#userNew").onclick=()=>openUser(null);v.querySelectorAll("tr[data-uid]").forEach(tr=>tr.onclick=()=>openUser(tr.dataset.uid));
 }
 let curU=null;
@@ -1269,10 +1288,10 @@ function openUser(id){curU=id?S.users.find(u=>u.id===id):null;const u=curU||{nam
   $("#userTitle").textContent=curU?t("userT"):t("newUserT");$("#u_name").value=u.name;$("#u_role").innerHTML=["admin","exec","staff","projStaff","monitor"].map(r=>`<option value="${r}">${t("role_"+r)}</option>`).join("");$("#u_role").value=u.role;
   $("#u_code").value="";$("#u_codeHint").textContent=curU?t("codeHintEdit"):t("codeHintNew");$("#u_active").checked=u.active!==false;
   drawPerms(u.perms);$("#userErr").hidden=true;$("#dlgUser").showModal()}
-function drawPerms(p){$("#u_perms").innerHTML=PERM_KEYS.map(k=>`<label class="tog" style="color:var(--fg)"><input type="checkbox" data-perm="${k}" ${p[k]?"checked":""}> ${t("perm_"+k)}</label>`).join("")}
+/* drawPerms: انظر صلاحيات الصفحات */
 $("#u_role").addEventListener("change",e=>drawPerms(ROLE_DEF[e.target.value]||{}));
-$("#fUser").addEventListener("submit",async ev=>{ev.preventDefault();const perms={};document.querySelectorAll("#u_perms [data-perm]").forEach(c=>perms[c.dataset.perm]=c.checked);
-  const x={id:curU?.id,name:$("#u_name").value.trim(),role:$("#u_role").value,perms,active:$("#u_active").checked,code:$("#u_code").value.trim()};
+$("#fUser").addEventListener("submit",async ev=>{ev.preventDefault();const rp=readPerms(),perms=rp.perms;
+  const x={id:curU?.id,name:$("#u_name").value.trim(),role:$("#u_role").value,perms,pages:rp.pages,active:$("#u_active").checked,code:$("#u_code").value.trim()};
   if(!x.name){showErr($("#userErr"),t("fillReq",{x:t("userName")}));return}
   $("#userSave").disabled=true;try{await api("saveUser",{user:x});S.users=(await api("users")).users;$("#dlgUser").close();toast(t("saved"));render()}catch(e){showErr($("#userErr"),errText(e))}finally{$("#userSave").disabled=false}});
 
@@ -1314,7 +1333,7 @@ async function prepUpload(f){
 function openExp(id){
   cur=id?S.exp.get(String(id)):null;pend=undefined;selects();
   const e=cur||{mosque:S.mosque||1,date:today(),category:"اسمنت"};
-  const canAll=cur?P("edit"):P("create"),attach=!!cur&&!P("edit")&&P("attachInvoice")&&!hasInv(cur);
+  const canAll=cur?PG("expenses","e"):PG("expenses","a"),attach=!!cur&&!PG("expenses","e")&&P("attachInvoice")&&!hasInv(cur);
   $("#expTitle").textContent=cur?t("expenseN",{s:cur.seq??"",m:mName(cur.mosque)}):t("newExpense");
   $("#e_mosque").value=e.mosque;$("#e_date").value=e.date||"";
   if(e.category&&!CATS.includes(e.category))$("#e_cat").insertAdjacentHTML("beforeend",`<option value="${esc(e.category)}">${esc(e.category)}</option>`);
@@ -1325,7 +1344,7 @@ function openExp(id){
   fileView($("#e_fileView"),e.invoiceFile,(canAll)?()=>{pend=null;fileView($("#e_fileView"),null)}:null);
   $("#e_uploadRow").hidden=!(canAll||attach);
   $("#expMode").hidden=canAll;$("#expMode").textContent=attach?t("attachMode"):cur?t("readMode"):t("entryOnly");
-  $("#expSave").hidden=!(canAll||attach);$("#expDel").hidden=!cur||!P("delete");$("#expErr").hidden=true;delete $("#fExp").dataset.dupOk;
+  $("#expSave").hidden=!(canAll||attach);$("#expDel").hidden=!cur||!PG("expenses","d");$("#expErr").hidden=true;delete $("#fExp").dataset.dupOk;
   $("#expMeta").textContent=cur?(cur.createdBy?t("addedBy",{u:cur.createdBy,d:String(cur.createdAt||"").slice(0,10)}):"")+(cur.updatedBy?" "+t("editedBy",{u:cur.updatedBy,d:String(cur.updatedAt||"").slice(0,10)}):""):"";
   syncNoInv();$("#dlgExp").showModal();
 }
@@ -1340,7 +1359,7 @@ $("#fExp").addEventListener("submit",async ev=>{ev.preventDefault();const err=$(
     invoiceNo:$("#e_inv").value.trim(),shop:$("#e_shop").value.trim(),paidBy:$("#e_paidby").value.trim(),review:$("#e_review").value.trim(),noInvoice:$("#e_noinv").checked,invoiceFile:file};
   const miss=[];if(!d.date)miss.push(t("date"));if(!d.desc)miss.push(t("desc"));if(!d.total)miss.push(t("total"));
   if(PURCHASE.has(d.category)&&!d.noInvoice&&!d.invoiceNo&&!file)miss.push(t("needInvoice"));
-  if(miss.length&&(P("edit")||!cur)){showErr(err,t("fillReq",{x:miss.join("، ")}));return}
+  if(miss.length&&(PG("expenses","e")||!cur)){showErr(err,t("fillReq",{x:miss.join("، ")}));return}
   if(d.invoiceNo&&!$("#fExp").dataset.dupOk){const dup=[...S.exp.values()].find(x=>x.id!==cur?.id&&String(x.invoiceNo||"").trim()===d.invoiceNo&&(x.shop||"")===(d.shop||""));
     if(dup){showErr(err,t("dupInvWarn",{x:d.invoiceNo,m:mName(dup.mosque),d:dup.date,a:fmt(dup.total)}));$("#fExp").dataset.dupOk="1";return}}
   $("#expSave").disabled=true;
@@ -1352,11 +1371,11 @@ async function confirmDel(text){const d=$("#dlgConfirm");$("#cfmText").textConte
 
 /* ============================ نافذة الدفعة المستلمة ============================ */
 let curR=null,pendR;
-function openRec(id){curR=id?S.rec.get(String(id)):null;pendR=undefined;selects();const r=curR||{mosque:S.mosque||1,source:"donor",date:today()};const can=curR?P("edit"):P("receipts");
+function openRec(id){curR=id?S.rec.get(String(id)):null;pendR=undefined;selects();const r=curR||{mosque:S.mosque||1,source:"donor",date:today()};const can=curR?PG("receipts","e"):PG("receipts","a");
   $("#recTitle").textContent=curR?t("editReceipt"):t("newReceipt");$("#r_source").innerHTML=`<option value="donor">${t("donorSrc")}</option><option value="council">${t("councilSrc")}</option>`;
   $("#r_mosque").value=r.mosque;$("#r_source").value=r.source||"donor";$("#r_date").value=r.date||"";$("#r_amount").value=r.amount??"";$("#r_who").value=r.receiver||"";$("#r_note").value=r.note||"";$("#r_file").value="";
   document.querySelectorAll("#fRec input,#fRec select").forEach(el=>el.disabled=!can);fileView($("#r_fileView"),r.file,can?()=>{pendR=null;fileView($("#r_fileView"),null)}:null);$("#r_uploadRow").hidden=!can;
-  $("#recSave").hidden=!can;$("#recDel").hidden=!curR||!P("delete");$("#recErr").hidden=true;$("#dlgRec").showModal()}
+  $("#recSave").hidden=!can;$("#recDel").hidden=!curR||!PG("receipts","d");$("#recErr").hidden=true;$("#dlgRec").showModal()}
 $("#r_file").addEventListener("change",async ev=>{const f=ev.target.files[0];if(!f)return;$("#recSave").disabled=true;try{pendR=await prepUpload(f);fileView($("#r_fileView"),pendR)}catch(e){showErr($("#recErr"),t("uploadFail"))}finally{$("#recSave").disabled=false}});
 $("#fRec").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curR||{}),mosque:+$("#r_mosque").value,source:$("#r_source").value,date:$("#r_date").value,amount:N($("#r_amount").value),receiver:$("#r_who").value.trim(),note:$("#r_note").value.trim(),file:pendR===undefined?(curR?.file||null):pendR};
   if(!d.amount||!d.date){showErr($("#recErr"),t("fillReq",{x:t("date")+"، "+t("amount")}));return}
@@ -1365,13 +1384,13 @@ $("#recDel").onclick=()=>delRec("receipts",curR,t("confirmDel"),S.rec,"#dlgRec")
 
 /* ============================ نافذة اتفاق المعلم ============================ */
 let curM=null,inst=[];
-function openMis(id,preset){curM=id?S.mis.get(String(id)):null;selects();const x=curM||{mosque:S.mosque||1,type:"paint",installments:[],...preset};const can=curM?P("edit"):P("create");
+function openMis(id,preset){curM=id?S.mis.get(String(id)):null;selects();const x=curM||{mosque:S.mosque||1,type:"paint",installments:[],...preset};const can=curM?PG("mistry","e"):PG("mistry","a");
   $("#mi_type").innerHTML=Object.keys(MTYPES).map(k=>`<option value="${k}">${esc(mtName(k))}</option>`).join("");
   $("#misTitle").textContent=curM?t("mistryT",{t:mtName(x.type),m:mName(x.mosque)}):t("newMistryT");
   $("#mi_mosque").value=x.mosque;$("#mi_type").value=MTYPES[x.type]?x.type:"other";$("#mi_name").value=x.name||"";$("#mi_phone").value=x.phone||"";$("#mi_id").value=x.idNo||"";$("#mi_agreed").value=x.agreed||"";$("#mi_start").value=x.startDate||"";$("#mi_end").value=x.endDate||"";$("#mi_scope").value=x.scope||"";$("#mi_notes").value=x.notes||"";
   inst=(x.installments||[]).map(i=>({...i}));drawInst(can);
   document.querySelectorAll("#fMis .fgrid input,#fMis .fgrid select,#fMis .fgrid textarea").forEach(el=>el.disabled=!can);$("#instBtns").hidden=!can;
-  $("#misSave").hidden=!can;$("#misDel").hidden=!curM||!P("delete");$("#misErr").hidden=true;$("#dlgMis").showModal()}
+  $("#misSave").hidden=!can;$("#misDel").hidden=!curM||!PG("mistry","d");$("#misErr").hidden=true;$("#dlgMis").showModal()}
 function drawInst(can=true){
   $("#instBody").innerHTML=inst.map((i,k)=>`<tr data-k="${k}"><td style="white-space:nowrap">${esc(ord(k))}</td><td><input data-f="planned" inputmode="decimal" value="${i.planned||""}" ${can?"":"disabled"}></td><td><input data-f="date" type="date" value="${esc(i.date||"")}" ${can?"":"disabled"}></td><td><input data-f="amount" inputmode="decimal" value="${i.amount||""}" ${can?"":"disabled"}></td>
     <td><select data-f="status" ${can?"":"disabled"}>${["planned","progress","done"].map(s=>`<option value="${s}" ${i.status===s?"selected":""}>${t("ist_"+s)}</option>`).join("")}</select></td><td><input data-f="note" value="${esc(i.note||"")}" ${can?"":"disabled"}></td><td>${can?`<button class="btn small" type="button" data-rmk="${k}">✕</button>`:""}</td></tr>`).join("")||`<tr><td colspan="7" class="empty">${t("noInst")}</td></tr>`;
@@ -1393,11 +1412,11 @@ $("#misDel").onclick=()=>delRec("mistries",curM,t("confirmDel"),S.mis,"#dlgMis")
 
 /* ============================ نافذة الملاحظة ============================ */
 let curN=null;
-function openNote(id){curN=id?S.notes.get(String(id)):null;const n=curN||{mosque:S.mosque||0,kind:"ملاحظة",date:today(),status:"open"};const can=curN?P("edit"):P("create");
+function openNote(id){curN=id?S.notes.get(String(id)):null;const n=curN||{mosque:S.mosque||0,kind:"ملاحظة",date:today(),status:"open"};const can=curN?PG("notes","e"):PG("notes","a");
   $("#n_mosque").innerHTML=`<option value="0">${t("general")}</option>`+mosques().map(m=>`<option value="${m.n}">${esc(mName(m.n))}</option>`).join("")+`<option value="-1">${t("projectsGen")}</option>`;
   $("#n_kind").innerHTML=Object.keys(NKINDS).map(k=>`<option value="${esc(k)}">${esc(nkName(k))}</option>`).join("");$("#n_status").innerHTML=`<option value="open">${t("open")}</option><option value="done">${t("done")}</option>`;
   $("#noteTitle").textContent=curN?t("noteT"):t("newNoteT");$("#n_mosque").value=n.mosque;$("#n_kind").value=n.kind;$("#n_title").value=n.title||"";$("#n_body").value=n.body||"";$("#n_date").value=n.date||"";$("#n_status").value=n.status||"open";
-  document.querySelectorAll("#fNote input,#fNote select,#fNote textarea").forEach(el=>el.disabled=!can);$("#noteSave").hidden=!can;$("#noteDel").hidden=!curN||!P("delete");$("#noteErr").hidden=true;$("#dlgNote").showModal()}
+  document.querySelectorAll("#fNote input,#fNote select,#fNote textarea").forEach(el=>el.disabled=!can);$("#noteSave").hidden=!can;$("#noteDel").hidden=!curN||!PG("notes","d");$("#noteErr").hidden=true;$("#dlgNote").showModal()}
 $("#fNote").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curN||{}),mosque:+$("#n_mosque").value,kind:$("#n_kind").value,title:$("#n_title").value.trim(),body:$("#n_body").value.trim(),date:$("#n_date").value,status:$("#n_status").value};
   if(!d.title){showErr($("#noteErr"),t("fillReq",{x:t("title")}));return}
   try{const r=await api("save",{table:"notes",record:d});S.notes.set(String(r.record.id),r.record);$("#dlgNote").close();toast(t("saved"));render()}catch(e){showErr($("#noteErr"),errText(e))}});
@@ -1405,23 +1424,23 @@ $("#noteDel").onclick=()=>delRec("notes",curN,t("confirmDel"),S.notes,"#dlgNote"
 
 /* ============================ نافذة المشروع ============================ */
 let curP=null;
-function openProj(id){curP=id?S.proj.get(String(id)):null;const pc=S.newProjCat?dcat(S.newProjCat):null;S.newProjCat=null;const p=curP||{date:today(),type:pc?(pc.types[0]||""):"بئر ارتوازي",cost:38000,fee:2000,status:"لم يبدأ"};const can=curP?(P("edit")||P("projManage")):P("create");
+function openProj(id){curP=id?S.proj.get(String(id)):null;const pc=S.newProjCat?dcat(S.newProjCat):null;S.newProjCat=null;const p=curP||{date:today(),type:pc?(pc.types[0]||""):"بئر ارتوازي",cost:38000,fee:2000,status:"لم يبدأ"};const can=curP?PG("projects","e"):PG("projects","a");
   const all=[...S.proj.values()],dl=(sel,k)=>$(sel).innerHTML=[...new Set(all.map(x=>x[k]).filter(Boolean))].map(s=>`<option value="${esc(s)}">`).join("");dl("#pdonors","donor");dl("#pexecs","executor");dl("#pagencies","agency");
   const types=[...new Set([...Object.keys(PTYPES),...all.map(x=>x.type)])];
   $("#p_cat").innerHTML=DCATS.map(c=>`<option value="${c.key}">${esc(c.icon+" "+L3(c.n))}</option>`).join("");$("#p_cat").value=catOfType(p.type).key;fillPTypes(p.type);$("#p_status").innerHTML=Object.keys(PSTAT).map(s=>`<option value="${esc(s)}">${esc(psName(s))}</option>`).join("");
   $("#p_paid").innerHTML=`<option value="">—</option><option value="تم">${t("paid_yes")}</option><option value="لم يتم">${t("paid_no")}</option>`;$("#p_timing").innerHTML=`<option value="">—</option><option value="في الموعد">${t("t_ontime")}</option><option value="متأخر">${t("t_late")}</option>`;$("#p_report").innerHTML=`<option value="">${t("rep_none")}</option><option value="مكتمل">${t("rep_done")}</option>`;
   $("#projTitle").textContent=curP?t("projT",{n:curP.n??""}):t("newProjT");
   $("#p_typeNew").value="";$("#p_date").value=p.date||"";$("#p_cost").value=p.cost??"";$("#p_fee").value=p.fee??"";$("#p_donor").value=p.donor||"";$("#p_exec").value=p.executor||"";$("#p_agency").value=p.agency||"";$("#p_ref").value=p.execRef||"";$("#p_status").value=p.status||"لم يبدأ";$("#p_paid").value=p.paid||"";$("#p_timing").value=p.timing||"";$("#p_report").value=p.report||"";$("#p_note").value=p.note||"";
-  document.querySelectorAll("#fProj input,#fProj select").forEach(el=>el.disabled=!can);$("#projSave").hidden=!can;$("#projDel").hidden=!curP||!(P("delete")||P("projManage"));$("#projErr").hidden=true;$("#dlgProj").showModal()}
+  document.querySelectorAll("#fProj input,#fProj select").forEach(el=>el.disabled=!can);$("#projSave").hidden=!can;$("#projDel").hidden=!curP||!PG("projects","d");$("#projErr").hidden=true;$("#dlgProj").showModal()}
 $("#p_type").addEventListener("change",e=>{if(curP)return;const x=e.target.value;if(x==="بئر سطحي"){$("#p_cost").value=10000;$("#p_fee").value=2000}else if(x==="بئر ارتوازي"){$("#p_cost").value=38000;$("#p_fee").value=2000}});
 $("#fProj").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curP||{}),type:$("#p_type").value==="__new"?$("#p_typeNew").value.trim():$("#p_type").value,date:$("#p_date").value,cost:N($("#p_cost").value),fee:N($("#p_fee").value),donor:$("#p_donor").value.trim(),executor:$("#p_exec").value.trim(),agency:$("#p_agency").value.trim(),execRef:$("#p_ref").value.trim(),status:$("#p_status").value,paid:$("#p_paid").value,timing:$("#p_timing").value,report:$("#p_report").value,note:$("#p_note").value.trim()};
   if(!d.type||!d.date||!d.cost){showErr($("#projErr"),t("fillReq",{x:[t("projectType"),t("date"),t("costExec")].join("، ")}));return}
   $("#projSave").disabled=true;try{const r=await api("save",{table:"projects",record:d});S.proj.set(String(r.record.id),r.record);$("#dlgProj").close();toast(t("saved"));render()}catch(e){showErr($("#projErr"),errText(e))}finally{$("#projSave").disabled=false}});
 $("#projDel").onclick=()=>delRec("projects",curP,t("confirmDel"),S.proj,"#dlgProj");
 let curPP=null;
-function openPP(id){curPP=id?S.ppay.get(String(id)):null;const p=curPP||{date:today()};const can=curPP?(P("edit")||P("projManage")):P("create");$("#ppTitle").textContent=t("ppT");
+function openPP(id){curPP=id?S.ppay.get(String(id)):null;const p=curPP||{date:today()};const can=curPP?PG("projects","e"):PG("projects","a");$("#ppTitle").textContent=t("ppT");
   $("#pp_date").value=p.date||"";$("#pp_amount").value=p.amount??"";$("#pp_payer").value=p.payer||"";$("#pp_note").value=p.note||"";
-  document.querySelectorAll("#fPPay input").forEach(el=>el.disabled=!can);$("#ppSave").hidden=!can;$("#ppDel").hidden=!curPP||!(P("delete")||P("projManage"));$("#ppErr").hidden=true;$("#dlgPPay").showModal()}
+  document.querySelectorAll("#fPPay input").forEach(el=>el.disabled=!can);$("#ppSave").hidden=!can;$("#ppDel").hidden=!curPP||!PG("projects","d");$("#ppErr").hidden=true;$("#dlgPPay").showModal()}
 $("#fPPay").addEventListener("submit",async ev=>{ev.preventDefault();const d={...(curPP||{}),date:$("#pp_date").value,amount:N($("#pp_amount").value),payer:$("#pp_payer").value.trim(),note:$("#pp_note").value.trim()};
   if(!d.date||!d.amount){showErr($("#ppErr"),t("fillReq",{x:t("date")+"، "+t("amount")}));return}
   try{const r=await api("save",{table:"projpay",record:d});S.ppay.set(String(r.record.id),r.record);$("#dlgPPay").close();toast(t("saved"));render()}catch(e){showErr($("#ppErr"),errText(e))}});
@@ -1477,7 +1496,7 @@ function evCalendar(all){
 /* ============================ حسابات الجوامع (للمشرف العام) ============================ */
 const ACC_ORDER=["مروان","بدر الهدى","اسمنت","بطحاء","خرسان","حديد","البلك","مصروفات عامة","المواصلات","مسامير","أجرة العمال","أجرة سيارة","معلم بناء","معلم بويا","معلم سراميك","بويا وألوان","أغراض سراميك","معلم كهرباء","رواتب الموظفين","أغراض كهرباء"];
 function vAccounts(v){
-  if(!P("master")){v.innerHTML=`<div class="panel empty">${t("adminOnly")}</div>`;return}
+  if(!PG("accounts","v")){v.innerHTML=`<div class="panel empty">${t("adminOnly")}</div>`;return}
   const ms=mosques(),all=[...S.exp.values()];
   const cats=[...ACC_ORDER,...[...new Set([...CATS,...all.map(e=>e.category)])].filter(c=>c&&!ACC_ORDER.includes(c)&&all.some(e=>e.category===c))];
   const cell=(c,n)=>{const xs=all.filter(e=>e.category===c&&e.mosque==n);return {q:xs.reduce((a,e)=>a+N(e.qty),0),t:xs.reduce((a,e)=>a+N(e.total),0)}};
@@ -1558,7 +1577,7 @@ const wDone=(w,cat)=>w&&w.stages?(cat||dcat(w.cat||"wells")).stages.filter((_,i)
 const wState=(w,cat)=>{const c=cat||dcat(w&&w.cat||"wells"),d=wDone(w,c);return d>=c.stages.length?"done":w?"prog":"none"};
 const wColor=s=>s==="done"?"#15803d":s==="prog"?"#2563c9":"#9aa8a2";
 const isExecuted=p=>p.status==="تم التنفيذ";
-const canDoc=()=>P("projDocs")||P("projManage")||P("edit"),canManageDoc=()=>P("projManage")||P("edit");
+const canDoc=()=>PG("wells","a")||PG("wells","e"),canManageDoc=()=>PG("wells","e");
 const donorLink=w=>w&&w.token?`${location.origin}${location.pathname}?w=${w.token}`:"";
 function wProgHtml(p){const w=S.wells.get(String(p.id)),c=catOfP(p),N=c.stages.length,d=wDone(w,c),s=wState(w,c);
   if(!w&&canDoc())return `<span class="pill ${isExecuted(p)?"ok docgo":"mute"}">📷 ${t(isExecuted(p)?"wAddNow":"wAdd")}</span>`;
@@ -1584,7 +1603,7 @@ function vWells(v){
   <div class="totals"><div><span class="lbl">${t("wTotal")}</span><span class="val num">${inCat.length}</span></div><div style="--tc:#15803d"><span class="lbl">${t("wDoneN")}</span><span class="val num" style="color:#15803d">${cnt.done}</span></div><div style="--tc:#2563c9"><span class="lbl">${t("wProgN")}</span><span class="val num" style="color:#2563c9">${cnt.prog}</span></div><div style="--tc:#c99a2e"><span class="lbl">${t("wExecNoDoc")}</span><span class="val num" style="color:#a16207">${cnt.exec}</span></div><div style="--tc:#9aa8a2"><span class="lbl">${t("wNoneN")}</span><span class="val num">${cnt.none}</span></div></div>
   <section class="panel"><div class="toolbar"><input type="search" id="wq" placeholder="${esc(t("projSearch"))}" value="${esc(f.q)}">
     ${types.length>1?`<select id="wtype"><option value="">${t("allTypes")}</option>${types.map(x=>`<option value="${esc(x)}" ${f.type===x?"selected":""}>${esc(ptName(x))}</option>`).join("")}</select>`:""}
-    ${P("create")?`<button class="btn primary" type="button" id="wNewProj">${t("wNewInCat")}</button>`:""}<div class="chips">${[["",t("wAll")],["exec",t("wExecNoDoc")],["prog",t("wProgN")],["done",t("wDoneN")],["none",t("wNoneN")]].map(([k,l])=>`<button type="button" class="chip" data-wst="${k}" aria-pressed="${f.st===k}">${l}</button>`).join("")}</div></div></section>
+    ${PG("projects","a")?`<button class="btn primary" type="button" id="wNewProj">${t("wNewInCat")}</button>`:""}<div class="chips">${[["",t("wAll")],["exec",t("wExecNoDoc")],["prog",t("wProgN")],["done",t("wDoneN")],["none",t("wNoneN")]].map(([k,l])=>`<button type="button" class="chip" data-wst="${k}" aria-pressed="${f.st===k}">${l}</button>`).join("")}</div></div></section>
   <div class="wgrid">${rows.map(p=>{const w=S.wells.get(String(p.id)),c=catOfP(p),N=c.stages.length,d=wDone(w,c),s=wState(w,c),cur=d<N?d:-1,ex=isExecuted(p);
     return `<article class="panel wcard" data-st="${s}" data-wopen="${esc(p.id)}" tabindex="0"><div class="wtop"><div class="wring" style="--p:${Math.round(d/N*100)};--rc:${wColor(s)}"><b>${d}/${N}</b></div>
       <div style="min-width:0;flex:1"><div class="small muted">${c.icon} ${esc(L3(c.n))} · ${esc(ptName(p.type))}</div><h3>${esc(w&&w.wellName||ptName(p.type)+" #"+(p.n??""))}</h3>
@@ -1628,7 +1647,7 @@ function vWellDetail(v,p){
       <div class="row-flex" style="justify-content:space-between"><h4>${esc(L3(st))}</h4><span class="pill ${sd?"ok":state==="cur"?"warn":"mute"}">${sd?`✓ ${esc(sd.date||"")}`:state==="cur"?t("wCurrent"):t("wPending")}</span></div>
       <div class="small muted">${t("wNeed",{p:r.p,v:r.v})}${sd&&sd.by?` · ${esc(sd.by)}`:""}</div>
       ${sd?`${sd.note?`<p style="margin:0">${esc(sd.note)}</p>`:""}<div class="media">${sd.photos.map(f=>`<button type="button" class="pic" data-fid="${esc(f.id)}"><span class="small muted">…</span></button>`).join("")}${sd.videos.map((f,k)=>`<button type="button" class="vd" data-vid="${esc(f.id)}">▶ ${t("videoN",{n:k+1})}</button>`).join("")}</div>`:""}
-      ${canEdit?(WS.n===n?wsEditor(c,n):`<div class="row-flex"><button class="btn small${sd?"":" primary"}" type="button" data-wedit="${n}">${sd?t("wReplace"):"📷 "+t("wAdd")}</button>${sd&&man?`<button class="btn small danger" type="button" data-wdel="${n}">${t("wDelStage")}</button>`:""}</div>`):""}</section>`}).join("")}</div>`
+      ${canEdit?(WS.n===n?wsEditor(c,n):`<div class="row-flex"><button class="btn small${sd?"":" primary"}" type="button" data-wedit="${n}">${sd?t("wReplace"):"📷 "+t("wAdd")}</button>${sd&&PG("wells","d")?`<button class="btn small danger" type="button" data-wdel="${n}">${t("wDelStage")}</button>`:""}</div>`):""}</section>`}).join("")}</div>`
     :`<div class="panel empty">${can?t("wStartFirst"):t("wNotStarted")}</div>`;
   v.innerHTML=head+linkBox+form+stages;
   $("#wBack").onclick=()=>{S.wellOpen=null;WS.n=0;render()};
@@ -1895,7 +1914,7 @@ function excessData(){
   return {ms,price,outl,units,byM,obs};
 }
 function vExcess(v){
-  const d=excessData(),names=d.ms.map(m=>mName(m.n)),canNote=P("create");
+  const d=excessData(),names=d.ms.map(m=>mName(m.n)),canNote=PG("notes","a");
   const s1=[{name:t("x_price"),color:"var(--c3)",values:d.byM.map(x=>Math.round(x.pe))},{name:t("x_entries"),color:"var(--c4)",values:d.byM.map(x=>Math.round(x.oeAmt))},{name:t("x_deficit"),color:"var(--c2)",values:d.byM.map(x=>x.deficit)}];
   const sevIc={bad:"⛔",warn:"⚠️",mute:"ℹ️"};
   v.innerHTML=`<div class="row-flex noprint" style="justify-content:space-between"><div><h2 class="sec-h" style="font-size:1.2rem">${t("tab_excess")}</h2><div class="small muted">${t("x_hint")}</div></div>
@@ -1967,6 +1986,80 @@ Object.assign(I18N.ar,{evFilesT:"ملفات كل جامع: أسبوعاً بأس
 Object.assign(I18N.en,{evFilesT:"Each mosque's files: week by week, day by day",evDrive:"Open the mosque folder in Drive",evDriveAll:"All folders",evWeek:"Week {a} to {b}",evWeekSum:"{n} visits · {d} days · {p} photos · {v} videos",evShow:"Show evidence",used_before:"This file was already uploaded for another visit and cannot be reused"});
 Object.assign(I18N.bn,{evFilesT:"প্রতিটি মসজিদের ফাইল: সপ্তাহ ও দিন অনুযায়ী",evDrive:"Drive-এ মসজিদের ফোল্ডার খুলুন",evDriveAll:"সব ফোল্ডার",evWeek:"সপ্তাহ {a} থেকে {b}",evWeekSum:"{n} ভিজিট · {d} দিন · {p} ছবি · {v} ভিডিও",evShow:"প্রমাণ দেখুন",used_before:"এই ফাইলটি আগে অন্য ভিজিটে আপলোড হয়েছে, পুনরায় ব্যবহার করা যাবে না"});
 
+/* ============================ صلاحيات الصفحات بفروعها ============================ */
+const PAGE_DEF=[["master","v"],["accounts","v"],["overview","v"],["charts","v"],["excess","v"],["expenses","vaed"],["receipts","vaed"],["mistry","vaed"],["cats","v"],["notes","vaed"],["projects","vaed"],["wells","vaed"],["evidence","va"],["trips","vae"],["users","v"]];
+const ACTS=["v","a","e","d"];
+const PG=(pg,act="v")=>{const m=S.user&&S.user.perms&&S.user.perms.pages;return !!(m&&m[pg]&&m[pg][act])};
+const actName=(pg,a)=>t((pg==="evidence"||pg==="trips")&&a==="v"?"act_vAll":pg==="evidence"&&a==="a"?"act_aEv":pg==="trips"&&a==="a"?"act_aTr":pg==="trips"&&a==="e"?"act_eTr":pg==="wells"&&a==="a"?"act_aW":"act_"+a);
+function normPagesC(pg){const out={};PAGE_DEF.forEach(([k,acts])=>{const s=(pg&&pg[k])||{},o={};acts.split("").forEach(a=>o[a]=!!s[a]);if((o.a||o.e||o.d)&&k!=="evidence"&&k!=="trips")o.v=true;out[k]=o});return out}
+function pagesFromLegacyC(p){const V=!!p.viewAll;return normPagesC({master:{v:p.master},accounts:{v:p.master},overview:{v:V},charts:{v:V},excess:{v:V},cats:{v:V},
+  expenses:{v:V,a:p.create,e:p.edit,d:p.delete},receipts:{v:V,a:p.receipts,e:p.edit,d:p.delete},mistry:{v:V,a:p.create,e:p.edit,d:p.delete},notes:{v:V,a:p.create,e:p.edit,d:p.delete},
+  projects:{v:V,a:p.create,e:p.edit||p.projManage,d:p.delete||p.projManage},wells:{v:V||p.projDocs,a:p.projDocs,e:p.projManage||p.edit,d:p.projManage||p.edit},
+  evidence:{v:V||p.evidenceView,a:p.evidence},trips:{v:V,a:p.trips,e:p.edit},users:{v:p.users}})}
+const SPECIALS=["attachInvoice","export","food"];
+function drawPerms(p){
+  const pg=p.pages?normPagesC(p.pages):pagesFromLegacyC(p);
+  $("#u_perms").className="";$("#u_perms").innerHTML=`<div class="tscroll"><table class="pmatrix"><thead><tr><th>${t("pageCol")}</th>${ACTS.map(a=>`<th><button type="button" class="pm-col" data-col="${a}">${t("act_"+a)}</button></th>`).join("")}<th>${t("allCol")}</th></tr></thead>
+  <tbody>${PAGE_DEF.map(([k,acts])=>`<tr><th>${esc(t("tab_"+k))}</th>${ACTS.map(a=>acts.includes(a)?`<td><label class="pm-cell" title="${esc(actName(k,a))}"><input type="checkbox" data-pg="${k}" data-act="${a}" ${pg[k][a]?"checked":""}><span>${esc(actName(k,a))}</span></label></td>`:`<td class="muted">—</td>`).join("")}<td><button type="button" class="btn small pm-row" data-row="${k}">✓</button></td></tr>`).join("")}</tbody></table></div>
+  <div class="row-flex" style="margin-top:10px;gap:14px">${SPECIALS.map(k=>`<label class="tog" style="color:var(--fg)"><input type="checkbox" data-perm="${k}" ${p[k]?"checked":""}> ${t("perm_"+k)}</label>`).join("")}</div>`;
+  const box=$("#u_perms");
+  box.querySelectorAll("[data-row]").forEach(b=>b.onclick=()=>{const cs=[...box.querySelectorAll(`[data-pg="${b.dataset.row}"]`)],on=!cs.every(c=>c.checked);cs.forEach(c=>c.checked=on)});
+  box.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>{const cs=[...box.querySelectorAll(`[data-act="${b.dataset.col}"]`)],on=!cs.every(c=>c.checked);cs.forEach(c=>c.checked=on)});
+  box.addEventListener("change",e=>{const c=e.target.closest("[data-pg]");if(!c)return;const k=c.dataset.pg;if(c.checked&&c.dataset.act!=="v"&&k!=="evidence"&&k!=="trips"){const v=box.querySelector(`[data-pg="${k}"][data-act="v"]`);if(v)v.checked=true}
+    if(!c.checked&&c.dataset.act==="v"&&k!=="evidence"&&k!=="trips")box.querySelectorAll(`[data-pg="${k}"]`).forEach(x=>x.checked=false)});
+}
+function readPerms(){const pages={};PAGE_DEF.forEach(([k])=>pages[k]={});document.querySelectorAll("#u_perms [data-pg]").forEach(c=>pages[c.dataset.pg][c.dataset.act]=c.checked);
+  const perms={};document.querySelectorAll("#u_perms [data-perm]").forEach(c=>perms[c.dataset.perm]=c.checked);return {pages:normPagesC(pages),perms}}
+function permSummary(u){const pg=(u.perms&&u.perms.pages)||{};const parts=PAGE_DEF.filter(([k])=>pg[k]&&Object.values(pg[k]).some(Boolean)).map(([k,acts])=>{const on=acts.split("").filter(a=>pg[k][a]);return `<span class="pill ${on.length===acts.length?"ok":"warn"}" style="margin:1px" title="${esc(on.map(a=>actName(k,a)).join("، "))}">${esc(t("tab_"+k))}${on.length<acts.length?` <small>${on.length}/${acts.length}</small>`:""}</span>`});
+  return parts.join("")||`<span class="pill mute">${t("noPerms")}</span>`}
+
+/* --------- طلبات الصلاحيات: عند المشرف --------- */
+function requestsHtml(){
+  const rq=(S.requests||[]).slice().sort((a,b)=>(a.status==="pending"?0:1)-(b.status==="pending"?0:1)||(b.createdAt||"").localeCompare(a.createdAt||""));
+  const pend=rq.filter(r=>r.status==="pending");
+  return `<section class="panel"><div class="ph"><h2 class="sec-h">${t("reqTitle")} ${pend.length?`<span class="pill warn">${pend.length}</span>`:""}</h2><span class="small muted">${t("reqHint")}</span></div>
+  <div class="reqlist">${rq.map(r=>`<div class="req req-${r.status}" data-rq="${esc(r.id)}"><div class="req-h"><b>👤 ${esc(r.userName)}</b><span>→ ${esc(t("tab_"+r.page))}</span><span class="small muted num">${esc((r.createdAt||"").slice(0,16).replace("T"," "))}</span>${stPill(r.status)}</div>
+    ${r.note?`<div class="small">💬 ${esc(r.note)}</div>`:""}
+    <div class="row-flex">${(PAGE_DEF.find(p=>p[0]===r.page)||[0,""])[1].split("").map(a=>{const asked=(r.acts||[]).includes(a);return r.status==="pending"?`<label class="tog" style="color:var(--fg)"><input type="checkbox" data-ract="${a}" ${asked?"checked":""}> ${esc(actName(r.page,a))}</label>`:asked?`<span class="pill ${r.status==="approved"?"ok":"mute"}">${esc(actName(r.page,a))}</span>`:""}).join("")}</div>
+    ${r.status==="pending"?`<div class="row-flex"><input class="reqnote" placeholder="${esc(t("note"))}"><button class="btn small primary" type="button" data-rok="${esc(r.id)}">✓ ${t("approve")}</button><button class="btn small danger" type="button" data-rno="${esc(r.id)}">✕ ${t("reject")}</button></div>`
+      :`<div class="small muted">${esc(r.decidedBy||"")} · ${esc((r.decidedAt||"").slice(0,16).replace("T"," "))}${r.decisionNote?` · ${esc(r.decisionNote)}`:""}</div>`}</div>`).join("")||`<div class="empty">${t("reqNone")}</div>`}</div></section>`;
+}
+const stPill=s=>`<span class="pill ${s==="approved"?"ok":s==="rejected"?"bad":"warn"}">${t("rq_"+s)}</span>`;
+function bindRequests(v){
+  const go=async(id,ok)=>{const box=v.querySelector(`[data-rq="${id}"]`),acts=[...box.querySelectorAll("[data-ract]:checked")].map(c=>c.dataset.ract),note=box.querySelector(".reqnote").value.trim();
+    if(ok&&!acts.length){toast(t("reqPick"));return}box.querySelectorAll("button").forEach(b=>b.disabled=true);
+    try{const r=await api("decideRequest",{id,approve:ok,acts,note});S.requests=(S.requests||[]).map(x=>x.id===id?r.request:x);try{S.users=(await api("users")).users}catch(_){}toast(ok?t("reqApproved"):t("reqRejected"));render();renderShell()}
+    catch(e){toast(errText(e));box.querySelectorAll("button").forEach(b=>b.disabled=false)}};
+  v.querySelectorAll("[data-rok]").forEach(b=>b.onclick=()=>go(b.dataset.rok,true));v.querySelectorAll("[data-rno]").forEach(b=>b.onclick=()=>go(b.dataset.rno,false));
+}
+
+/* --------- صفحة «صلاحياتي وطلباتي» للموظفين --------- */
+function vAccess(v){
+  const mine=(S.myRequests||[]).slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));
+  v.innerHTML=`<div class="notice info">${t("accHint")}</div>
+  <section class="panel"><div class="ph"><h2 class="sec-h">🔐 ${t("accTitle2")}</h2></div><div class="acclist">${PAGE_DEF.filter(([k])=>k!=="users").map(([k,acts])=>{const have=acts.split("").filter(a=>PG(k,a)),miss=acts.split("").filter(a=>!PG(k,a)),pend=mine.find(r=>r.page===k&&r.status==="pending");
+    return `<div class="accrow ${miss.length?"":"acc-full"}" data-acc="${k}"><div class="acc-h"><b>${esc(t("tab_"+k))}</b><div class="row-flex">${have.map(a=>`<span class="pill ok">✓ ${esc(actName(k,a))}</span>`).join("")}</div></div>
+      ${miss.length?(pend?`<div class="row-flex">${stPill("pending")}<span class="small muted">${(pend.acts||[]).map(a=>actName(k,a)).join("، ")}</span></div>`
+        :`<div class="row-flex">${miss.map(a=>`<label class="tog" style="color:var(--fg)"><input type="checkbox" data-want="${a}" ${a==="v"||(!acts.includes("v")||have.includes("v"))&&a===miss[0]?"checked":""}> ${esc(actName(k,a))}</label>`).join("")}<input class="reqnote" placeholder="${esc(t("reqWhy"))}"><button class="btn small primary" type="button" data-ask="${k}">📨 ${t("reqSend")}</button></div>`):""}</div>`}).join("")}</div></section>
+  <section class="panel"><div class="ph"><h2 class="sec-h">${t("myReqs")}</h2></div><div class="tscroll"><table><thead><tr><th>${t("date")}</th><th>${t("pageCol")}</th><th>${t("reqActs")}</th><th>${t("status")}</th><th>${t("note")}</th></tr></thead><tbody>
+  ${mine.map(r=>`<tr><td class="num">${esc((r.createdAt||"").slice(0,10))}</td><td>${esc(t("tab_"+r.page))}</td><td>${(r.acts||[]).map(a=>esc(actName(r.page,a))).join("، ")}</td><td>${stPill(r.status)}</td><td class="small">${esc(r.decisionNote||r.note||"")}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">${t("reqNone")}</td></tr>`}</tbody></table></div></section>`;
+  v.querySelectorAll("[data-ask]").forEach(b=>b.onclick=async()=>{const row=v.querySelector(`[data-acc="${b.dataset.ask}"]`),acts=[...row.querySelectorAll("[data-want]:checked")].map(c=>c.dataset.want),note=row.querySelector(".reqnote").value.trim();
+    if(!acts.length){toast(t("reqPick"));return}b.disabled=true;
+    try{const r=await api("requestAccess",{page:b.dataset.ask,acts,note});S.myRequests=[...(S.myRequests||[]),r.request];toast(t("reqSent"));render()}catch(e){toast(errText(e));b.disabled=false}});
+}
+Object.assign(I18N.ar,{tab_access:"صلاحياتي وطلباتي",tab_users:"المستخدمون والصلاحيات",tab_master:"كشف الحسابات الشامل",tab_accounts:"حسابات الجوامع",pageCol:"الصفحة",allCol:"الكل",act_v:"اطلاع",act_a:"إضافة",act_e:"تعديل",act_d:"حذف",act_vAll:"اطلاع على الكل",act_aEv:"رفع شواهده",act_aTr:"تسجيل مشاويره",act_eTr:"اعتماد ورفض",act_aW:"رفع التوثيق",
+  perm_attachInvoice:"إرفاق فاتورة لقيد بلا فاتورة",perm_export:"تصدير Excel إلى Drive",perm_food:"خانة الأكل والشرب",noPerms:"بلا صلاحيات",reqTitle:"طلبات الصلاحيات",reqHint:"عدّل الفروع قبل الموافقة إن أردت",reqNone:"لا توجد طلبات",approve:"موافقة",reject:"رفض",reqPick:"اختر فرعاً واحداً على الأقل",reqApproved:"تمت الموافقة وأُضيفت الصلاحية",reqRejected:"تم رفض الطلب",
+  rq_pending:"بانتظار الموافقة",rq_approved:"تمت الموافقة",rq_rejected:"مرفوض",accHint:"هنا صلاحياتك الحالية في كل صفحة. اطلب أي صلاحية تحتاجها، فتصل للمشرف العام للموافقة، وتظهر لك الصفحة بعد الموافقة عند تحديث الصفحة.",accTitle2:"الصفحات وفروع الصلاحية",reqWhy:"سبب الطلب (اختياري)",reqSend:"طلب الصلاحية",reqSent:"أُرسل الطلب إلى المشرف العام",myReqs:"طلباتي",reqActs:"الفروع",
+  already_have:"لديك هذه الصلاحية مسبقاً",already_requested:"لديك طلب سابق لهذه الصفحة بانتظار الموافقة",already_decided:"تم البت في هذا الطلب مسبقاً"});
+Object.assign(I18N.en,{tab_access:"My permissions & requests",tab_users:"Users & permissions",pageCol:"Page",allCol:"All",act_v:"View",act_a:"Add",act_e:"Edit",act_d:"Delete",act_vAll:"View all",act_aEv:"Upload own evidence",act_aTr:"Log own trips",act_eTr:"Approve / reject",act_aW:"Upload documentation",
+  perm_attachInvoice:"Attach invoice to an entry without one",perm_export:"Export Excel to Drive",perm_food:"Food & drink field",noPerms:"No permissions",reqTitle:"Permission requests",reqHint:"Adjust the branches before approving if needed",reqNone:"No requests",approve:"Approve",reject:"Reject",reqPick:"Pick at least one branch",reqApproved:"Approved — permission added",reqRejected:"Request rejected",
+  rq_pending:"Awaiting approval",rq_approved:"Approved",rq_rejected:"Rejected",accHint:"These are your current permissions on each page. Request any permission you need; it goes to the general supervisor, and the page appears after approval when you refresh.",accTitle2:"Pages and permission branches",reqWhy:"Reason (optional)",reqSend:"Request",reqSent:"Request sent to the general supervisor",myReqs:"My requests",reqActs:"Branches",
+  already_have:"You already have this permission",already_requested:"You already have a pending request for this page",already_decided:"This request was already decided"});
+Object.assign(I18N.bn,{tab_access:"আমার অনুমতি ও অনুরোধ",tab_users:"ব্যবহারকারী ও অনুমতি",pageCol:"পাতা",allCol:"সব",act_v:"দেখা",act_a:"যোগ",act_e:"সম্পাদনা",act_d:"মুছা",act_vAll:"সব দেখা",act_aEv:"নিজের প্রমাণ আপলোড",act_aTr:"নিজের যাতায়াত লেখা",act_eTr:"অনুমোদন / বাতিল",act_aW:"নথি আপলোড",
+  perm_attachInvoice:"চালানহীন এন্ট্রিতে চালান যোগ",perm_export:"Drive-এ Excel রপ্তানি",perm_food:"খাবার ও পানীয় ঘর",noPerms:"কোনো অনুমতি নেই",reqTitle:"অনুমতির অনুরোধ",reqHint:"প্রয়োজনে অনুমোদনের আগে শাখা বদলান",reqNone:"কোনো অনুরোধ নেই",approve:"অনুমোদন",reject:"বাতিল",reqPick:"অন্তত একটি শাখা বেছে নিন",reqApproved:"অনুমোদিত — অনুমতি যোগ হয়েছে",reqRejected:"অনুরোধ বাতিল",
+  rq_pending:"অনুমোদনের অপেক্ষায়",rq_approved:"অনুমোদিত",rq_rejected:"বাতিল",accHint:"প্রতিটি পাতায় আপনার বর্তমান অনুমতি এখানে। দরকারি অনুমতি চাইলে সাধারণ তত্ত্বাবধায়কের কাছে যাবে; অনুমোদনের পর পাতা রিফ্রেশ করলে দেখা যাবে।",accTitle2:"পাতা ও অনুমতির শাখা",reqWhy:"কারণ (ঐচ্ছিক)",reqSend:"অনুরোধ",reqSent:"অনুরোধ পাঠানো হয়েছে",myReqs:"আমার অনুরোধ",reqActs:"শাখা",
+  already_have:"এই অনুমতি আগেই আছে",already_requested:"এই পাতার জন্য অনুরোধ অপেক্ষমাণ",already_decided:"এই অনুরোধের সিদ্ধান্ত আগেই হয়েছে"});
+
 const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
 const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
 function mosqueSelectHtml(id){return `<select id="${id}">${mosques().map(m=>`<option value="${m.n}">${esc(mName(m.n))}</option>`).join("")}<option value="0">${t("otherMosque")}</option></select>`}
@@ -2016,9 +2109,9 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-rmslot]");
 
 function vEvidence(v){
   const all=[...S.ev.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.createdAt||"").localeCompare(a.createdAt||""));
-  const mine=all.filter(x=>x.staffId===S.user.id),canAdd=P("evidence");
+  const mine=all.filter(x=>x.staffId===S.user.id),canAdd=PG("evidence","a");
   const byStaff={};all.forEach(x=>{(byStaff[x.staffId]=byStaff[x.staffId]||{name:x.staffName,list:[]}).list.push(x)});
-  const showAll=P("viewAll")||P("evidenceView");const st=evStats(showAll?all.filter(x=>!S.evStaff||x.staffId===S.evStaff):mine);
+  const showAll=PG("evidence","v");const st=evStats(showAll?all.filter(x=>!S.evStaff||x.staffId===S.evStaff):mine);
   v.innerHTML=`<div class="totals"><div><span class="lbl">${t("evDays")}</span><span class="val num">${st.days}</span></div><div><span class="lbl">${t("evMosques")}</span><span class="val num">${st.mosques}</span></div><div><span class="lbl">${t("evVisits")}</span><span class="val num">${st.visits}</span></div><div><span class="lbl">${t("lastVisit")}</span><span class="val num">${esc(st.last)}</span></div></div>
   ${showAll&&Object.keys(byStaff).length?`<div class="grid4">${Object.entries(byStaff).map(([id,s])=>{const x=evStats(s.list);return `<button type="button" class="panel mcard" data-evstaff="${esc(id)}" style="--mc:var(--ink);text-align:start;cursor:pointer;${S.evStaff===id?"outline:2px solid var(--ink)":""}"><h3>${esc(s.name)}</h3><dl class="kv"><dt>${t("evDays")}</dt><dd class="num">${x.days}</dd><dt>${t("evMosques")}</dt><dd class="num">${x.mosques}</dd><dt>${t("evVisits")}</dt><dd class="num">${x.visits}</dd><dt>${t("lastVisit")}</dt><dd class="num">${esc(x.last)}</dd></dl></button>`}).join("")}</div>`:""}
   ${canAdd?`<section class="panel" style="padding:16px;display:flex;flex-direction:column;gap:12px"><h2 class="sec-h">${t("evNew")}</h2>
@@ -2055,7 +2148,7 @@ async function viewEvidence(x){
 const trPill=s=>`<span class="pill ${s==="approved"?"ok":s==="rejected"?"bad":"warn"}">${t("st_"+(s||"pending"))}</span>`;
 function vTrips(v){
   const all=[...S.trips.values()].sort((a,b)=>(a.status==="pending"?0:1)-(b.status==="pending"?0:1)||(b.date||"").localeCompare(a.date||""));
-  const canReview=P("edit"),canAdd=P("trips"),list=canReview||P("viewAll")?all:all.filter(x=>x.staffId===S.user.id);
+  const canReview=PG("trips","e"),canAdd=PG("trips","a"),list=canReview||PG("trips","v")?all:all.filter(x=>x.staffId===S.user.id);
   const pend=list.filter(x=>x.status==="pending").length,sum=list.filter(x=>x.status==="approved").reduce((a,x)=>a+N(x.roundTrip)+N(x.food),0);
   v.innerHTML=`<div class="notice info">${t("trHint")}</div>
   ${canAdd?`<section class="panel" style="padding:16px;display:flex;flex-direction:column;gap:12px"><h2 class="sec-h">${t("trNew")}</h2>
@@ -2070,7 +2163,7 @@ function vTrips(v){
     <div class="field"><label for="tr_note">${t("note")}</label><input id="tr_note"></div></div>
     <div class="err" id="trErr" hidden></div><div class="row-flex" style="justify-content:flex-end"><button class="btn primary" type="button" id="trSave">${t("trSubmit")}</button></div></section>`:""}
   <section class="panel"><div class="ph"><h2 class="sec-h">${t("tab_trips")}</h2><span class="small">${pend?`<span class="pill warn">${t("trPendingCount",{n:pend})}</span> `:""}${t("st_approved")}: <span class="num">${fmt(sum)}</span></span></div><div class="tscroll"><table><thead><tr><th>${t("date")}</th>${canReview||P("viewAll")?`<th>${t("staff")}</th>`:""}<th>${t("mosque")}</th><th>${t("fromPlace")} ← ${t("toPlace")}</th><th class="amt">${t("tripCost")}</th><th class="amt">${t("roundTrip")}</th><th class="amt">${t("food")}</th><th>${t("status")}</th>${canReview?"<th></th>":""}</tr></thead><tbody>
-  ${list.map(x=>`<tr><td class="num">${esc(x.date)}</td>${canReview||P("viewAll")?`<td>${esc(x.staffName)}</td>`:""}<td>${esc(mosqueLabel(x))}</td><td>${esc([x.fromPlace,x.toPlace].filter(Boolean).join(" ← "))}${x.purpose?`<div class="small muted">${esc(x.purpose)}</div>`:""}</td><td class="amt num">${fmt(x.tripCost)}</td><td class="amt num" style="font-weight:600">${fmt(x.roundTrip)}</td><td class="amt num">${N(x.food)?fmt(x.food):"—"}</td><td>${trPill(x.status)}${x.reviewedBy?`<div class="small muted">${esc(x.reviewedBy)}</div>`:""}</td>
+  ${list.map(x=>`<tr><td class="num">${esc(x.date)}</td>${canReview||PG("trips","v")?`<td>${esc(x.staffName)}</td>`:""}<td>${esc(mosqueLabel(x))}</td><td>${esc([x.fromPlace,x.toPlace].filter(Boolean).join(" ← "))}${x.purpose?`<div class="small muted">${esc(x.purpose)}</div>`:""}</td><td class="amt num">${fmt(x.tripCost)}</td><td class="amt num" style="font-weight:600">${fmt(x.roundTrip)}</td><td class="amt num">${N(x.food)?fmt(x.food):"—"}</td><td>${trPill(x.status)}${x.reviewedBy?`<div class="small muted">${esc(x.reviewedBy)}</div>`:""}</td>
     ${canReview?`<td>${x.status==="pending"?`<div class="row-flex"><button class="btn small primary" type="button" data-trok="${esc(x.id)}">${t("approve")}</button><button class="btn small danger" type="button" data-trno="${esc(x.id)}">${t("reject")}</button></div>`:""}</td>`:""}</tr>`).join("")||`<tr><td colspan="9" class="empty">${t("trNone")}</td></tr>`}
   </tbody></table></div></section>`;
   if(canAdd){$("#tr_mosque").onchange=e=>{$("#tr_otherWrap").hidden=e.target.value!=="0"};$("#tr_cost").oninput=()=>{const c=N($("#tr_cost").value);$("#tr_round").value=c?fmt(c*2):""};
