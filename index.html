@@ -522,6 +522,45 @@ span.docgo{animation:none;font-weight:800}
 #installBar .ib-ic{width:44px;height:44px;flex:none;border-radius:12px;background:#fff url(icon-192.png) center/86% no-repeat;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 #installBar .ib-x{background:none;border:0;color:#eaf7f2;font-size:1.1rem;cursor:pointer;padding:4px 6px}
 @media (display-mode: standalone){#btnInstall,#loginInstall,#installBar{display:none!important}}
+/* ===== الرسوم البيانية ===== */
+:root{--c1:#0b8a6f;--c2:#2563c9;--c3:#c58a1c;--c4:#9b3d8f;--cbud:#aab6b1}
+@media (prefers-color-scheme:dark){:root{--c1:#2aa985;--c2:#5f95e0;--c3:#b9852b;--c4:#b06aa6;--cbud:#4d5d56}}
+nav.tabs button[data-tab="charts"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20V10M10 20V4M16 20v-7M22 20H2'/%3E%3C/svg%3E")}
+nav.tabs button[data-tab="excess"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4M11 8v4M11 14.5v.5'/%3E%3C/svg%3E")}
+.ccard .cwrap{overflow-x:auto;padding:8px 12px 12px}
+svg.chart{display:block;direction:ltr;max-width:none}
+svg.chart .grid{stroke:var(--line2);stroke-width:1}
+svg.chart .base{stroke:var(--line);stroke-width:1.5}
+svg.chart .axis{fill:var(--muted);font-size:11px;font-family:var(--f-num)}
+svg.chart .axis.cat{font-family:var(--f-body);font-size:12px;fill:var(--fg)}
+svg.chart .vlab{fill:var(--fg);font-size:11px;font-weight:700;font-family:var(--f-num)}
+svg.chart .hit{fill:transparent}
+svg.chart text,svg.chart line{pointer-events:none}
+svg.chart .bar path{filter:drop-shadow(0 3px 3px rgba(6,40,32,.18));transition:opacity .15s}
+svg.chart .bar:hover path{opacity:.85}
+svg.chart .ln{stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+svg.chart .dot{stroke:var(--surface);stroke-width:2}
+.clegend{display:flex;flex-wrap:wrap;gap:14px;padding:10px 18px 0;font-size:.84rem;color:var(--fg)}
+.clegend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-inline-end:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+#ctip{position:fixed;z-index:50;pointer-events:none;padding:7px 11px;border-radius:10px;font-size:.82rem;font-weight:600;color:#fff;max-width:280px;
+  background:rgba(4,38,31,.94);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+#ctip[hidden]{display:none}
+.bullets{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;padding:16px 18px 18px}
+.bul{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;background:var(--sunk);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.bul-h{display:flex;justify-content:space-between;align-items:center}
+.bul-h .num{font-size:1.2rem;font-weight:800}
+.bul-t{position:relative;height:18px;border-radius:999px;background:var(--surface);box-shadow:inset 0 2px 4px rgba(0,0,0,.12);overflow:visible}
+.bul-b{position:absolute;inset-block:0;inset-inline-start:0;border-radius:999px;background:var(--cbud);opacity:.55}
+.bul-s{position:absolute;inset-block:3px;inset-inline-start:0;border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 4px rgba(0,0,0,.2)}
+.bul-r{position:absolute;top:-4px;bottom:-4px;width:4px;border-radius:2px;background:var(--fg)}
+.lg-b{background:var(--cbud)!important}.lg-s{background:var(--c1)!important}.lg-r{background:var(--fg)!important;width:4px!important}
+/* الملاحظات المستخرجة */
+.obslist{display:flex;flex-direction:column;gap:8px;padding:12px 14px 16px}
+.obs{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line2);border-inline-start:5px solid var(--muted);box-shadow:var(--sh1)}
+.obs-bad{border-inline-start-color:var(--bad)}.obs-warn{border-inline-start-color:var(--warn)}.obs-mute{border-inline-start-color:var(--c2)}
+.obs-ic{font-size:1.2rem;line-height:1.2}
+@media print{.ccard .btn,.obs .btn{display:none!important}#ctip{display:none}}
+
 @media print{
   header.top,.noprint,.toolbar,.pager,.btn,.hero{display:none!important}
   body{background:#fff!important;color:#000;font-size:11px}
@@ -952,7 +991,7 @@ async function boot(){
 /* ============================ الهيكل والتبويبات ============================ */
 function allowedTabs(){
   if(!P("viewAll")){const t=[];if(P("projDocs"))t.push("wells");if(P("evidence")||P("evidenceView"))t.push("evidence");if(P("trips"))t.push("trips");if(P("evidence")||P("trips")||!(P("evidenceView")||P("projDocs")))t.push("entry");return t}
-  const t=[];if(P("master"))t.push("master","accounts");t.push("overview","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips");if(P("users"))t.push("users");return t;
+  const t=[];if(P("master"))t.push("master","accounts");t.push("overview","charts","excess","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips");if(P("users"))t.push("users");return t;
 }
 function renderShell(){
   renderLang();
@@ -960,7 +999,7 @@ function renderShell(){
   $("#tabs").innerHTML=allowedTabs().map(k=>`<button role="tab" type="button" data-tab="${k}" aria-selected="${S.tab===k}">${t("tab_"+k)}${k==="notes"?` <span class="pill warn" id="notesBadge" hidden></span>`:""}</button>`).join("");
   $("#mosqueChips").innerHTML=[{n:0},...mosques()].map(m=>`<button class="chip" type="button" data-m="${m.n}" aria-pressed="${S.mosque==m.n}">${m.n?`<span class="dot" style="background:${mColor(m.n)}"></span>${esc(mName(m.n))}`:t("allMosques")}</button>`).join("");
   const pc=$("#projChip");pc.hidden=!P("viewAll");pc.textContent=t("tab_projects");pc.setAttribute("aria-pressed",S.tab==="projects");
-  $("#quickAdd").innerHTML=P("create")&&P("viewAll")?`<button class="btn small" type="button" id="qRec">${t("addReceipt")}</button><button class="btn primary small" type="button" id="qExp">${t("addExpense")}</button>`:"";
+  $("#quickAdd").innerHTML=P("create")&&P("viewAll")?`${P("receipts")?`<button class="btn small" type="button" id="qRec">${t("addReceipt")}</button>`:""}<button class="btn primary small" type="button" id="qExp">${t("addExpense")}</button>`:"";
   $("#qExp")&&($("#qExp").onclick=()=>openExp(null));$("#qRec")&&($("#qRec").onclick=()=>openRec(null));
 }
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;S.tab=b.dataset.tab;document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));render()});
@@ -968,8 +1007,8 @@ $("#projChip").addEventListener("click",()=>{S.tab="projects";document.querySele
 $("#mosqueChips").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;S.mosque=+b.dataset.m;S.limit=100;document.querySelectorAll("#mosqueChips .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==S.mosque));render()});
 function render(){
   const v=$("#view");
-  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
-  ({wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
+  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells","charts","excess"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
+  ({charts:vCharts,excess:vExcess,wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
   const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&P("edit")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
   const b=$("#notesBadge");if(b){const c=[...S.notes.values()].filter(n=>(n.status||"open")==="open").length;b.hidden=!c;b.textContent=c}
 }
@@ -1207,8 +1246,8 @@ function vUsers(v){
   $("#userNew").onclick=()=>openUser(null);v.querySelectorAll("tr[data-uid]").forEach(tr=>tr.onclick=()=>openUser(tr.dataset.uid));
 }
 let curU=null;
-const PERM_KEYS=["viewAll","create","attachInvoice","edit","delete","master","users","export","evidence","evidenceView","trips","food","projDocs","projManage"];
-const ROLE_DEF={admin:{viewAll:1,create:1,attachInvoice:1,edit:1,delete:1,master:1,users:1,export:1,evidence:1,evidenceView:1,trips:1,food:1,projDocs:1,projManage:1},exec:{viewAll:1,create:1,attachInvoice:1,evidenceView:1,projDocs:1,projManage:1},staff:{evidence:1,trips:1},monitor:{evidenceView:1},projStaff:{projDocs:1}};
+const PERM_KEYS=["viewAll","create","attachInvoice","edit","delete","master","users","export","evidence","evidenceView","trips","food","projDocs","projManage","receipts"];
+const ROLE_DEF={admin:{viewAll:1,create:1,attachInvoice:1,edit:1,delete:1,master:1,users:1,export:1,evidence:1,evidenceView:1,trips:1,food:1,projDocs:1,projManage:1,receipts:1},exec:{viewAll:1,create:1,attachInvoice:1,evidenceView:1,projDocs:1,projManage:1},staff:{evidence:1,trips:1},monitor:{evidenceView:1},projStaff:{projDocs:1}};
 function openUser(id){curU=id?S.users.find(u=>u.id===id):null;const u=curU||{name:"",role:"staff",perms:{},active:true};
   $("#userTitle").textContent=curU?t("userT"):t("newUserT");$("#u_name").value=u.name;$("#u_role").innerHTML=["admin","exec","staff","projStaff","monitor"].map(r=>`<option value="${r}">${t("role_"+r)}</option>`).join("");$("#u_role").value=u.role;
   $("#u_code").value="";$("#u_codeHint").textContent=curU?t("codeHintEdit"):t("codeHintNew");$("#u_active").checked=u.active!==false;
@@ -1296,7 +1335,7 @@ async function confirmDel(text){const d=$("#dlgConfirm");$("#cfmText").textConte
 
 /* ============================ نافذة الدفعة المستلمة ============================ */
 let curR=null,pendR;
-function openRec(id){curR=id?S.rec.get(String(id)):null;pendR=undefined;selects();const r=curR||{mosque:S.mosque||1,source:"donor",date:today()};const can=curR?P("edit"):P("create");
+function openRec(id){curR=id?S.rec.get(String(id)):null;pendR=undefined;selects();const r=curR||{mosque:S.mosque||1,source:"donor",date:today()};const can=curR?P("edit"):P("receipts");
   $("#recTitle").textContent=curR?t("editReceipt"):t("newReceipt");$("#r_source").innerHTML=`<option value="donor">${t("donorSrc")}</option><option value="council">${t("councilSrc")}</option>`;
   $("#r_mosque").value=r.mosque;$("#r_source").value=r.source||"donor";$("#r_date").value=r.date||"";$("#r_amount").value=r.amount??"";$("#r_who").value=r.receiver||"";$("#r_note").value=r.note||"";$("#r_file").value="";
   document.querySelectorAll("#fRec input,#fRec select").forEach(el=>el.disabled=!can);fileView($("#r_fileView"),r.file,can?()=>{pendR=null;fileView($("#r_fileView"),null)}:null);$("#r_uploadRow").hidden=!can;
@@ -1736,6 +1775,158 @@ Object.assign(I18N.bn,{pCat:"বিভাগ",newType:"+ অন্য ধরন�
 Object.assign(I18N.ar,{installBarSub:"افتحه من الشاشة الرئيسية مباشرة",andStep1:"اضغط القائمة ⋮ أعلى Chrome",andStep2:"اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»",andStep3:"اضغط «تثبيت»، وستجد أيقونة التطبيق على شاشتك",inappNote:"أنت تفتح الرابط من داخل تطبيق آخر (واتساب أو غيره). انسخ الرابط وافتحه في Chrome على أندرويد أو Safari على آيفون، ثم ثبّت التطبيق.",install:"تثبيت",installApp:"تثبيت التطبيق على الجوال",installed:"تم تثبيت التطبيق على جوالك",iosStep1:"اضغط زر المشاركة أسفل Safari",iosStep2:"اختر «إضافة إلى الشاشة الرئيسية»",iosStep3:"اضغط «إضافة»، وستجد أيقونة التطبيق على شاشتك",iosNote:"على أندرويد: افتح الرابط في Chrome واضغط «تثبيت التطبيق»، أو من القائمة ⋮ اختر «تثبيت التطبيق»."});
 Object.assign(I18N.en,{installBarSub:"Open it straight from your home screen",andStep1:"Tap the ⋮ menu in Chrome",andStep2:"Choose “Install app” or “Add to Home screen”",andStep3:"Tap “Install” — the app icon appears on your home screen",inappNote:"You opened this link inside another app (WhatsApp etc.). Copy the link and open it in Chrome on Android or Safari on iPhone, then install.",install:"Install",installApp:"Install the app on your phone",installed:"The app is installed on your phone",iosStep1:"Tap the Share button in Safari",iosStep2:"Choose “Add to Home Screen”",iosStep3:"Tap “Add” — the app icon appears on your home screen",iosNote:"On Android: open the link in Chrome and tap “Install app”, or choose “Install app” from the ⋮ menu."});
 Object.assign(I18N.bn,{installBarSub:"হোম স্ক্রিন থেকে সরাসরি খুলুন",andStep1:"Chrome-এর ⋮ মেনু চাপুন",andStep2:"“Install app” বা “Add to Home screen” বেছে নিন",andStep3:"“Install” চাপুন — হোম স্ক্রিনে অ্যাপের আইকন আসবে",inappNote:"আপনি অন্য অ্যাপের ভেতর থেকে লিংক খুলেছেন। লিংক কপি করে অ্যান্ড্রয়েডে Chrome বা আইফোনে Safari-তে খুলে ইনস্টল করুন।",install:"ইনস্টল",installApp:"মোবাইলে অ্যাপ ইনস্টল করুন",installed:"আপনার মোবাইলে অ্যাপ ইনস্টল হয়েছে",iosStep1:"Safari-তে শেয়ার বোতাম চাপুন",iosStep2:"“Add to Home Screen” বেছে নিন",iosStep3:"“Add” চাপুন — হোম স্ক্রিনে অ্যাপের আইকন আসবে",iosNote:"অ্যান্ড্রয়েডে: Chrome-এ লিংক খুলে “Install app” চাপুন, অথবা ⋮ মেনু থেকে “Install app” বেছে নিন।"});
+
+/* ============================ الرسوم البيانية (SVG بلا مكتبات) ============================ */
+const cColor=n=>`var(--c${((n-1)%4)+1})`;
+const fmtK=v=>{const a=Math.abs(v);return a>=1e6?(v/1e6).toFixed(a>=1e7?0:1)+"M":a>=1e3?Math.round(v/1e3)+"k":String(Math.round(v))};
+function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p;return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p}
+let CHID=0;
+const CW=()=>Math.max(300,(document.querySelector('#view')?.clientWidth||900)-44);
+/* أعمدة مجمّعة: cats = أسماء المحور، series = [{name,color,values}] */
+function colChart({cats,series,h=280,labels=true,pct=false}){
+  const id="ch"+(++CHID),rtl=document.documentElement.dir==="rtl",order=cats.map((_,i)=>i);if(rtl)order.reverse();
+  const W=Math.max(CW(),cats.length*series.length*24+cats.length*28),L=54,R=12,T=26,B=46,ih=h-T-B,iw=W-L-R;
+  const max=pct?100:niceMax(Math.max(1,...series.flatMap(s=>s.values.map(v=>v||0)))),y=v=>T+ih-(v/max)*ih;
+  const gw=iw/cats.length,bw=Math.min(40,(gw-18)/series.length),gap=2;
+  const ticks=[0,.2,.4,.6,.8,1].map(f=>f*max);
+  let s=`<svg viewBox="0 0 ${W} ${h}" class="chart" role="img" width="${W}" height="${h}" style="width:${W}px"><defs><linearGradient id="${id}s" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".45" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient></defs>`;
+  s+=ticks.map(v=>`<line class="grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${L-8}" y="${y(v)+4}" text-anchor="end">${pct?Math.round(v)+"%":fmtK(v)}</text>`).join("");
+  order.forEach((ci,slot)=>{const gx=L+slot*gw+(gw-(bw*series.length+gap*(series.length-1)))/2;
+    series.forEach((se,si)=>{const v=se.values[ci]||0,x=gx+si*(bw+gap),yy=y(v),hh=Math.max(0,T+ih-yy),r=Math.min(4,hh,bw/2);
+      const d=hh>0?`M${x},${T+ih}V${yy+r}Q${x},${yy} ${x+r},${yy}H${x+bw-r}Q${x+bw},${yy} ${x+bw},${yy+r}V${T+ih}Z`:"";
+      const tip=`${cats[ci]} — ${se.name}: ${pct?Math.round(v)+"%":fmt(v)}`;
+      s+=`<g class="bar" data-tip="${esc(tip)}"><rect class="hit" x="${x-gap}" y="${T}" width="${bw+gap*2}" height="${ih}"/>${d?`<path d="${d}" fill="${se.color}"/><path d="${d}" fill="url(#${id}s)"/>`:""}</g>`;
+      if(labels&&v&&series.length*cats.length<=20)s+=`<text class="vlab" x="${x+bw/2}" y="${yy-6}" text-anchor="middle">${pct?Math.round(v)+"%":fmtK(v)}</text>`});
+    s+=`<text class="axis cat" x="${L+slot*gw+gw/2}" y="${T+ih+20}" text-anchor="middle">${esc(String(cats[ci]).slice(0,18))}</text>`});
+  s+=`<line class="base" x1="${L}" x2="${W-R}" y1="${T+ih}" y2="${T+ih}"/></svg>`;
+  return s}
+/* خطوط زمنية: x = تسميات، series = [{name,color,values}] */
+function lineChart({xs,series,h=260}){
+  const rtl=document.documentElement.dir==="rtl",W=Math.max(CW(),xs.length*80),L=70,R=40,T=20,B=40,ih=h-T-B,iw=W-L-R;
+  const max=niceMax(Math.max(1,...series.flatMap(s=>s.values))),y=v=>T+ih-(v/max)*ih,x=i=>{const p=xs.length>1?i/(xs.length-1):.5;return L+(rtl?1-p:p)*iw};
+  let s=`<svg viewBox="0 0 ${W} ${h}" class="chart" role="img" width="${W}" height="${h}" style="width:${W}px">`;
+  s+=[0,.2,.4,.6,.8,1].map(f=>`<line class="grid" x1="${L}" x2="${W-R}" y1="${y(f*max)}" y2="${y(f*max)}"/><text class="axis" x="${L-8}" y="${y(f*max)+4}" text-anchor="end">${fmtK(f*max)}</text>`).join("");
+  s+=xs.map((m,i)=>`<text class="axis cat" x="${x(i)}" y="${T+ih+20}" text-anchor="middle">${esc(m)}</text>`).join("");
+  series.forEach(se=>{s+=`<polyline class="ln" fill="none" stroke="${se.color}" points="${se.values.map((v,i)=>`${x(i)},${y(v)}`).join(" ")}"/>`;
+    s+=se.values.map((v,i)=>`<g class="bar" data-tip="${esc(`${xs[i]} — ${se.name}: ${fmt(v)}`)}"><circle class="hit" cx="${x(i)}" cy="${y(v)}" r="12"/><circle class="dot" cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${se.color}"/></g>`).join("")});
+  return s+`<line class="base" x1="${L}" x2="${W-R}" y1="${T+ih}" y2="${T+ih}"/></svg>`}
+const legendHtml=series=>`<div class="clegend">${series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join("")}</div>`;
+function chartCard(title,sub,svg,legend,table){const id="tb"+(++CHID);
+  return `<section class="panel ccard"><div class="ph"><div><h3 class="sec-h">${title}</h3>${sub?`<div class="small muted">${sub}</div>`:""}</div><button class="btn small" type="button" data-tbl="${id}">${t("asTable")}</button></div>
+    ${legend||""}<div class="cwrap">${svg}</div><div class="tscroll" id="${id}" hidden>${table}</div></section>`}
+function tblHtml(head,rows){return `<table><thead><tr>${head.map((h,i)=>`<th class="${i?"amt":""}">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${i?"amt num":""}">${typeof c==="number"?fmt(c):esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`}
+/* تلميح عائم لكل عمود ونقطة */
+(()=>{const tip=document.createElement("div");tip.id="ctip";tip.hidden=true;document.body.appendChild(tip);
+  document.addEventListener("pointermove",e=>{const g=e.target.closest&&e.target.closest("[data-tip]");if(!g||!g.closest(".chart")){tip.hidden=true;return}
+    tip.textContent=g.dataset.tip;tip.hidden=false;const r=tip.getBoundingClientRect();let x=e.clientX+14,y=e.clientY-r.height-12;if(x+r.width>innerWidth-8)x=e.clientX-r.width-14;if(y<8)y=e.clientY+18;tip.style.left=x+"px";tip.style.top=y+"px"},{passive:true});
+  document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tbl]");if(!b)return;const el=document.getElementById(b.dataset.tbl);if(el){el.hidden=!el.hidden;b.textContent=el.hidden?t("asTable"):t("hideTable")}});})();
+
+/* ============================ صفحة مقارنة البيانات ============================ */
+function vCharts(v){
+  const ms=mosques(),names=ms.map(m=>mName(m.n)),st=ms.map(m=>stats(m.n)),all=[...S.exp.values()];
+  // 1) الميزانية والمستلم والمصروف
+  const s1=[{name:t("budget"),color:"var(--cbud)",values:st.map(s=>s.budget)},{name:t("received"),color:"var(--c2)",values:st.map(s=>s.donor)},{name:t("spent"),color:"var(--c1)",values:st.map(s=>s.spent)}];
+  // 2) أكبر البنود
+  const catTot={};all.forEach(e=>catTot[e.category]=(catTot[e.category]||0)+N(e.total));
+  const topCats=Object.keys(catTot).filter(Boolean).sort((a,b)=>catTot[b]-catTot[a]).slice(0,8);
+  const s2=ms.map(m=>({name:mName(m.n),color:cColor(m.n),values:topCats.map(c=>all.filter(e=>e.mosque==m.n&&e.category===c).reduce((a,e)=>a+N(e.total),0))}));
+  // 3) الصرف الشهري
+  const months=[...new Set(all.map(e=>String(e.date||"").slice(0,7)).filter(x=>/^\d{4}-\d\d$/.test(x)))].sort();
+  const s3=ms.map(m=>({name:mName(m.n),color:cColor(m.n),values:months.map(mo=>all.filter(e=>e.mosque==m.n&&String(e.date||"").startsWith(mo)).reduce((a,e)=>a+N(e.total),0))}));
+  // 5) تغطية الفواتير
+  const cov=st.map(s=>s.purAmt?s.purInvAmt/s.purAmt*100:0);
+  const s5=[{name:t("withInv"),color:"var(--c2)",values:cov}];
+  const bullet=ms.map((m,i)=>{const s=st[i],mx=Math.max(s.budget,s.spent,s.donor,1),pS=s.spent/mx*100,pR=s.donor/mx*100,pB=s.budget/mx*100;
+    return `<div class="bul" data-tip="${esc(`${names[i]} — ${t("spent")}: ${fmt(s.spent)} · ${t("received")}: ${fmt(s.donor)} · ${t("budget")}: ${fmt(s.budget)}`)}"><div class="bul-h"><b>${esc(names[i])}</b><span class="num">${s.budget?Math.round(s.spent/s.budget*100):0}%</span></div>
+      <div class="bul-t"><span class="bul-b" style="width:${pB}%"></span><span class="bul-s" style="width:${pS}%;background:${cColor(m.n)}"></span><span class="bul-r" style="inset-inline-start:calc(${pR}% - 2px)" title="${esc(t("received"))}"></span></div>
+      <div class="small muted row-flex" style="justify-content:space-between"><span>${t("spent")}: <b class="num">${fmt(s.spent)}</b></span><span>${t("balance")}: <b class="num" style="color:${s.balance<0?"var(--bad)":"var(--ok)"}">${fmt(s.balance)}</b></span></div></div>`}).join("");
+  v.innerHTML=`<div class="row-flex noprint" style="justify-content:space-between"><div><h2 class="sec-h" style="font-size:1.2rem">${t("tab_charts")}</h2><div class="small muted">${t("asOf",{d:today()})} · ${t("chartHint")}</div></div><button class="btn primary" type="button" onclick="window.print()">${t("print")}</button></div>
+  ${chartCard(t("ch1"),t("ch1s"),colChart({cats:names,series:s1}),legendHtml(s1),tblHtml([t("mosque"),...s1.map(s=>s.name)],names.map((n,i)=>[n,...s1.map(s=>s.values[i])])))}
+  <section class="panel ccard"><div class="ph"><h3 class="sec-h">${t("ch4")}</h3><div class="clegend"><span><i class="lg-b"></i>${t("budget")}</span><span><i class="lg-s"></i>${t("spent")}</span><span><i class="lg-r"></i>${t("received")}</span></div></div><div class="bullets chart">${bullet}</div></section>
+  ${chartCard(t("ch2"),t("ch2s"),colChart({cats:topCats.map(catName),series:s2,labels:false}),legendHtml(s2),tblHtml([t("category"),...s2.map(s=>s.name)],topCats.map((c,i)=>[catName(c),...s2.map(s=>s.values[i])])))}
+  ${months.length?chartCard(t("ch3"),t("ch3s"),lineChart({xs:months,series:s3}),legendHtml(s3),tblHtml([t("date"),...s3.map(s=>s.name)],months.map((mo,i)=>[mo,...s3.map(s=>s.values[i])]))):""}
+  ${chartCard(t("ch5"),t("ch5s"),colChart({cats:names,series:s5,pct:true}),"",tblHtml([t("mosque"),t("withInv")+" %"],names.map((n,i)=>[n,Math.round(cov[i])+"%"])))}`;
+}
+
+/* ============================ صفحة الصرف الزائد والملاحظات ============================ */
+function excessData(){
+  const ms=mosques(),pur=[...S.exp.values()].filter(e=>PURCHASE.has(e.category)&&N(e.qty)>0&&N(e.total)>0);
+  const med=a=>{const s=[...a].sort((x,y)=>x-y),n=s.length;return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):0};
+  const cats=[...new Set(pur.map(e=>e.category))];const price=[],outl=[],units=[];
+  cats.forEach(c=>{const es=pur.filter(e=>e.category===c),ups=es.map(e=>N(e.total)/N(e.qty)),md=med(ups);
+    const ok=es.filter((e,i)=>ups[i]<=md*5&&ups[i]>=md/5);es.forEach((e,i)=>{if(!(ups[i]<=md*5&&ups[i]>=md/5))units.push({e,up:ups[i],md,c})});
+    const per=ms.map(m=>{const xs=ok.filter(e=>e.mosque==m.n),q=xs.reduce((a,e)=>a+N(e.qty),0),tt=xs.reduce((a,e)=>a+N(e.total),0);return {n:m.n,q,t:tt,avg:q?tt/q:0}});
+    const live=per.filter(p=>p.q>0);
+    if(live.length>=2){const best=Math.min(...live.map(p=>p.avg));per.forEach(p=>{p.ex=p.q&&p.avg>best*1.03?(p.avg-best)*p.q:0;p.best=p.q&&p.avg===best});price.push({c,per,best,tot:per.reduce((a,p)=>a+p.ex,0)})}
+    ok.forEach(e=>{const up=N(e.total)/N(e.qty);if(up>md*1.25)outl.push({e,up,md,ex:(up-md)*N(e.qty)})})});
+  price.sort((a,b)=>b.tot-a.tot);outl.sort((a,b)=>b.ex-a.ex);
+  const byM=ms.map(m=>{const s=stats(m.n),pe=price.reduce((a,r)=>a+(r.per.find(p=>p.n===m.n)?.ex||0),0),oe=outl.filter(o=>o.e.mosque==m.n),
+    dup=[...S.exp.values()].filter(e=>e.mosque==m.n&&S.dupMap.has(String(e.id))),rev=[...S.exp.values()].filter(e=>e.mosque==m.n&&e.review);
+    return {m,s,pe,oe,oeAmt:oe.reduce((a,o)=>a+o.ex,0),noInv:s.purAmt-s.purInvAmt,deficit:Math.max(0,s.spent-s.donor),overBudget:Math.max(0,s.spent-s.budget),dup:dup.length,dupAmt:dup.reduce((a,e)=>a+N(e.total),0),rev:rev.length}});
+  // الملاحظات المستخرجة
+  const obs=[];
+  byM.forEach(x=>{const nm=mName(x.m.n);
+    if(x.overBudget>0)obs.push({sev:"bad",mosque:x.m.n,title:t("o_overBudget",{m:nm}),body:t("o_overBudgetB",{s:fmt(x.s.spent),b:fmt(x.s.budget),x:fmt(x.overBudget)})});
+    else if(x.deficit>0)obs.push({sev:"bad",mosque:x.m.n,title:t("o_deficit",{m:nm}),body:t("o_deficitB",{s:fmt(x.s.spent),r:fmt(x.s.donor),x:fmt(x.deficit)})});
+    if(x.s.budget&&x.s.spent/x.s.budget>.9&&x.overBudget<=0)obs.push({sev:"warn",mosque:x.m.n,title:t("o_near",{m:nm,p:Math.round(x.s.spent/x.s.budget*100)}),body:t("o_nearB",{x:fmt(x.s.budget-x.s.spent)})});
+    if(x.noInv>0)obs.push({sev:"warn",mosque:x.m.n,title:t("o_noInv",{m:nm}),body:t("o_noInvB",{x:fmt(x.noInv),n:x.s.pur-x.s.purInv})});
+    if(x.dup)obs.push({sev:"bad",mosque:x.m.n,title:t("o_dup",{m:nm,n:x.dup}),body:t("o_dupB",{x:fmt(x.dupAmt)})});});
+  price.filter(r=>r.tot>0).slice(0,8).forEach(r=>{const hi=r.per.filter(p=>p.ex>0).sort((a,b)=>b.ex-a.ex)[0],lo=r.per.find(p=>p.best);if(!hi||!lo)return;
+    obs.push({sev:"warn",mosque:hi.n,title:t("o_price",{c:catName(r.c),m:mName(hi.n)}),body:t("o_priceB",{a:fmt(Math.round(hi.avg)),b:fmt(Math.round(lo.avg)),l:mName(lo.n),x:fmt(Math.round(hi.ex))})})});
+  outl.slice(0,6).forEach(o=>obs.push({sev:"warn",mosque:o.e.mosque,ref:o.e.id,title:t("o_entry",{c:catName(o.e.category),m:mName(o.e.mosque),n:o.e.seq??""}),body:t("o_entryB",{d:o.e.desc||"",u:fmt(Math.round(o.up)),md:fmt(Math.round(o.md)),x:fmt(Math.round(o.ex)),dt:o.e.date||""})}));
+  units.slice(0,5).forEach(u=>obs.push({sev:"mute",mosque:u.e.mosque,ref:u.e.id,title:t("o_unit",{c:catName(u.c),m:mName(u.e.mosque),n:u.e.seq??""}),body:t("o_unitB",{q:u.e.qty,u:fmt(Math.round(u.up)),md:fmt(Math.round(u.md))})}));
+  return {ms,price,outl,units,byM,obs};
+}
+function vExcess(v){
+  const d=excessData(),names=d.ms.map(m=>mName(m.n)),canNote=P("create");
+  const s1=[{name:t("x_price"),color:"var(--c3)",values:d.byM.map(x=>Math.round(x.pe))},{name:t("x_entries"),color:"var(--c4)",values:d.byM.map(x=>Math.round(x.oeAmt))},{name:t("x_deficit"),color:"var(--c2)",values:d.byM.map(x=>x.deficit)}];
+  const sevIc={bad:"⛔",warn:"⚠️",mute:"ℹ️"};
+  v.innerHTML=`<div class="row-flex noprint" style="justify-content:space-between"><div><h2 class="sec-h" style="font-size:1.2rem">${t("tab_excess")}</h2><div class="small muted">${t("x_hint")}</div></div>
+    <div class="row-flex"><button class="btn" type="button" id="obsCopy">${t("x_copy")}</button><button class="btn primary" type="button" onclick="window.print()">${t("print")}</button></div></div>
+  <div class="grid4">${d.byM.map(x=>`<article class="panel mcard" style="--mc:${mColor(x.m.n)}"><div class="row-flex" style="justify-content:space-between"><h3>${esc(mName(x.m.n))}</h3><span class="small muted">${t("x_total")}</span></div>
+    <dl class="kv"><dt>${t("x_price")}</dt><dd class="num" style="color:${x.pe?"var(--warn)":"inherit"}">${fmt(Math.round(x.pe))}</dd><dt>${t("x_entries")}</dt><dd class="num">${x.oe.length} · ${fmt(Math.round(x.oeAmt))}</dd>
+    <dt>${t("x_noInv")}</dt><dd class="num">${fmt(x.noInv)}</dd><dt>${t("x_deficit")}</dt><dd class="num" style="color:${x.deficit?"var(--bad)":"var(--ok)"}">${fmt(x.deficit)}</dd><dt>${t("x_over")}</dt><dd class="num" style="color:${x.overBudget?"var(--bad)":"var(--ok)"}">${fmt(x.overBudget)}</dd>
+    <dt>${t("x_dup")}</dt><dd class="num">${x.dup}</dd><dt>${t("x_rev")}</dt><dd class="num">${x.rev}</dd></dl></article>`).join("")}</div>
+  ${chartCard(t("x_ch"),t("x_chs"),colChart({cats:names,series:s1}),legendHtml(s1),tblHtml([t("mosque"),...s1.map(s=>s.name)],names.map((n,i)=>[n,...s1.map(s=>s.values[i])])))}
+  <section class="panel"><div class="ph"><h3 class="sec-h">${t("x_obs")} <span class="pill warn">${d.obs.length}</span></h3><span class="small muted">${t("x_obsHint")}</span></div>
+    <div class="obslist">${d.obs.map((o,i)=>`<div class="obs obs-${o.sev}"><span class="obs-ic">${sevIc[o.sev]}</span><div style="flex:1;min-width:0"><b>${esc(o.title)}</b><div class="small">${esc(o.body)}</div></div>
+      <div class="row-flex">${o.ref?`<button class="btn small" type="button" data-oeid="${esc(o.ref)}">${t("x_open")}</button>`:""}${canNote?`<button class="btn small" type="button" data-obs="${i}">${t("x_save")}</button>`:""}</div></div>`).join("")||`<div class="empty">${t("x_none")}</div>`}</div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">${t("x_priceT")}</h3><span class="small muted">${t("x_priceTs")}</span></div><div class="tscroll"><table class="acc"><thead><tr><th>${t("category")}</th>${d.ms.map(m=>`<th class="mh amt" style="--mc:${mColor(m.n)}">${esc(mName(m.n))}</th>`).join("")}<th class="amt">${t("x_price")}</th></tr></thead>
+    <tbody>${d.price.map(r=>`<tr><th>${esc(catName(r.c))}</th>${r.per.map(p=>`<td class="amt mc" style="--mc:${mColor(p.n)}">${p.q?`<div class="num" style="font-weight:800;color:${p.best?"var(--ok)":p.ex?"var(--bad)":"inherit"}">${fmt(Math.round(p.avg))}${p.best?" ✓":""}</div><div class="small muted"><span class="num">${fmt(p.q)}</span> ${t("qtyU")}${p.ex?` · +<span class="num">${fmt(Math.round(p.ex))}</span>`:""}</div>`:`<span class="muted">—</span>`}</td>`).join("")}<td class="amt num" style="font-weight:800">${fmt(Math.round(r.tot))}</td></tr>`).join("")||`<tr><td class="empty" colspan="${d.ms.length+2}">${t("x_none")}</td></tr>`}</tbody></table></div></section>
+  <section class="panel"><div class="ph"><h3 class="sec-h">${t("x_outT")}</h3><span class="small muted">${t("x_outTs")}</span></div><div class="tscroll"><table><thead><tr><th>${t("mosque")}</th><th>#</th><th>${t("date")}</th><th>${t("category")}</th><th>${t("desc")}</th><th class="amt">${t("qty")}</th><th class="amt">${t("unitPrice")}</th><th class="amt">${t("x_median")}</th><th class="amt">${t("x_extra")}</th></tr></thead>
+    <tbody>${d.outl.slice(0,40).map(o=>`<tr class="row flag" data-eid="${esc(o.e.id)}"><td><span class="mtag" style="--mc:${mColor(o.e.mosque)}">${o.e.mosque}</span></td><td class="num muted">${o.e.seq??""}</td><td class="num">${esc(o.e.date||"")}</td><td>${esc(catName(o.e.category))}</td><td style="white-space:normal;min-width:160px">${esc(o.e.desc||"")}</td><td class="amt num">${esc(o.e.qty)}</td><td class="amt num" style="color:var(--bad);font-weight:700">${fmt(Math.round(o.up))}</td><td class="amt num">${fmt(Math.round(o.md))}</td><td class="amt num" style="font-weight:800">${fmt(Math.round(o.ex))}</td></tr>`).join("")||`<tr><td colspan="9" class="empty">${t("x_none")}</td></tr>`}</tbody></table></div></section>`;
+  v.querySelectorAll("tr[data-eid],[data-oeid]").forEach(el=>el.onclick=()=>openExp(el.dataset.eid||el.dataset.oeid));
+  v.querySelectorAll("[data-obs]").forEach(b=>b.onclick=async()=>{const o=d.obs[+b.dataset.obs];b.disabled=true;
+    try{const r=await api("save",{table:"notes",record:{mosque:o.mosque||0,kind:"ملاحظة",title:o.title.slice(0,200),body:o.body,date:today(),status:"open",ref:o.ref||""}});S.notes.set(String(r.record.id),r.record);b.textContent="✓ "+t("x_saved");toast(t("x_saved"))}catch(e){toast(errText(e));b.disabled=false}});
+  $("#obsCopy").onclick=async()=>{const txt=d.obs.map((o,i)=>`${i+1}. ${o.title}\n   ${o.body}`).join("\n");try{await navigator.clipboard.writeText(txt);toast(t("wCopied"))}catch(_){toast(t("network"))}};
+}
+Object.assign(I18N.ar,{perm_receipts:"إضافة الدفعات المستلمة",tab_charts:"مقارنة البيانات",tab_excess:"الصرف الزائد والملاحظات",asTable:"عرض كجدول",hideTable:"إخفاء الجدول",chartHint:"مرّر على أي عمود لرؤية قيمته",
+  ch1:"الميزانية والمستلم والمصروف لكل جامع",ch1s:"بالتاكا",ch2:"أكبر بنود الصرف: مقارنة بين الجوامع",ch2s:"أعلى 8 بنود صرفاً",ch3:"الصرف الشهري لكل جامع",ch3s:"مجموع قيود كل شهر",ch4:"نسبة الصرف من الميزانية",ch5:"نسبة المشتريات الموثّقة بفاتورة",ch5s:"من مبالغ المشتريات",
+  x_hint:"تحليل تلقائي يقارن أسعار الشراء بين الجوامع ويستخرج الملاحظات",x_copy:"نسخ الملاحظات",x_total:"ملخص الزيادة",x_price:"زيادة الأسعار عن أرخص جامع",x_entries:"قيود بسعر مرتفع",x_noInv:"مشتريات بلا فاتورة",x_deficit:"صرف يتجاوز المستلم",x_over:"تجاوز الميزانية",x_dup:"مكررات محتملة",x_rev:"قيود للمراجعة",
+  x_ch:"مقارنة المبالغ الزائدة بين الجوامع",x_chs:"زيادة الأسعار، والقيود ذات السعر المرتفع، والصرف فوق المستلم",x_obs:"الملاحظات المستخرجة",x_obsHint:"احفظ أي ملاحظة لتظهر في صفحة الملاحظات وتُتابَع",x_open:"فتح القيد",x_save:"حفظ كملاحظة",x_saved:"حُفظت في الملاحظات",x_none:"لا توجد ملاحظات",
+  x_priceT:"متوسط سعر الوحدة لكل بند في كل جامع",x_priceTs:"✓ الأرخص · بالأحمر الأغلى مع مقدار الزيادة",x_outT:"قيود سعرها أعلى من المعتاد بأكثر من 25%",x_outTs:"مقارنة بالسعر الوسيط للبند في كل الجوامع",x_median:"السعر الوسيط",x_extra:"الزيادة التقديرية",qtyU:"وحدة",
+  o_overBudget:"{m}: الصرف تجاوز الميزانية",o_overBudgetB:"المصروف {s} مقابل ميزانية {b} — تجاوز بمقدار {x}.",o_deficit:"{m}: الصرف أكبر من المستلم من المتبرع",o_deficitB:"المصروف {s} والمستلم {r} — عجز {x} يحتاج دفعة جديدة.",
+  o_near:"{m}: صُرف {p}% من الميزانية",o_nearB:"المتبقي من الميزانية {x} فقط.",o_noInv:"{m}: مشتريات بلا فاتورة",o_noInvB:"{n} قيد بقيمة {x} تحتاج رقم فاتورة وصورتها.",o_dup:"{m}: {n} قيد مكرر محتمل",o_dupB:"بقيمة إجمالية {x} — راجعها في المصروفات.",
+  o_price:"{c}: سعر {m} أعلى من غيره",o_priceB:"متوسط الوحدة {a} مقابل {b} في {l} — زيادة تقديرية {x}.",o_entry:"{c} في {m} (قيد {n}): سعر مرتفع",o_entryB:"«{d}» بتاريخ {dt}: سعر الوحدة {u} والسعر الوسيط {md} — زيادة تقديرية {x}.",
+  o_unit:"{c} في {m} (قيد {n}): وحدة غير معتادة",o_unitB:"الكمية {q} وسعر الوحدة {u} بعيد جداً عن المعتاد ({md}) — قد تكون الوحدة مختلفة (طن/كيلو، كيس/حبة)."});
+Object.assign(I18N.en,{perm_receipts:"Add received installments",tab_charts:"Data comparison",tab_excess:"Overspending & notes",asTable:"Show as table",hideTable:"Hide table",chartHint:"Hover any column to see its value",
+  ch1:"Budget, received and spent per mosque",ch1s:"In Taka",ch2:"Largest spending items across mosques",ch2s:"Top 8 items",ch3:"Monthly spending per mosque",ch3s:"Total entries per month",ch4:"Spent as share of budget",ch5:"Purchases backed by an invoice",ch5s:"Share of purchase amounts",
+  x_hint:"Automatic analysis comparing purchase prices across mosques and extracting notes",x_copy:"Copy notes",x_total:"Excess summary",x_price:"Price excess vs cheapest mosque",x_entries:"High-price entries",x_noInv:"Purchases without invoice",x_deficit:"Spent above received",x_over:"Over budget",x_dup:"Possible duplicates",x_rev:"Entries to review",
+  x_ch:"Excess amounts compared across mosques",x_chs:"Price excess, high-price entries, spending above received",x_obs:"Extracted notes",x_obsHint:"Save a note to track it on the Notes page",x_open:"Open entry",x_save:"Save as note",x_saved:"Saved to notes",x_none:"No notes",
+  x_priceT:"Average unit price per item and mosque",x_priceTs:"✓ cheapest · red = most expensive with the excess",x_outT:"Entries priced more than 25% above normal",x_outTs:"Compared with the item's median price across mosques",x_median:"Median price",x_extra:"Estimated excess",qtyU:"units",
+  o_overBudget:"{m}: spending exceeded the budget",o_overBudgetB:"Spent {s} against a budget of {b} — over by {x}.",o_deficit:"{m}: spending exceeds donor receipts",o_deficitB:"Spent {s}, received {r} — a {x} gap needs a new installment.",
+  o_near:"{m}: {p}% of the budget spent",o_nearB:"Only {x} of the budget remains.",o_noInv:"{m}: purchases without invoice",o_noInvB:"{n} entries worth {x} need an invoice number and photo.",o_dup:"{m}: {n} possible duplicate entries",o_dupB:"Worth {x} in total — review them in Expenses.",
+  o_price:"{c}: {m} paid more than others",o_priceB:"Average unit {a} vs {b} at {l} — estimated excess {x}.",o_entry:"{c} at {m} (entry {n}): high price",o_entryB:"“{d}” on {dt}: unit price {u} vs median {md} — estimated excess {x}.",
+  o_unit:"{c} at {m} (entry {n}): unusual unit",o_unitB:"Quantity {q}, unit price {u} is far from normal ({md}) — the unit may differ (ton/kg, bag/piece)."});
+Object.assign(I18N.bn,{perm_receipts:"প্রাপ্ত কিস্তি যোগ",tab_charts:"তথ্য তুলনা",tab_excess:"অতিরিক্ত ব্যয় ও মন্তব্য",asTable:"টেবিল দেখুন",hideTable:"টেবিল লুকান",chartHint:"মান দেখতে যেকোনো কলামের উপর রাখুন",
+  ch1:"প্রতি মসজিদের বাজেট, প্রাপ্তি ও ব্যয়",ch1s:"টাকায়",ch2:"বড় ব্যয়ের খাত: মসজিদভিত্তিক তুলনা",ch2s:"শীর্ষ ৮টি খাত",ch3:"প্রতি মসজিদের মাসিক ব্যয়",ch3s:"প্রতি মাসের মোট",ch4:"বাজেটের তুলনায় ব্যয়",ch5:"চালানসহ ক্রয়ের হার",ch5s:"ক্রয়ের টাকার অনুপাত",
+  x_hint:"মসজিদগুলোর ক্রয়মূল্য তুলনা করে স্বয়ংক্রিয় মন্তব্য",x_copy:"মন্তব্য কপি",x_total:"অতিরিক্তের সারাংশ",x_price:"সবচেয়ে সস্তার চেয়ে বাড়তি দাম",x_entries:"উচ্চমূল্যের এন্ট্রি",x_noInv:"চালান ছাড়া ক্রয়",x_deficit:"প্রাপ্তির বেশি ব্যয়",x_over:"বাজেট অতিক্রম",x_dup:"সম্ভাব্য ডুপ্লিকেট",x_rev:"পর্যালোচনার এন্ট্রি",
+  x_ch:"মসজিদভিত্তিক অতিরিক্ত অর্থের তুলনা",x_chs:"বাড়তি দাম, উচ্চমূল্যের এন্ট্রি, প্রাপ্তির বেশি ব্যয়",x_obs:"স্বয়ংক্রিয় মন্তব্য",x_obsHint:"মন্তব্য সংরক্ষণ করলে মন্তব্য পাতায় দেখা যাবে",x_open:"এন্ট্রি খুলুন",x_save:"মন্তব্য হিসেবে সংরক্ষণ",x_saved:"মন্তব্যে সংরক্ষিত",x_none:"কোনো মন্তব্য নেই",
+  x_priceT:"প্রতি খাত ও মসজিদের গড় একক মূল্য",x_priceTs:"✓ সবচেয়ে সস্তা · লাল = সবচেয়ে দামি ও বাড়তি পরিমাণ",x_outT:"স্বাভাবিকের চেয়ে ২৫% বেশি দামের এন্ট্রি",x_outTs:"সব মসজিদে খাতের মধ্যমা দামের সাথে তুলনা",x_median:"মধ্যমা দাম",x_extra:"আনুমানিক বাড়তি",qtyU:"একক",
+  o_overBudget:"{m}: ব্যয় বাজেট ছাড়িয়েছে",o_overBudgetB:"ব্যয় {s}, বাজেট {b} — {x} বেশি।",o_deficit:"{m}: দাতার প্রাপ্তির চেয়ে ব্যয় বেশি",o_deficitB:"ব্যয় {s}, প্রাপ্তি {r} — {x} ঘাটতি।",
+  o_near:"{m}: বাজেটের {p}% ব্যয়",o_nearB:"বাজেটের মাত্র {x} বাকি।",o_noInv:"{m}: চালান ছাড়া ক্রয়",o_noInvB:"{n}টি এন্ট্রি ({x}) চালান নম্বর ও ছবি দরকার।",o_dup:"{m}: {n}টি সম্ভাব্য ডুপ্লিকেট",o_dupB:"মোট {x} — ব্যয় পাতায় দেখুন।",
+  o_price:"{c}: {m} বেশি দাম দিয়েছে",o_priceB:"গড় একক {a}, {l}-এ {b} — আনুমানিক বাড়তি {x}।",o_entry:"{c}, {m} (এন্ট্রি {n}): উচ্চ দাম",o_entryB:"“{d}” {dt}: একক মূল্য {u}, মধ্যমা {md} — আনুমানিক বাড়তি {x}।",
+  o_unit:"{c}, {m} (এন্ট্রি {n}): অস্বাভাবিক একক",o_unitB:"পরিমাণ {q}, একক মূল্য {u} স্বাভাবিক ({md}) থেকে অনেক দূরে — একক ভিন্ন হতে পারে।"});
 
 const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
 const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
