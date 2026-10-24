@@ -508,6 +508,23 @@ nav.tabs button[data-tab="wells"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='htt
 span.docgo{animation:none;font-weight:800}
 .wcard>.btn{align-self:stretch}
 
+/* ===== ملفات الجوامع ===== */
+.evweeks{display:flex;flex-direction:column;gap:10px;padding:4px 16px 16px}
+.evweek{border:1px solid var(--line2);border-radius:16px;background:var(--surface);box-shadow:var(--sh1);overflow:hidden}
+.evweek>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;background:linear-gradient(180deg,color-mix(in srgb,var(--ink) 7%,transparent),transparent)}
+.evweek>summary::-webkit-details-marker{display:none}
+.evweek>summary::before{content:"▸";color:var(--ink);font-weight:800;transition:transform .2s}
+.evweek[open]>summary::before{transform:rotate(90deg)}
+html[dir="rtl"] .evweek>summary::before{content:"◂"}
+html[dir="rtl"] .evweek[open]>summary::before{transform:rotate(-90deg)}
+.evdays{display:flex;flex-direction:column;gap:8px;padding:10px 14px 14px}
+.evday{display:flex;gap:12px;align-items:flex-start}
+.evdate{flex:none;width:118px;display:flex;flex-direction:column;align-items:center;padding:8px;border-radius:12px;color:#fff;background:linear-gradient(180deg,#14a383,var(--ink));box-shadow:0 3px 0 #06523f}
+.evdate span{font-size:.78rem;opacity:.9}
+.evvisits{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.evvisit{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-radius:12px;background:var(--sunk)}
+.evvisit .btn{margin-inline-start:auto}
+
 /* ===== تطبيق الجوال ===== */
 .installbtn{background:linear-gradient(180deg,#fdeab0,var(--gold2) 45%,var(--gold));color:#2f2204;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 0 #8f6a15,0 8px 16px -6px rgba(0,0,0,.35)}
 .installsteps{display:flex;flex-direction:column;gap:10px}
@@ -953,10 +970,10 @@ async function api(action,payload={}){
   try{res=await fetch(API,{method:"POST",body:JSON.stringify({action,token:S.token,...payload}),redirect:"follow"})}
   catch(e){throw {code:"network"}}
   let j;try{j=await res.json()}catch(e){throw {code:"network"}}
-  if(!j.ok){if(j.error==="no_session"&&action!=="login"){logout(true)}throw {code:j.error,message:j.message}}
+  if(!j.ok){if(j.error==="no_session"&&action!=="login"){logout(true)}throw {code:j.error,message:j.message,detail:j.detail}}
   return j;
 }
-const errText=e=>{const c=e?.code;if(c==="api_missing")return t("apiTitle");if(c==="invalid"&&I18N.ar[e.message])return t(e.message);return I18N.ar[c]?t(c):(e?.message||t("network"))};
+const errText=e=>{const c=e?.code;if(c==="api_missing")return t("apiTitle");if(c==="invalid"&&I18N.ar[e.message])return t(e.message)+(e.detail&&e.detail.trim()!=="·"?` (${e.detail})`:"");return I18N.ar[c]?t(c):(e?.message||t("network"))};
 
 /* ============================ الدخول ============================ */
 function renderLang(){
@@ -977,7 +994,7 @@ $("#btnRefresh").onclick=async()=>{$("#btnRefresh").disabled=true;try{await load
 async function loadAll(){
   const d=await api("load");S.user=d.user;S.mosques=d.mosques||[];
   const fill=(map,arr)=>{map.clear();(arr||[]).forEach(r=>map.set(String(r.id),r))};
-  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
+  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.evFolders=d.evFolders||{};S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
   computeDupes();
 }
 async function boot(){
@@ -1928,6 +1945,28 @@ Object.assign(I18N.bn,{perm_receipts:"প্রাপ্ত কিস্তি �
   o_price:"{c}: {m} বেশি দাম দিয়েছে",o_priceB:"গড় একক {a}, {l}-এ {b} — আনুমানিক বাড়তি {x}।",o_entry:"{c}, {m} (এন্ট্রি {n}): উচ্চ দাম",o_entryB:"“{d}” {dt}: একক মূল্য {u}, মধ্যমা {md} — আনুমানিক বাড়তি {x}।",
   o_unit:"{c}, {m} (এন্ট্রি {n}): অস্বাভাবিক একক",o_unitB:"পরিমাণ {q}, একক মূল্য {u} স্বাভাবিক ({md}) থেকে অনেক দূরে — একক ভিন্ন হতে পারে।"});
 
+/* ============================ ملفات كل جامع: أسبوعاً بأسبوع ويوماً بيوم ============================ */
+const AR_DAYS_C=["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],EN_DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],BN_DAYS=["রবি","সোম","মঙ্গল","বুধ","বৃহঃ","শুক্র","শনি"];
+const dayLbl=iso=>{const d=new Date(String(iso).slice(0,10)+"T12:00:00Z").getUTCDay();return (LANG==="en"?EN_DAYS:LANG==="bn"?BN_DAYS:AR_DAYS_C)[d]};
+const weekStart=iso=>{const d=new Date(String(iso).slice(0,10)+"T12:00:00Z"),back=(d.getUTCDay()+1)%7;return new Date(d.getTime()-back*864e5).toISOString().slice(0,10)};
+const addDays=(iso,n)=>new Date(new Date(iso+"T12:00:00Z").getTime()+n*864e5).toISOString().slice(0,10);
+function evFilesHtml(all){
+  const names=[...new Set(all.map(x=>mosqueLabel(x)))];if(!names.length)return "";
+  if(!S.evM||!names.includes(S.evM))S.evM=names[0];
+  const list=all.filter(x=>mosqueLabel(x)===S.evM),weeks={};
+  list.forEach(x=>{const w=weekStart(x.date);(weeks[w]=weeks[w]||[]).push(x)});
+  const wk=Object.keys(weeks).sort().reverse(),link=(S.evFolders||{})[S.evM],root=(S.evFolders||{}).__root;
+  const cnt=a=>({p:a.reduce((s,x)=>s+(x.photos||[]).length,0),v:a.reduce((s,x)=>s+(x.videos||[]).length,0)});
+  return `<section class="panel"><div class="ph"><h2 class="sec-h">📁 ${t("evFilesT")}</h2><div class="row-flex">${link?`<a class="btn small primary" target="_blank" rel="noopener" href="${esc(link)}">📂 ${t("evDrive")}</a>`:""}${root?`<a class="btn small" target="_blank" rel="noopener" href="${esc(root)}">${t("evDriveAll")}</a>`:""}</div></div>
+    <div class="toolbar"><div class="chips">${names.map(n=>{const c=cnt(all.filter(x=>mosqueLabel(x)===n));return `<button type="button" class="chip" data-evm="${esc(n)}" aria-pressed="${n===S.evM}">🕌 ${esc(n)} <span class="small num">${c.p}📷 ${c.v}🎥</span></button>`}).join("")}</div></div>
+    <div class="evweeks">${wk.map((w,i)=>{const a=weeks[w].sort((x,y)=>(y.date||"").localeCompare(x.date||"")),c=cnt(a),days={};a.forEach(x=>(days[x.date]=days[x.date]||[]).push(x));
+      return `<details class="evweek" ${i===0?"open":""}><summary><b>${t("evWeek",{a:`<span class="num">${w}</span>`,b:`<span class="num">${addDays(w,6)}</span>`})}</b><span class="small muted">${t("evWeekSum",{n:a.length,p:c.p,v:c.v,d:Object.keys(days).length})}</span></summary>
+        <div class="evdays">${Object.keys(days).sort().reverse().map(dd=>`<div class="evday"><div class="evdate"><b class="num">${esc(dd)}</b><span>${dayLbl(dd)}</span></div><div class="evvisits">${days[dd].map(x=>`<div class="evvisit"><span>👤 ${esc(x.staffName||"")}</span>${x.place?`<span class="small muted">${esc(x.place)}</span>`:""}<span class="small num">${(x.photos||[]).length}📷 ${(x.videos||[]).length}🎥</span><button class="btn small" type="button" data-evview="${esc(x.id)}">${t("evShow")}</button></div>`).join("")}</div></div>`).join("")}</div></details>`}).join("")}</div></section>`;
+}
+Object.assign(I18N.ar,{evFilesT:"ملفات كل جامع: أسبوعاً بأسبوع ويوماً بيوم",evDrive:"فتح مجلد الجامع في Drive",evDriveAll:"كل المجلدات",evWeek:"أسبوع {a} إلى {b}",evWeekSum:"{n} زيارة · {d} أيام · {p} صورة · {v} فيديو",evShow:"عرض الشواهد",used_before:"هذا الملف مرفوع سابقاً في زيارة أخرى، ولا يُقبل مكرراً"});
+Object.assign(I18N.en,{evFilesT:"Each mosque's files: week by week, day by day",evDrive:"Open the mosque folder in Drive",evDriveAll:"All folders",evWeek:"Week {a} to {b}",evWeekSum:"{n} visits · {d} days · {p} photos · {v} videos",evShow:"Show evidence",used_before:"This file was already uploaded for another visit and cannot be reused"});
+Object.assign(I18N.bn,{evFilesT:"প্রতিটি মসজিদের ফাইল: সপ্তাহ ও দিন অনুযায়ী",evDrive:"Drive-এ মসজিদের ফোল্ডার খুলুন",evDriveAll:"সব ফোল্ডার",evWeek:"সপ্তাহ {a} থেকে {b}",evWeekSum:"{n} ভিজিট · {d} দিন · {p} ছবি · {v} ভিডিও",evShow:"প্রমাণ দেখুন",used_before:"এই ফাইলটি আগে অন্য ভিজিটে আপলোড হয়েছে, পুনরায় ব্যবহার করা যাবে না"});
+
 const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
 const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
 function mosqueSelectHtml(id){return `<select id="${id}">${mosques().map(m=>`<option value="${m.n}">${esc(mName(m.n))}</option>`).join("")}<option value="0">${t("otherMosque")}</option></select>`}
@@ -1973,7 +2012,7 @@ async function onSlotFile(input){
   finally{EV.busy--;drawSlots()}
 }
 document.addEventListener("change",e=>{if(e.target.matches&&e.target.matches("input[data-k][data-i]"))onSlotFile(e.target)});
-document.addEventListener("click",e=>{const b=e.target.closest("[data-rmslot]");if(!b)return;e.preventDefault();const[k,i]=b.dataset.rmslot.split(":");EV[k][+i]=null;drawSlots()});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-rmslot]");if(!b)return;e.preventDefault();const[k,i]=b.dataset.rmslot.split(":");const old=EV[k][+i];if(old&&old.file&&!old.file.reused)api("discardUpload",{id:old.file.id}).catch(()=>{});EV[k][+i]=null;drawSlots()});
 
 function vEvidence(v){
   const all=[...S.ev.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.createdAt||"").localeCompare(a.createdAt||""));
@@ -1994,7 +2033,7 @@ function vEvidence(v){
   <section class="panel"><div class="ph"><h2 class="sec-h">${t("evVisits")}</h2>${showAll?`<button type="button" class="btn small" data-evstaff="">${t("allStaff")}</button>`:""}</div><div class="tscroll"><table><thead><tr><th>${t("date")}</th>${showAll?`<th>${t("staff")}</th>`:""}<th>${t("mosque")}</th><th>${t("place")}</th><th>📷 / 🎥</th><th></th></tr></thead><tbody>
   ${(showAll?all.filter(x=>!S.evStaff||x.staffId===S.evStaff):mine).map(x=>`<tr><td class="num">${esc(x.date)}</td>${showAll?`<td>${esc(x.staffName)}</td>`:""}<td>${esc(mosqueLabel(x))}</td><td>${esc(x.place||"")}${x.note?`<div class="small muted">${esc(x.note)}</div>`:""}</td><td class="num">${(x.photos||[]).length} / ${(x.videos||[]).length}</td><td><button class="btn small" type="button" data-evview="${esc(x.id)}">${t("evView")}</button></td></tr>`).join("")||`<tr><td colspan="6" class="empty">${t("evNone")}</td></tr>`}
   </tbody></table></div></section>`;
-  if(showAll)v.querySelector(".totals").insertAdjacentHTML("afterend",evCalendar(all));
+  if(showAll){v.querySelector(".totals").insertAdjacentHTML("afterend",evCalendar(all)+evFilesHtml(all));v.querySelectorAll("[data-evm]").forEach(b=>b.onclick=()=>{S.evM=b.dataset.evm;render()})}
   v.querySelectorAll("[data-evmon]").forEach(b=>b.onclick=()=>{const[y,m]=S.evMonth.split("-").map(Number),d=new Date(y,m-1+(+b.dataset.evmon),1);S.evMonth=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;render()});
   $("#evMonth")&&($("#evMonth").onchange=e=>{if(e.target.value){S.evMonth=e.target.value;render()}});
   v.querySelectorAll("[data-evstaff]").forEach(b=>b.onclick=()=>{S.evStaff=b.dataset.evstaff||null;render()});
