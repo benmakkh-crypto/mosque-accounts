@@ -514,7 +514,14 @@ span.docgo{animation:none;font-weight:800}
 .installsteps div{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--sunk);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
 .installsteps b{width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(180deg,#14a383,var(--ink));box-shadow:0 2px 0 #06523f}
 .iosicon{margin-inline-start:auto;font-size:1.2rem}
-@media (display-mode: standalone){#btnInstall,#loginInstall{display:none!important}}
+#installBar{position:fixed;z-index:30;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;color:#eaf7f2;
+  background:var(--pattern),linear-gradient(125deg,#06362f,#0b6a57 60%,#0a5462);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 5px 0 #04261f,0 20px 40px -12px rgba(0,0,0,.6);animation:toast .4s ease}
+#installBar[hidden]{display:none}
+#installBar>div{flex:1;min-width:0;display:flex;flex-direction:column}
+#installBar .small{color:rgba(234,247,242,.75)}
+#installBar .ib-ic{width:44px;height:44px;flex:none;border-radius:12px;background:#fff url(icon-192.png) center/86% no-repeat;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+#installBar .ib-x{background:none;border:0;color:#eaf7f2;font-size:1.1rem;cursor:pointer;padding:4px 6px}
+@media (display-mode: standalone){#btnInstall,#loginInstall,#installBar{display:none!important}}
 @media print{
   header.top,.noprint,.toolbar,.pager,.btn,.hero{display:none!important}
   body{background:#fff!important;color:#000;font-size:11px}
@@ -735,8 +742,10 @@ span.docgo{animation:none;font-weight:800}
   <div class="actions"><div><a id="viewOpen" class="btn" target="_blank" rel="noopener" data-t="openNewTab"></a></div><div class="r"><button class="btn" type="button" data-close data-t="close"></button></div></div></div></dialog>
 
 <dialog id="dlgInstall"><div class="dbody"><h2 data-t="installApp"></h2>
-  <div class="installsteps"><div><b>1</b><span data-t="iosStep1"></span> <span class="iosicon">⬆️</span></div><div><b>2</b><span data-t="iosStep2"></span> <span class="iosicon">➕</span></div><div><b>3</b><span data-t="iosStep3"></span></div></div>
-  <p class="small muted" data-t="iosNote"></p>
+  <div class="notice" id="inappNote" hidden data-t="inappNote"></div>
+  <div class="installsteps" id="stepsIos"><div><b>1</b><span data-t="iosStep1"></span> <span class="iosicon">⬆️</span></div><div><b>2</b><span data-t="iosStep2"></span> <span class="iosicon">➕</span></div><div><b>3</b><span data-t="iosStep3"></span></div></div>
+  <div class="installsteps" id="stepsAnd"><div><b>1</b><span data-t="andStep1"></span> <span class="iosicon">⋮</span></div><div><b>2</b><span data-t="andStep2"></span> <span class="iosicon">📲</span></div><div><b>3</b><span data-t="andStep3"></span></div></div>
+  <div class="linkbox"><input readonly id="appLink"><button class="btn small" type="button" id="appLinkCopy" data-t="wCopy"></button></div>
   <div class="actions"><div></div><div class="r"><button class="btn primary" type="button" data-close data-t="close"></button></div></div></div></dialog>
 
 <dialog id="dlgConfirm"><form method="dialog" style="gap:16px"><h2 id="cfmText"></h2><p class="muted" style="margin:0" data-t="cannotUndo"></p>
@@ -745,6 +754,7 @@ span.docgo{animation:none;font-weight:800}
 <datalist id="people"><option value="بدر الهدى"><option value="مروان"><option value="إدريس"><option value="زبير"></datalist>
 <datalist id="shops"></datalist><datalist id="pdonors"></datalist><datalist id="pexecs"></datalist><datalist id="pagencies"></datalist>
 <div class="toast" id="toast" hidden></div>
+<div id="installBar" hidden><span class="ib-ic"></span><div><b data-t="installApp"></b><span class="small" data-t="installBarSub"></span></div><button class="btn small installbtn" type="button" id="installBarBtn" data-t="install"></button><button class="ib-x" type="button" id="installBarX" aria-label="close">✕</button></div>
 
 <script>
 /* =====================================================================
@@ -1703,19 +1713,29 @@ Object.assign(I18N.bn,{pCat:"বিভাগ",newType:"+ অন্য ধরন�
 
 /* ============================ تطبيق الجوال (PWA) ============================ */
 (()=>{
-  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-  let deferred=null;const btns=()=>[$("#btnInstall"),$("#loginInstall")].filter(Boolean);
-  const show=v=>btns().forEach(b=>b.hidden=!v||standalone);
+  const ua=navigator.userAgent,standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  const ios=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  const inapp=/FBAN|FBAV|Instagram|Line\/|WhatsApp|Telegram|Snapchat|; wv\)/i.test(ua)||(ios&&!/Safari\//.test(ua))||(ios&&/CriOS|FxiOS|EdgiOS/.test(ua));
+  const mobile=ios||/android/i.test(ua);
+  let deferred=null;
+  const btns=[$("#btnInstall"),$("#loginInstall")].filter(Boolean);
   if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;show(true)});
-  addEventListener("appinstalled",()=>{deferred=null;show(false);toast(t("installed"))});
-  if(ios&&!standalone)show(true);
-  btns().forEach(b=>b.onclick=async()=>{if(deferred){deferred.prompt();const r=await deferred.userChoice.catch(()=>null);deferred=null;if(!r||r.outcome!=="accepted")show(false)}else $("#dlgInstall").showModal()});
+  // زر التثبيت ظاهر دائماً ما لم يكن التطبيق مثبّتاً ومفتوحاً كتطبيق
+  btns.forEach(b=>b.hidden=standalone);
+  let dismissed=false;try{dismissed=localStorage.getItem("installBarX")==="1"}catch(_){}
+  const bar=$("#installBar");if(bar)bar.hidden=standalone||!mobile||dismissed||new URLSearchParams(location.search).has("w");
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e});
+  addEventListener("appinstalled",()=>{deferred=null;btns.forEach(b=>b.hidden=true);if(bar)bar.hidden=true;toast(t("installed"))});
+  const guide=()=>{$("#stepsIos").hidden=!ios;$("#stepsAnd").hidden=ios;$("#inappNote").hidden=!inapp;
+    const link=location.origin+location.pathname;$("#appLink").value=link;$("#appLinkCopy").onclick=async()=>{try{await navigator.clipboard.writeText(link)}catch(_){$("#appLink").select();document.execCommand("copy")}toast(t("wCopied"))};
+    $("#dlgInstall").showModal()};
+  const go=async()=>{if(deferred){deferred.prompt();const r=await deferred.userChoice.catch(()=>null);deferred=null;if(r&&r.outcome==="accepted")return}guide()};
+  btns.forEach(b=>b.onclick=go);$("#installBarBtn")&&($("#installBarBtn").onclick=go);
+  $("#installBarX")&&($("#installBarX").onclick=()=>{bar.hidden=true;try{localStorage.setItem("installBarX","1")}catch(_){}});
 })();
-Object.assign(I18N.ar,{install:"تثبيت",installApp:"تثبيت التطبيق على الجوال",installed:"تم تثبيت التطبيق على جوالك",iosStep1:"اضغط زر المشاركة أسفل Safari",iosStep2:"اختر «إضافة إلى الشاشة الرئيسية»",iosStep3:"اضغط «إضافة»، وستجد أيقونة التطبيق على شاشتك",iosNote:"على أندرويد: افتح الرابط في Chrome واضغط «تثبيت التطبيق»، أو من القائمة ⋮ اختر «تثبيت التطبيق»."});
-Object.assign(I18N.en,{install:"Install",installApp:"Install the app on your phone",installed:"The app is installed on your phone",iosStep1:"Tap the Share button in Safari",iosStep2:"Choose “Add to Home Screen”",iosStep3:"Tap “Add” — the app icon appears on your home screen",iosNote:"On Android: open the link in Chrome and tap “Install app”, or choose “Install app” from the ⋮ menu."});
-Object.assign(I18N.bn,{install:"ইনস্টল",installApp:"মোবাইলে অ্যাপ ইনস্টল করুন",installed:"আপনার মোবাইলে অ্যাপ ইনস্টল হয়েছে",iosStep1:"Safari-তে শেয়ার বোতাম চাপুন",iosStep2:"“Add to Home Screen” বেছে নিন",iosStep3:"“Add” চাপুন — হোম স্ক্রিনে অ্যাপের আইকন আসবে",iosNote:"অ্যান্ড্রয়েডে: Chrome-এ লিংক খুলে “Install app” চাপুন, অথবা ⋮ মেনু থেকে “Install app” বেছে নিন।"});
+Object.assign(I18N.ar,{installBarSub:"افتحه من الشاشة الرئيسية مباشرة",andStep1:"اضغط القائمة ⋮ أعلى Chrome",andStep2:"اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»",andStep3:"اضغط «تثبيت»، وستجد أيقونة التطبيق على شاشتك",inappNote:"أنت تفتح الرابط من داخل تطبيق آخر (واتساب أو غيره). انسخ الرابط وافتحه في Chrome على أندرويد أو Safari على آيفون، ثم ثبّت التطبيق.",install:"تثبيت",installApp:"تثبيت التطبيق على الجوال",installed:"تم تثبيت التطبيق على جوالك",iosStep1:"اضغط زر المشاركة أسفل Safari",iosStep2:"اختر «إضافة إلى الشاشة الرئيسية»",iosStep3:"اضغط «إضافة»، وستجد أيقونة التطبيق على شاشتك",iosNote:"على أندرويد: افتح الرابط في Chrome واضغط «تثبيت التطبيق»، أو من القائمة ⋮ اختر «تثبيت التطبيق»."});
+Object.assign(I18N.en,{installBarSub:"Open it straight from your home screen",andStep1:"Tap the ⋮ menu in Chrome",andStep2:"Choose “Install app” or “Add to Home screen”",andStep3:"Tap “Install” — the app icon appears on your home screen",inappNote:"You opened this link inside another app (WhatsApp etc.). Copy the link and open it in Chrome on Android or Safari on iPhone, then install.",install:"Install",installApp:"Install the app on your phone",installed:"The app is installed on your phone",iosStep1:"Tap the Share button in Safari",iosStep2:"Choose “Add to Home Screen”",iosStep3:"Tap “Add” — the app icon appears on your home screen",iosNote:"On Android: open the link in Chrome and tap “Install app”, or choose “Install app” from the ⋮ menu."});
+Object.assign(I18N.bn,{installBarSub:"হোম স্ক্রিন থেকে সরাসরি খুলুন",andStep1:"Chrome-এর ⋮ মেনু চাপুন",andStep2:"“Install app” বা “Add to Home screen” বেছে নিন",andStep3:"“Install” চাপুন — হোম স্ক্রিনে অ্যাপের আইকন আসবে",inappNote:"আপনি অন্য অ্যাপের ভেতর থেকে লিংক খুলেছেন। লিংক কপি করে অ্যান্ড্রয়েডে Chrome বা আইফোনে Safari-তে খুলে ইনস্টল করুন।",install:"ইনস্টল",installApp:"মোবাইলে অ্যাপ ইনস্টল করুন",installed:"আপনার মোবাইলে অ্যাপ ইনস্টল হয়েছে",iosStep1:"Safari-তে শেয়ার বোতাম চাপুন",iosStep2:"“Add to Home Screen” বেছে নিন",iosStep3:"“Add” চাপুন — হোম স্ক্রিনে অ্যাপের আইকন আসবে",iosNote:"অ্যান্ড্রয়েডে: Chrome-এ লিংক খুলে “Install app” চাপুন, অথবা ⋮ মেনু থেকে “Install app” বেছে নিন।"});
 
 const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
 const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
