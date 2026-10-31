@@ -2144,7 +2144,7 @@ function vUpdates(v){
       <div class="upd-stat ${gapN?"is-warn":""}"><span>${t("autoGaps")}</span><b class="num">${gapN}</b><small class="muted">${t("gapsSub")}</small></div>
       <div class="upd-stat"><span>${t("todayUpd")}</span><b class="num">${todayN}</b><small class="muted">${t("sysAndDrive")}</small></div>
     </div>
-    <div class="row-flex upd-bar">${si.trigger===false?`<span class="pill warn">⚠ ${t("trigOff")}</span>`:`<span class="pill ok">⟳ ${t("trigOn")}</span>`}
+    <div class="row-flex upd-bar">${si.trigger!==true?`<span class="pill warn">⚠ ${t("trigOff")}</span>`:`<span class="pill ok">⟳ ${t("trigOn")}</span>`}
       ${canE?`<button class="btn primary small" type="button" id="updSync">☁ ${t("syncNow")}</button>`:""}<button class="btn small" type="button" id="updReload">↻ ${t("reloadData")}</button></div>
   </section>
   <section class="panel"><div class="ph"><h2 class="sec-h">🔔 ${t("needReview")} <span class="pill ${pend.length?"warn":"ok"}">${pend.length}</span></h2>${canE&&invPend>3?`<button class="btn small" type="button" id="updDismissInv">${t("dismissAllInv",{n:invPend})}</button>`:""}</div>
