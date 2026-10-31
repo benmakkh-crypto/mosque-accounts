@@ -540,6 +540,30 @@ table.pmatrix tbody th{text-align:start;background:var(--sunk);color:var(--fg);w
 .reqnote{flex:1 1 180px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--surface)}
 .accrow{border-inline-start-color:var(--c2)}.acc-full{border-inline-start-color:var(--ok)}
 
+/* ===== التحديثات والملاحظات ===== */
+nav.tabs button[data-tab="updates"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9'/%3E%3Cpath d='M10.3 21a1.94 1.94 0 003.4 0'/%3E%3C/svg%3E")}
+.upd-hero{padding:16px}
+.upd-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.upd-stat{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:16px;background:var(--surface);border:1px solid var(--line2);box-shadow:var(--sh1);border-inline-start:5px solid var(--ok)}
+.upd-stat.is-warn{border-inline-start-color:var(--warn)}
+.upd-stat span{font-size:.8rem;color:var(--muted);font-weight:600}.upd-stat b{font-size:1.6rem;line-height:1.1;color:var(--fg)}
+.upd-bar{margin-top:12px;gap:8px;flex-wrap:wrap;align-items:center}
+.upd-list{display:flex;flex-direction:column;gap:10px;padding:12px 16px 16px}
+.upd-card{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--surface);box-shadow:var(--sh1);border-inline-start:5px solid var(--warn)}
+.upd-h{display:flex;gap:10px;align-items:flex-start}.upd-tt{flex:1;min-width:0}.upd-ic{font-size:1.4rem;line-height:1}
+.upd-file{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);word-break:break-all}
+.upd-act{gap:8px;flex-wrap:wrap}.upd-sel{flex:1 1 260px;min-width:0;max-width:100%}
+.gaps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:12px 16px 16px}
+.gap-grp h3{font-size:.95rem;margin:0 0 8px;display:flex;gap:6px;align-items:center}
+.gap-grp ul{margin:0 0 8px;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.gap-grp li{padding:8px 10px;border-radius:10px;background:var(--warn-bg);color:var(--fg);font-size:.86rem;border-inline-start:4px solid var(--warn)}
+.gap-grp li.gap-bad{background:var(--bad-bg);border-inline-start-color:var(--bad)}
+.feed{list-style:none;margin:0;padding:6px 16px 12px;display:flex;flex-direction:column}
+.feed li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line2)}
+.feed li:last-child{border-bottom:0}.feed-ic{font-size:1.1rem;width:26px;text-align:center}.feed-b{flex:1;min-width:0;word-break:break-word}
+.feed-m{display:flex;flex-direction:column;align-items:flex-end;gap:2px;white-space:nowrap}
+@media (max-width:560px){.feed li{flex-wrap:wrap}.feed-m{flex-direction:row;gap:8px;width:100%;justify-content:flex-start;padding-inline-start:36px}.upd-stat b{font-size:1.3rem}}
+
 /* ===== تطبيق الجوال ===== */
 .installbtn{background:linear-gradient(180deg,#fdeab0,var(--gold2) 45%,var(--gold));color:#2f2204;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 0 #8f6a15,0 8px 16px -6px rgba(0,0,0,.35)}
 .installsteps{display:flex;flex-direction:column;gap:10px}
@@ -1009,7 +1033,7 @@ $("#btnRefresh").onclick=async()=>{$("#btnRefresh").disabled=true;try{await load
 async function loadAll(){
   const d=await api("load");S.user=d.user;S.mosques=d.mosques||[];
   const fill=(map,arr)=>{map.clear();(arr||[]).forEach(r=>map.set(String(r.id),r))};
-  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.evFolders=d.evFolders||{};S.requests=d.requests||[];S.myRequests=d.myRequests||[];S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
+  fill(S.exp,d.expenses);fill(S.rec,d.receipts);fill(S.mis,d.mistries);fill(S.notes,d.notes);fill(S.proj,d.projects);fill(S.ppay,d.projpay);fill(S.ev,d.evidence);fill(S.trips,d.trips);S.staffList=d.staff||[];S.evFolders=d.evFolders||{};S.requests=d.requests||[];S.myRequests=d.myRequests||[];S.updates=d.updates||[];S.activity=d.activity||[];S.syncInfo=d.syncInfo||null;S.lastRefresh=Date.now();S.wells=new Map((d.wells||[]).map(w=>[String(w.projectId),w]));
   computeDupes();
 }
 async function boot(){
@@ -1022,7 +1046,7 @@ async function boot(){
 
 /* ============================ الهيكل والتبويبات ============================ */
 function allowedTabs(){
-  const t=["master","accounts","overview","charts","excess","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips"].filter(k=>PG(k,"v")||((k==="evidence"||k==="trips"||k==="wells")&&PG(k,"a")));
+  const t=["master","accounts","overview","charts","excess","expenses","receipts","mistry","cats","notes","projects","wells","evidence","trips","updates"].filter(k=>PG(k,"v")||((k==="evidence"||k==="trips"||k==="wells")&&PG(k,"a")));
   if(PG("users","v"))t.push("users");else t.push("access");
   if(!t.some(k=>!["access","evidence","trips","wells"].includes(k))&&(PG("evidence","a")||PG("trips","a")||t.length<=1))t.splice(t.length-1,0,"entry");
   return t;
@@ -1041,10 +1065,11 @@ $("#projChip").addEventListener("click",()=>{S.tab="projects";document.querySele
 $("#mosqueChips").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;S.mosque=+b.dataset.m;S.limit=100;document.querySelectorAll("#mosqueChips .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==S.mosque));render()});
 function render(){
   const v=$("#view");
-  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells","charts","excess","access"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
-  ({access:vAccess,charts:vCharts,excess:vExcess,wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
+  $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells","charts","excess","access","updates"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
+  ({updates:vUpdates,access:vAccess,charts:vCharts,excess:vExcess,wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
   const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&PG("trips","e")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
   const ub=document.querySelector('#tabs [data-tab="users"]');if(ub){const n=(S.requests||[]).filter(r=>r.status==="pending").length;ub.textContent=t("tab_users")+(n?` (${n})`:"")}
+  const upb=document.querySelector('#tabs [data-tab="updates"]');if(upb&&S.tab!=="updates"){const n=updBadgeCount();upb.textContent=t("tab_updates")+(n?` (${n})`:"")}
   const b=$("#notesBadge");if(b){const c=[...S.notes.values()].filter(n=>(n.status||"open")==="open").length;b.hidden=!c;b.textContent=c}
 }
 
@@ -1987,7 +2012,7 @@ Object.assign(I18N.en,{evFilesT:"Each mosque's files: week by week, day by day",
 Object.assign(I18N.bn,{evFilesT:"প্রতিটি মসজিদের ফাইল: সপ্তাহ ও দিন অনুযায়ী",evDrive:"Drive-এ মসজিদের ফোল্ডার খুলুন",evDriveAll:"সব ফোল্ডার",evWeek:"সপ্তাহ {a} থেকে {b}",evWeekSum:"{n} ভিজিট · {d} দিন · {p} ছবি · {v} ভিডিও",evShow:"প্রমাণ দেখুন",used_before:"এই ফাইলটি আগে অন্য ভিজিটে আপলোড হয়েছে, পুনরায় ব্যবহার করা যাবে না"});
 
 /* ============================ صلاحيات الصفحات بفروعها ============================ */
-const PAGE_DEF=[["master","v"],["accounts","v"],["overview","v"],["charts","v"],["excess","v"],["expenses","vaed"],["receipts","vaed"],["mistry","vaed"],["cats","v"],["notes","vaed"],["projects","vaed"],["wells","vaed"],["evidence","va"],["trips","vae"],["users","v"]];
+const PAGE_DEF=[["master","v"],["accounts","v"],["overview","v"],["charts","v"],["excess","v"],["expenses","vaed"],["receipts","vaed"],["mistry","vaed"],["cats","v"],["notes","vaed"],["projects","vaed"],["wells","vaed"],["evidence","va"],["trips","vae"],["updates","ve"],["users","v"]];
 const ACTS=["v","a","e","d"];
 const PG=(pg,act="v")=>{const m=S.user&&S.user.perms&&S.user.perms.pages;return !!(m&&m[pg]&&m[pg][act])};
 const actName=(pg,a)=>t((pg==="evidence"||pg==="trips")&&a==="v"?"act_vAll":pg==="evidence"&&a==="a"?"act_aEv":pg==="trips"&&a==="a"?"act_aTr":pg==="trips"&&a==="e"?"act_eTr":pg==="wells"&&a==="a"?"act_aW":"act_"+a);
@@ -1995,7 +2020,7 @@ function normPagesC(pg){const out={};PAGE_DEF.forEach(([k,acts])=>{const s=(pg&&
 function pagesFromLegacyC(p){const V=!!p.viewAll;return normPagesC({master:{v:p.master},accounts:{v:p.master},overview:{v:V},charts:{v:V},excess:{v:V},cats:{v:V},
   expenses:{v:V,a:p.create,e:p.edit,d:p.delete},receipts:{v:V,a:p.receipts,e:p.edit,d:p.delete},mistry:{v:V,a:p.create,e:p.edit,d:p.delete},notes:{v:V,a:p.create,e:p.edit,d:p.delete},
   projects:{v:V,a:p.create,e:p.edit||p.projManage,d:p.delete||p.projManage},wells:{v:V||p.projDocs,a:p.projDocs,e:p.projManage||p.edit,d:p.projManage||p.edit},
-  evidence:{v:V||p.evidenceView,a:p.evidence},trips:{v:V,a:p.trips,e:p.edit},users:{v:p.users}})}
+  evidence:{v:V||p.evidenceView,a:p.evidence},trips:{v:V,a:p.trips,e:p.edit},users:{v:p.users},updates:{v:V,e:p.edit}})}
 const SPECIALS=["attachInvoice","export","food"];
 function drawPerms(p){
   const pg=p.pages?normPagesC(p.pages):pagesFromLegacyC(p);
@@ -2059,6 +2084,131 @@ Object.assign(I18N.bn,{tab_access:"আমার অনুমতি ও অনু
   perm_attachInvoice:"চালানহীন এন্ট্রিতে চালান যোগ",perm_export:"Drive-এ Excel রপ্তানি",perm_food:"খাবার ও পানীয় ঘর",noPerms:"কোনো অনুমতি নেই",reqTitle:"অনুমতির অনুরোধ",reqHint:"প্রয়োজনে অনুমোদনের আগে শাখা বদলান",reqNone:"কোনো অনুরোধ নেই",approve:"অনুমোদন",reject:"বাতিল",reqPick:"অন্তত একটি শাখা বেছে নিন",reqApproved:"অনুমোদিত — অনুমতি যোগ হয়েছে",reqRejected:"অনুরোধ বাতিল",
   rq_pending:"অনুমোদনের অপেক্ষায়",rq_approved:"অনুমোদিত",rq_rejected:"বাতিল",accHint:"প্রতিটি পাতায় আপনার বর্তমান অনুমতি এখানে। দরকারি অনুমতি চাইলে সাধারণ তত্ত্বাবধায়কের কাছে যাবে; অনুমোদনের পর পাতা রিফ্রেশ করলে দেখা যাবে।",accTitle2:"পাতা ও অনুমতির শাখা",reqWhy:"কারণ (ঐচ্ছিক)",reqSend:"অনুরোধ",reqSent:"অনুরোধ পাঠানো হয়েছে",myReqs:"আমার অনুরোধ",reqActs:"শাখা",
   already_have:"এই অনুমতি আগেই আছে",already_requested:"এই পাতার জন্য অনুরোধ অপেক্ষমাণ",already_decided:"এই অনুরোধের সিদ্ধান্ত আগেই হয়েছে"});
+
+/* ============================ التحديثات والملاحظات ومزامنة Drive ============================ */
+const UPD_ICON={docs:"🗂️","docs-unsorted":"🧩",evidence:"📷",invoice:"🧾",duplicate:"♻️"};
+const updSeen=()=>{try{return localStorage.getItem("upd_seen")||""}catch(_){return ""}};
+const setUpdSeen=v=>{try{localStorage.setItem("upd_seen",v)}catch(_){}};
+function updBadgeCount(){const seen=updSeen();return (S.updates||[]).filter(u=>u.status==="pending"||(u.status==="new"&&u.at>seen)).length}
+function relAgo(iso){if(!iso)return "—";const s=(Date.now()-Date.parse(iso))/1000;if(!isFinite(s))return String(iso).slice(0,16).replace("T"," ");
+  if(s<90)return t("agoNow");if(s<3600)return t("agoMin",{n:Math.round(s/60)});if(s<86400)return t("agoHour",{n:Math.round(s/3600)});return String(iso).slice(0,10)}
+const driveUrl=id=>"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/view";
+const AR_DAY=["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+function computeGaps(){
+  const out={docs:[],ev:[],inv:[]};
+  // التوثيق: مراحل ناقصة الملفات، ومشاريع منفذة بلا توثيق
+  if(PG("wells","v")){
+    [...S.proj.values()].forEach(p=>{const w=S.wells.get(String(p.id));const c=catOfP(p);
+      if(!w){if(p.status==="تم التنفيذ")out.docs.push({t:t("gapNoDoc",{p:`#${p.n||p.row||""} ${p.type||""}${p.donor?" — "+p.donor:""}`}),k:"bad"});return}
+      const st=w.stages||{},nS=c.stages.length;
+      Object.keys(st).forEach(n=>{const s=st[n],last=+n===nS,rp=last?3:2,rv=last?3:1,mp=rp-(s.photos||[]).length,mv=rv-(s.videos||[]).length;
+        if(mp>0||mv>0)out.docs.push({t:t("gapStage",{w:w.wellName||p.type,s:L3(c.stages[+n-1]||{ar:"#"+n}),m:[mp>0?t("gapPh",{n:mp}):"",mv>0?t("gapVd",{n:mv}):""].filter(Boolean).join(" · ")}),k:"warn"})});
+      if(p.status==="تم التنفيذ"){const miss=c.stages.map((_,i)=>i+1).filter(n=>!st[String(n)]);if(miss.length)out.docs.push({t:t("gapStages",{w:w.wellName||p.type,n:miss.length,all:nS}),k:"warn"})}
+    })}
+  // الشواهد: آخر 7 أيام (بلا الجمعة واليوم) لكل موظف
+  if(PG("evidence","v")&&(S.staffList||[]).length){
+    const evs=[...S.ev.values()];
+    S.staffList.forEach(st=>{const miss=[];for(let i=1;i<=7;i++){const d=new Date(Date.now()-i*864e5),iso=d.toISOString().slice(0,10);if(d.getDay()===5)continue;
+      const day=evs.filter(e=>e.staffId===st.id&&e.date===iso);if(!day.length)miss.push(iso)}
+      if(miss.length)out.ev.push({t:t("gapEv",{s:st.name,n:miss.length,d:miss.slice(0,4).map(x=>x.slice(5)+" "+AR_DAY[new Date(x+"T12:00:00Z").getUTCDay()]).join("، ")+(miss.length>4?" …":"")}),k:miss.length>=3?"bad":"warn"})})}
+  // الفواتير: مصروفات بلا صورة فاتورة
+  if(S.exp.size){const by={};[...S.exp.values()].forEach(e=>{if(!e.invoiceFile&&!e.noInvoice&&+e.total>0)by[e.mosque]=(by[e.mosque]||0)+1});
+    Object.keys(by).sort().forEach(m=>out.inv.push({t:t("gapInv",{m:mName(+m),n:by[m]}),k:"warn"}))}
+  return out;
+}
+function updActLabel(a){const tb=t("tbl_"+a.table)!=="tbl_"+a.table?t("tbl_"+a.table):a.table;return `${t("act2_"+a.action)!=="act2_"+a.action?t("act2_"+a.action):a.action} · ${tb}`}
+function vUpdates(v){
+  const si=S.syncInfo||{},canE=PG("updates","e"),pend=(S.updates||[]).filter(u=>u.status==="pending"),gaps=computeGaps();
+  const gapN=gaps.docs.length+gaps.ev.length+gaps.inv.length,todayIso=today();
+  const feedAll=[...(S.updates||[]).map(u=>({at:u.at,src:"drive",icon:UPD_ICON[u.kind]||"☁️",title:u.title,detail:[u.detail,u.fileName&&u.kind!=="invoice"?u.fileName:""].filter(Boolean).join(" · "),who:"Drive",status:u.status})),
+    ...(S.activity||[]).filter(a=>a.table!=="drive"&&a.action!=="login"&&a.action!=="logout").map(a=>({at:a.at,src:"system",icon:"🖊️",title:updActLabel(a),detail:a.summary,who:a.user}))].sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+  const todayN=feedAll.filter(f=>String(f.at).slice(0,10)===todayIso).length,flt=S.updFilter||"all",feed=feedAll.filter(f=>flt==="all"||f.src===flt).slice(0,S.updLimit||60);
+  const noExpInv=[...S.exp.values()].filter(e=>!(e.invoiceFile&&e.invoiceFile.id)).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,400);
+  const expOpts=noExpInv.map(e=>`<option value="${esc(e.id)}">#${esc(e.seq||"")} · ${esc(mName(e.mosque))} · ${esc(e.date||"")} · ${esc(String(e.desc||e.category||"").slice(0,40))} · ${fmt(e.total)}</option>`).join("");
+  const wellById=id=>[...S.wells.values()].find(w=>w.id===id);
+  const card=u=>{const w=u.kind==="docs-unsorted"?wellById(u.refId):null,c=w?dcat(w.cat||"wells"):null;
+    return `<article class="upd-card upd-${esc(u.kind)}" data-uid="${esc(u.id)}">
+      <div class="upd-h"><span class="upd-ic" aria-hidden="true">${UPD_ICON[u.kind]||"☁️"}</span><div class="upd-tt"><b>${esc(u.title)}</b><div class="small muted">${esc(u.detail||"")}${u.mosqueName&&u.kind!=="invoice"?" · "+esc(u.mosqueName):""}</div></div>
+      <span class="small muted num">${esc(relAgo(u.at))}</span></div>
+      <div class="upd-file small">📎 <span class="num">${esc(u.fileName||"")}</span> ${u.fileId?`<a class="btn small" href="${driveUrl(u.fileId)}" target="_blank" rel="noopener">${t("openDrive")}</a>`:""}</div>
+      ${canE?`<div class="upd-act row-flex">${u.kind==="invoice"?`<select class="upd-sel" data-exp aria-label="${esc(t("pickExp"))}"><option value="">${t("pickExp")}</option>${expOpts}</select><button class="btn small primary" type="button" data-link>${t("linkInv")}</button>`
+        :u.kind==="docs-unsorted"&&c?`<select class="upd-sel" data-stage aria-label="${esc(t("pickStage"))}"><option value="">${t("pickStage")}</option>${c.stages.map((s,i)=>`<option value="${i+1}">${i+1}. ${esc(L3(s))}</option>`).join("")}</select><button class="btn small primary" type="button" data-stagego>${t("addToStage")}</button>`:""}
+        <button class="btn small" type="button" data-dismiss>${t("dismiss")}</button></div>`:""}
+    </article>`};
+  const gapList=(arr,ttl,icon)=>arr.length?`<div class="gap-grp"><h3>${icon} ${ttl} <span class="pill warn">${arr.length}</span></h3><ul>${arr.slice(0,S.gapAll?999:8).map(g=>`<li class="gap-${g.k}">${esc(g.t)}</li>`).join("")}</ul>${arr.length>8&&!S.gapAll?`<button class="btn small" type="button" data-gapall>${t("showAll")} (${arr.length})</button>`:""}</div>`:"";
+  const invPend=pend.filter(u=>u.kind==="invoice").length;
+  v.innerHTML=`<section class="panel upd-hero">
+    <div class="upd-stats">
+      <div class="upd-stat"><span>${t("lastSync")}</span><b class="num">${esc(relAgo(si.at))}</b><small class="muted">${si.result?esc(t("syncRes",{d:si.result.docs||0,e:si.result.evFiles||0,i:si.result.invoices||0})):t("neverSync")}</small></div>
+      <div class="upd-stat ${pend.length?"is-warn":""}"><span>${t("needReview")}</span><b class="num">${pend.length}</b><small class="muted">${t("fromDrive")}</small></div>
+      <div class="upd-stat ${gapN?"is-warn":""}"><span>${t("autoGaps")}</span><b class="num">${gapN}</b><small class="muted">${t("gapsSub")}</small></div>
+      <div class="upd-stat"><span>${t("todayUpd")}</span><b class="num">${todayN}</b><small class="muted">${t("sysAndDrive")}</small></div>
+    </div>
+    <div class="row-flex upd-bar">${si.trigger===false?`<span class="pill warn">⚠ ${t("trigOff")}</span>`:`<span class="pill ok">⟳ ${t("trigOn")}</span>`}
+      ${canE?`<button class="btn primary small" type="button" id="updSync">☁ ${t("syncNow")}</button>`:""}<button class="btn small" type="button" id="updReload">↻ ${t("reloadData")}</button></div>
+  </section>
+  <section class="panel"><div class="ph"><h2 class="sec-h">🔔 ${t("needReview")} <span class="pill ${pend.length?"warn":"ok"}">${pend.length}</span></h2>${canE&&invPend>3?`<button class="btn small" type="button" id="updDismissInv">${t("dismissAllInv",{n:invPend})}</button>`:""}</div>
+    <div class="upd-list">${pend.length?pend.slice().reverse().map(card).join(""):`<div class="empty">✓ ${t("noPending")}</div>`}</div></section>
+  <section class="panel"><div class="ph"><h2 class="sec-h">📝 ${t("autoGaps")} <span class="pill ${gapN?"warn":"ok"}">${gapN}</span></h2></div>
+    <div class="gaps">${gapN?gapList(gaps.docs,t("gapDocsT"),"🗂️")+gapList(gaps.ev,t("gapEvT"),"📷")+gapList(gaps.inv,t("gapInvT"),"🧾"):`<div class="empty">✓ ${t("noGaps")}</div>`}</div></section>
+  <section class="panel"><div class="ph"><h2 class="sec-h">🕘 ${t("feedT")}</h2>
+    <div class="row-flex">${["all","system","drive"].map(k=>`<button class="chip" type="button" data-uf="${k}" aria-pressed="${flt===k}">${t("uf_"+k)}</button>`).join("")}</div></div>
+    <ol class="feed">${feed.map(f=>`<li class="feed-${f.src}"><span class="feed-ic" aria-hidden="true">${f.icon}</span><div class="feed-b"><div><b>${esc(f.title)}</b> <span class="pill ${f.src==="drive"?"ok":"mute"}">${f.src==="drive"?"Drive":t("srcSys")}</span>${f.status==="dismissed"?` <span class="pill mute">${t("st_dismissed")}</span>`:f.status==="done"?` <span class="pill ok">${t("st_done")}</span>`:""}</div><div class="small muted">${esc(f.detail||"")}</div></div><div class="feed-m small muted"><span>${esc(f.who||"")}</span><span class="num">${esc(relAgo(f.at))}</span></div></li>`).join("")||`<li class="empty">${t("noFeed")}</li>`}</ol>
+    ${feedAll.filter(f=>flt==="all"||f.src===flt).length>feed.length?`<div style="text-align:center;padding:10px"><button class="btn small" type="button" id="updMore">${t("more")}</button></div>`:""}</section>`;
+  const after=d=>{if(d.updates)S.updates=d.updates;if(d.activity)S.activity=d.activity;if(d.syncInfo)S.syncInfo=d.syncInfo;if(d.expense)S.exp.set(String(d.expense.id),d.expense);if(d.well)S.wells.set(String(d.well.projectId),d.well);render()};
+  const act=async(btn,id,a,data)=>{btn.disabled=true;try{const d=await api("driveAction",{id,act:a,data});after(d);toast(t("saved"))}catch(e){btn.disabled=false;toast(errText(e))}};
+  v.querySelectorAll("[data-uid]").forEach(el=>{const id=el.dataset.uid;
+    el.querySelector("[data-dismiss]")?.addEventListener("click",e=>act(e.currentTarget,id,"dismiss"));
+    el.querySelector("[data-link]")?.addEventListener("click",e=>{const x=el.querySelector("[data-exp]").value;if(!x){toast(t("pickExp"));return}act(e.currentTarget,id,"link",{expenseId:x})});
+    el.querySelector("[data-stagego]")?.addEventListener("click",e=>{const n=el.querySelector("[data-stage]").value;if(!n){toast(t("pickStage"));return}act(e.currentTarget,id,"stage",{stage:+n})});});
+  $("#updDismissInv")&&($("#updDismissInv").onclick=e=>act(e.currentTarget,"","dismissAll",{kind:"invoice"}));
+  $("#updSync")&&($("#updSync").onclick=async e=>{const b=e.currentTarget;b.disabled=true;b.textContent="⏳ "+t("syncing");try{const d=await api("syncNow");after(d);const r=d.result||{};toast(r.busy?t("syncBusy"):t("syncDone",{n:(r.docs||0)+(r.evFiles||0)+(r.invoices||0)+(r.unsorted||0)}));await silentRefresh(true)}catch(err){toast(errText(err));b.disabled=false}});
+  $("#updReload").onclick=()=>silentRefresh(true,true);
+  $("#updMore")&&($("#updMore").onclick=()=>{S.updLimit=(S.updLimit||60)+60;render()});
+  v.querySelectorAll("[data-uf]").forEach(b=>b.onclick=()=>{S.updFilter=b.dataset.uf;S.updLimit=60;render()});
+  v.querySelectorAll("[data-gapall]").forEach(b=>b.onclick=()=>{S.gapAll=true;render()});
+  setUpdSeen(new Date().toISOString());
+  const tb=document.querySelector('#tabs [data-tab="updates"]');if(tb)tb.textContent=t("tab_updates")+(pend.length?` (${pend.length})`:"");
+}
+/* --------- التحديث التلقائي للبيانات أثناء فتح الصفحة --------- */
+let refreshing=false;
+async function silentRefresh(force,notify){
+  if(refreshing||!S.token||!S.user)return;
+  if(!force){if(document.hidden)return;if(document.querySelector("dialog[open]"))return;const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return}
+  refreshing=true;
+  try{const before=updBadgeCount(),sig=S.exp.size+"|"+S.ev.size+"|"+S.wells.size+"|"+(S.updates||[]).length+"|"+((S.activity||[])[0]||{}).at;
+    await loadAll();const after=S.exp.size+"|"+S.ev.size+"|"+S.wells.size+"|"+(S.updates||[]).length+"|"+((S.activity||[])[0]||{}).at;
+    if(sig!==after||force){const y=window.scrollY;render();window.scrollTo(0,y)}
+    const n=updBadgeCount();if(n>before&&!notify)toast(t("newUpdates",{n:n-before}));if(notify)toast(t("dataRefreshed"));
+  }catch(_){}finally{refreshing=false}
+}
+setInterval(()=>silentRefresh(false),3*60*1000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&S.lastRefresh&&Date.now()-S.lastRefresh>3*60*1000)silentRefresh(false)});
+Object.assign(I18N.ar,{tab_updates:"التحديثات والملاحظات",agoNow:"الآن",agoMin:"قبل {n} دقيقة",agoHour:"قبل {n} ساعة",openDrive:"فتح في Drive",pickExp:"اختر القيد الذي تخصه الفاتورة",linkInv:"ربط بالقيد",pickStage:"اختر المرحلة",addToStage:"إضافة للمرحلة",dismiss:"تجاهل",
+  lastSync:"آخر فحص لـ Drive",syncRes:"{d} توثيق · {e} شواهد · {i} فواتير",neverSync:"لم يُفحص بعد",needReview:"تحتاج مراجعة",fromDrive:"ملفات وردت من Drive",autoGaps:"ملاحظات النواقص",gapsSub:"تُحسب تلقائياً",todayUpd:"تحديثات اليوم",sysAndDrive:"من النظام و Drive",
+  trigOff:"الفحص التلقائي غير مثبّت بعد",trigOn:"يُفحص Drive تلقائياً كل 15 دقيقة",syncNow:"افحص Drive الآن",reloadData:"تحديث البيانات",syncing:"جاري الفحص…",syncBusy:"فحص آخر يعمل الآن، أعد المحاولة بعد قليل",syncDone:"تم الفحص · {n} ملف جديد",
+  dismissAllInv:"تجاهل كل الفواتير ({n})",noPending:"لا يوجد ما يحتاج مراجعة",noGaps:"لا نواقص",gapDocsT:"التوثيق",gapEvT:"الشواهد (آخر 7 أيام)",gapInvT:"الفواتير",
+  gapNoDoc:"مشروع منفذ بلا توثيق: {p}",gapStage:"{w} · {s}: ينقصها {m}",gapPh:"{n} صورة",gapVd:"{n} فيديو",gapStages:"{w}: موثّق جزئياً، تنقصه {n} من {all} مراحل",gapEv:"{s}: لا شواهد في {n} يوم ({d})",gapInv:"{m}: {n} مصروف بلا صورة فاتورة",
+  showAll:"عرض الكل",feedT:"سجل آخر التحديثات",uf_all:"الكل",uf_system:"النظام",uf_drive:"Drive",srcSys:"النظام",st_dismissed:"متجاهَل",st_done:"تم",noFeed:"لا تحديثات بعد",more:"المزيد",
+  newUpdates:"وصلت {n} تحديثات جديدة",dataRefreshed:"تم تحديث البيانات",has_invoice:"هذا القيد له فاتورة مرفقة",
+  act2_create:"إضافة",act2_update:"تعديل",act2_delete:"حذف",act2_upload:"رفع ملف",act2_approve:"اعتماد",act2_reject:"رفض",act2_request:"طلب صلاحية",act2_dismiss:"تجاهل",act2_user_update:"تعديل مستخدم",act2_user_create:"مستخدم جديد",act2_login:"دخول",
+  tbl_expenses:"المصروفات",tbl_receipts:"الدفعات",tbl_mistries:"المعلمون",tbl_notes:"الملاحظات",tbl_projects:"المشاريع العامة",tbl_projpay:"دفعات المشاريع",tbl_wells:"توثيق المشاريع",tbl_evidence:"الشواهد",tbl_trips:"المشاوير",tbl_users:"المستخدمون",tbl_files:"الفواتير",tbl_accreq:"طلبات الصلاحيات",tbl_updates:"تحديثات Drive",tbl_mosques:"الجوامع"});
+Object.assign(I18N.en,{tab_updates:"Updates & notes",agoNow:"just now",agoMin:"{n} min ago",agoHour:"{n} h ago",openDrive:"Open in Drive",pickExp:"Choose the expense this invoice belongs to",linkInv:"Link",pickStage:"Choose stage",addToStage:"Add to stage",dismiss:"Dismiss",
+  lastSync:"Last Drive check",syncRes:"{d} docs · {e} evidence · {i} invoices",neverSync:"Not checked yet",needReview:"Needs review",fromDrive:"Files that came from Drive",autoGaps:"Missing items",gapsSub:"Computed automatically",todayUpd:"Today's updates",sysAndDrive:"System and Drive",
+  trigOff:"Automatic check not installed yet",trigOn:"Drive is checked every 15 minutes",syncNow:"Check Drive now",reloadData:"Refresh data",syncing:"Checking…",syncBusy:"Another check is running, try again shortly",syncDone:"Checked · {n} new files",
+  dismissAllInv:"Dismiss all invoices ({n})",noPending:"Nothing needs review",noGaps:"Nothing missing",gapDocsT:"Documentation",gapEvT:"Evidence (last 7 days)",gapInvT:"Invoices",
+  gapNoDoc:"Completed project without documentation: {p}",gapStage:"{w} · {s}: missing {m}",gapPh:"{n} photo(s)",gapVd:"{n} video(s)",gapStages:"{w}: partly documented, {n} of {all} stages missing",gapEv:"{s}: no evidence on {n} day(s) ({d})",gapInv:"{m}: {n} expenses without an invoice image",
+  showAll:"Show all",feedT:"Latest updates",uf_all:"All",uf_system:"System",uf_drive:"Drive",srcSys:"System",st_dismissed:"Dismissed",st_done:"Done",noFeed:"No updates yet",more:"More",
+  newUpdates:"{n} new updates arrived",dataRefreshed:"Data refreshed",has_invoice:"This expense already has an invoice",
+  act2_create:"Added",act2_update:"Edited",act2_delete:"Deleted",act2_upload:"Uploaded",act2_approve:"Approved",act2_reject:"Rejected",act2_request:"Access request",act2_dismiss:"Dismissed",act2_user_update:"User edited",act2_user_create:"New user",act2_login:"Login",
+  tbl_expenses:"Expenses",tbl_receipts:"Payments",tbl_mistries:"Contractors",tbl_notes:"Notes",tbl_projects:"General projects",tbl_projpay:"Project payments",tbl_wells:"Project documentation",tbl_evidence:"Evidence",tbl_trips:"Trips",tbl_users:"Users",tbl_files:"Invoices",tbl_accreq:"Access requests",tbl_updates:"Drive updates",tbl_mosques:"Mosques"});
+Object.assign(I18N.bn,{tab_updates:"হালনাগাদ ও নোট",agoNow:"এইমাত্র",agoMin:"{n} মিনিট আগে",agoHour:"{n} ঘণ্টা আগে",openDrive:"Drive-এ খুলুন",pickExp:"চালানটি কোন খরচের তা বাছুন",linkInv:"যুক্ত করুন",pickStage:"ধাপ বাছুন",addToStage:"ধাপে যোগ",dismiss:"উপেক্ষা",
+  lastSync:"শেষ Drive যাচাই",syncRes:"{d} নথি · {e} প্রমাণ · {i} চালান",neverSync:"এখনো যাচাই হয়নি",needReview:"পর্যালোচনা দরকার",fromDrive:"Drive থেকে আসা ফাইল",autoGaps:"ঘাটতি",gapsSub:"স্বয়ংক্রিয় হিসাব",todayUpd:"আজকের হালনাগাদ",sysAndDrive:"সিস্টেম ও Drive",
+  trigOff:"স্বয়ংক্রিয় যাচাই এখনো চালু হয়নি",trigOn:"প্রতি ১৫ মিনিটে Drive যাচাই হয়",syncNow:"এখন Drive যাচাই",reloadData:"তথ্য রিফ্রেশ",syncing:"যাচাই চলছে…",syncBusy:"আরেকটি যাচাই চলছে, একটু পরে চেষ্টা করুন",syncDone:"যাচাই শেষ · {n}টি নতুন ফাইল",
+  dismissAllInv:"সব চালান উপেক্ষা ({n})",noPending:"পর্যালোচনার কিছু নেই",noGaps:"কোনো ঘাটতি নেই",gapDocsT:"নথিভুক্তি",gapEvT:"প্রমাণ (শেষ ৭ দিন)",gapInvT:"চালান",
+  gapNoDoc:"নথিহীন সম্পন্ন প্রকল্প: {p}",gapStage:"{w} · {s}: ঘাটতি {m}",gapPh:"{n}টি ছবি",gapVd:"{n}টি ভিডিও",gapStages:"{w}: আংশিক নথিভুক্ত, {all}টির মধ্যে {n}টি ধাপ বাকি",gapEv:"{s}: {n} দিনে প্রমাণ নেই ({d})",gapInv:"{m}: চালানের ছবি ছাড়া {n}টি খরচ",
+  showAll:"সব দেখুন",feedT:"সর্বশেষ হালনাগাদ",uf_all:"সব",uf_system:"সিস্টেম",uf_drive:"Drive",srcSys:"সিস্টেম",st_dismissed:"উপেক্ষিত",st_done:"সম্পন্ন",noFeed:"এখনো হালনাগাদ নেই",more:"আরও",
+  newUpdates:"{n}টি নতুন হালনাগাদ এসেছে",dataRefreshed:"তথ্য রিফ্রেশ হয়েছে",has_invoice:"এই খরচে আগেই চালান আছে"});
 
 const evStats=list=>({days:new Set(list.map(e=>e.date)).size,mosques:new Set(list.map(e=>(e.mosque>0?"#"+e.mosque:String(e.mosqueName||"").trim()))).size,visits:list.length,last:list.map(e=>e.date).sort().pop()||"—"});
 const mosqueLabel=x=>x.mosque>0?mName(x.mosque):(x.mosqueName||"—");
