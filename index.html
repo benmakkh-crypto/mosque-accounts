@@ -2122,7 +2122,7 @@ Object.assign(I18N.bn,{tab_access:"আমার অনুমতি ও অনু
   already_have:"এই অনুমতি আগেই আছে",already_requested:"এই পাতার জন্য অনুরোধ অপেক্ষমাণ",already_decided:"এই অনুরোধের সিদ্ধান্ত আগেই হয়েছে"});
 
 /* ============================ التحديثات والملاحظات ومزامنة Drive ============================ */
-const UPD_ICON={docs:"🗂️","docs-unsorted":"🧩",evidence:"📷",invoice:"🧾",duplicate:"♻️"};
+const UPD_ICON={docs:"🗂️","docs-unsorted":"🧩",evidence:"📷",invoice:"🧾",duplicate:"♻️",resync:"🔄"};
 const updSeen=()=>{try{return localStorage.getItem("upd_seen")||""}catch(_){return ""}};
 const setUpdSeen=v=>{try{localStorage.setItem("upd_seen",v)}catch(_){}};
 function updBadgeCount(){const seen=updSeen();return (S.updates||[]).filter(u=>u.status==="pending"||(u.status==="new"&&u.at>seen)).length}
