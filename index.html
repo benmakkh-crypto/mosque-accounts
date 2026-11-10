@@ -600,6 +600,24 @@ nav.tabs button[data-tab="updates"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='h
 @media (max-width:820px){.upd-hero2{grid-template-columns:1fr}.uh-main{flex-direction:column;text-align:center}.uh-sync,.uh-chips,.uh-btns{justify-content:center}}
 @media (max-width:420px){.uh-rings .ring2 small{display:none}.tl{padding-inline:8px}.tl::before{inset-inline-start:23px}.tl-day{padding-inline-start:40px}}
 
+
+/* ===== شريط التبويبات المجمّع (يبدأ من اليمين ويلتف بلا قص) ===== */
+nav.tabs{display:flex;flex-wrap:wrap;align-items:stretch;justify-content:flex-start;gap:10px;overflow:visible;padding:4px 0 14px;margin:0}
+nav.tabs .tgrp{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:3px;padding:16px 5px 5px;border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 6px 16px -10px rgba(0,0,0,.6)}
+nav.tabs .tgrp-l{position:absolute;top:3px;inset-inline-start:12px;font-size:.64rem;font-weight:700;letter-spacing:.02em;color:var(--gold2,#f3cf6b);opacity:.92;pointer-events:none;white-space:nowrap}
+nav.tabs .tgrp.is-on{border-color:rgba(243,207,107,.55);background:linear-gradient(180deg,rgba(243,207,107,.14),rgba(255,255,255,.04))}
+nav.tabs button{padding:7px 11px;font-size:.88rem}
+nav.tabs button[aria-selected="true"]{transform:none;box-shadow:inset 0 1px 0 #fff,0 3px 0 rgba(0,0,0,.25),0 10px 18px -8px rgba(0,0,0,.55)}
+nav.tabs .tbadge{min-width:20px;height:20px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;font-size:.72rem;font-weight:800;background:var(--gold2,#f3cf6b);color:#3a2a03;margin-inline-start:2px}
+nav.tabs button[aria-selected="true"] .tbadge{background:var(--ink);color:#fff}
+@media (max-width:760px){
+  nav.tabs{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;gap:8px;padding-bottom:12px;
+    -webkit-mask-image:linear-gradient(to left,#000 92%,transparent);mask-image:linear-gradient(to left,#000 92%,transparent)}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs .tgrp{flex-wrap:nowrap;flex:none;scroll-snap-align:start}
+  nav.tabs button{padding:7px 10px;font-size:.84rem}
+}
 /* ===== تطبيق الجوال ===== */
 .installbtn{background:linear-gradient(180deg,#fdeab0,var(--gold2) 45%,var(--gold));color:#2f2204;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 0 #8f6a15,0 8px 16px -6px rgba(0,0,0,.35)}
 .installsteps{display:flex;flex-direction:column;gap:10px}
@@ -1090,22 +1108,33 @@ function allowedTabs(){
 function renderShell(){
   renderLang();
   $("#whoami").textContent=`${S.user.name} — ${t("role_"+S.user.role)}`;
-  $("#tabs").innerHTML=allowedTabs().map(k=>`<button role="tab" type="button" data-tab="${k}" aria-selected="${S.tab===k}">${t("tab_"+k)}${k==="notes"?` <span class="pill warn" id="notesBadge" hidden></span>`:""}</button>`).join("");
+  const tabBtn=k=>`<button role="tab" type="button" data-tab="${k}" aria-selected="${S.tab===k}"><span class="tlbl">${tabShort(k)}</span>${k==="notes"?`<span class="tbadge" id="notesBadge" hidden></span>`:`<span class="tbadge" data-badge="${k}" hidden></span>`}</button>`;
+  const al=allowedTabs(),done=new Set();
+  $("#tabs").innerHTML=TAB_GROUPS.map(g=>{const ks=g.tabs.filter(k=>al.includes(k));ks.forEach(k=>done.add(k));return ks.length?`<div class="tgrp${ks.includes(S.tab)?" is-on":""}" role="presentation"><span class="tgrp-l">${t("tg_"+g.k)}</span>${ks.map(tabBtn).join("")}</div>`:""}).join("")
+    +(al.some(k=>!done.has(k))?`<div class="tgrp" role="presentation">${al.filter(k=>!done.has(k)).map(tabBtn).join("")}</div>`:"");
+  setTimeout(()=>{const b=document.querySelector('#tabs [aria-selected="true"]');if(b&&window.innerWidth<=760)b.scrollIntoView({block:"nearest",inline:"center"})},30);
   $("#mosqueChips").innerHTML=[{n:0},...mosques()].map(m=>`<button class="chip" type="button" data-m="${m.n}" aria-pressed="${S.mosque==m.n}">${m.n?`<span class="dot" style="background:${mColor(m.n)}"></span>${esc(mName(m.n))}`:t("allMosques")}</button>`).join("");
   const pc=$("#projChip");pc.hidden=!PG("projects","v");pc.textContent=t("tab_projects");pc.setAttribute("aria-pressed",S.tab==="projects");
   $("#quickAdd").innerHTML=`${PG("receipts","a")?`<button class="btn small" type="button" id="qRec">${t("addReceipt")}</button>`:""}${PG("expenses","a")?`<button class="btn primary small" type="button" id="qExp">${t("addExpense")}</button>`:""}`;
   $("#qExp")&&($("#qExp").onclick=()=>openExp(null));$("#qRec")&&($("#qRec").onclick=()=>openRec(null));
 }
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;S.tab=b.dataset.tab;document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));render()});
-$("#projChip").addEventListener("click",()=>{S.tab="projects";document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));render()});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;S.tab=b.dataset.tab;syncTabSel();render()});
+function syncTabSel(){document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));document.querySelectorAll("#tabs .tgrp").forEach(g=>g.classList.toggle("is-on",!!g.querySelector(`[data-tab="${S.tab}"]`)))}
+function setTabBadge(k,n){const el=document.querySelector(`#tabs [data-badge="${k}"]`);if(!el)return;el.hidden=!n;el.textContent=n||""}
+const TAB_SHORT={
+ ar:{master:"الكشف الشامل",accounts:"حسابات الجوامع",overview:"نظرة عامة",charts:"المقارنات",excess:"الصرف الزائد",expenses:"المصروفات",receipts:"الدفعات",mistry:"المعلمون",cats:"البنود",notes:"الملاحظات",projects:"سجل المشاريع",wells:"التوثيق",evidence:"الشواهد",trips:"المشاوير",entry:"الإدخال",updates:"التحديثات",users:"المستخدمون",access:"صلاحياتي"},
+ en:{master:"Full statement",accounts:"Mosque accounts",overview:"Overview",charts:"Comparisons",excess:"Overspending",expenses:"Expenses",receipts:"Payments",mistry:"Contractors",cats:"Categories",notes:"Notes",projects:"Project list",wells:"Documentation",evidence:"Evidence",trips:"Trips",entry:"Entry",updates:"Updates",users:"Users",access:"My access"}};
+const tabShort=k=>(TAB_SHORT[LANG]||{})[k]||t("tab_"+k);
+const TAB_GROUPS=[{k:"acc",tabs:["master","accounts","overview","charts","excess","expenses","receipts","mistry","cats","notes"]},{k:"proj",tabs:["projects","wells"]},{k:"field",tabs:["evidence","trips","entry"]},{k:"admin",tabs:["updates","users","access"]}];
+$("#projChip").addEventListener("click",()=>{S.tab="projects";syncTabSel();render()});
 $("#mosqueChips").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;S.mosque=+b.dataset.m;S.limit=100;document.querySelectorAll("#mosqueChips .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==S.mosque));render()});
 function render(){
   const v=$("#view");
   $("#mosqueChips").hidden=["projects","users","entry","evidence","trips","accounts","wells","charts","excess","access","updates"].includes(S.tab);$("#projChip").setAttribute("aria-pressed",S.tab==="projects");
   ({updates:vUpdates,access:vAccess,charts:vCharts,excess:vExcess,wells:vWells,master:vMaster,accounts:vAccounts,overview:vOverview,expenses:vExpenses,receipts:vReceipts,mistry:vMistry,cats:vCats,notes:vNotes,projects:vProjects,users:vUsers,entry:vEntry,evidence:vEvidence,trips:vTrips})[S.tab](v);
-  const tb=document.querySelector('#tabs [data-tab="trips"]');if(tb&&PG("trips","e")){const n=[...S.trips.values()].filter(x=>x.status==="pending").length;tb.textContent=t("tab_trips")+(n?` (${n})`:"")}
-  const ub=document.querySelector('#tabs [data-tab="users"]');if(ub){const n=(S.requests||[]).filter(r=>r.status==="pending").length;ub.textContent=t("tab_users")+(n?` (${n})`:"")}
-  const upb=document.querySelector('#tabs [data-tab="updates"]');if(upb&&S.tab!=="updates"){const n=updBadgeCount();upb.textContent=t("tab_updates")+(n?` (${n})`:"")}
+  if(PG("trips","e"))setTabBadge("trips",[...S.trips.values()].filter(x=>x.status==="pending").length);
+  setTabBadge("users",(S.requests||[]).filter(r=>r.status==="pending").length);
+  if(S.tab!=="updates")setTabBadge("updates",updBadgeCount());
   const b=$("#notesBadge");if(b){const c=[...S.notes.values()].filter(n=>(n.status||"open")==="open").length;b.hidden=!c;b.textContent=c}
 }
 
@@ -2222,7 +2251,7 @@ function vUpdates(v){
   v.querySelectorAll("[data-rf]").forEach(b=>b.onclick=()=>{S.revFilter=b.dataset.rf;render()});
   v.querySelectorAll("[data-gapall]").forEach(b=>b.onclick=()=>{S.gapAll=true;render()});
   setUpdSeen(new Date().toISOString());
-  const tb=document.querySelector('#tabs [data-tab="updates"]');if(tb)tb.textContent=t("tab_updates")+(pend.length?` (${pend.length})`:"");
+  setTabBadge("updates",pend.length);
 }
 /* --------- التحديث التلقائي للبيانات أثناء فتح الصفحة --------- */
 let refreshing=false;
@@ -2238,7 +2267,7 @@ async function silentRefresh(force,notify){
 }
 setInterval(()=>silentRefresh(false),3*60*1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&S.lastRefresh&&Date.now()-S.lastRefresh>3*60*1000)silentRefresh(false)});
-Object.assign(I18N.ar,{dToday:"اليوم",dYesterday:"أمس",healthScore:"اكتمال المتابعة",healthSub:"متوسط المؤشرات الثلاثة",mDoc:"التوثيق",mDocSub:"مراحل المشاريع المنفذة",mInv:"الفواتير",mInvSub:"مصروفات بفاتورة",mEv:"الشواهد",mEvSub:"أيام موثّقة (7 أيام)",rf_all:"الكل",rf_invoice:"فواتير",rf_docs:"توثيق",tab_updates:"التحديثات والملاحظات",agoNow:"الآن",agoMin:"قبل {n} دقيقة",agoHour:"قبل {n} ساعة",openDrive:"فتح في Drive",pickExp:"اختر القيد الذي تخصه الفاتورة",linkInv:"ربط بالقيد",pickStage:"اختر المرحلة",addToStage:"إضافة للمرحلة",dismiss:"تجاهل",
+Object.assign(I18N.ar,{tg_acc:"الحسابات",tg_proj:"المشاريع العامة",tg_field:"الميدان",tg_admin:"الإدارة",dToday:"اليوم",dYesterday:"أمس",healthScore:"اكتمال المتابعة",healthSub:"متوسط المؤشرات الثلاثة",mDoc:"التوثيق",mDocSub:"مراحل المشاريع المنفذة",mInv:"الفواتير",mInvSub:"مصروفات بفاتورة",mEv:"الشواهد",mEvSub:"أيام موثّقة (7 أيام)",rf_all:"الكل",rf_invoice:"فواتير",rf_docs:"توثيق",tab_updates:"التحديثات والملاحظات",agoNow:"الآن",agoMin:"قبل {n} دقيقة",agoHour:"قبل {n} ساعة",openDrive:"فتح في Drive",pickExp:"اختر القيد الذي تخصه الفاتورة",linkInv:"ربط بالقيد",pickStage:"اختر المرحلة",addToStage:"إضافة للمرحلة",dismiss:"تجاهل",
   lastSync:"آخر فحص لـ Drive",syncRes:"{d} توثيق · {e} شواهد · {i} فواتير",neverSync:"لم يُفحص بعد",needReview:"تحتاج مراجعة",fromDrive:"ملفات وردت من Drive",autoGaps:"ملاحظات النواقص",gapsSub:"تُحسب تلقائياً",todayUpd:"تحديثات اليوم",sysAndDrive:"من النظام و Drive",
   trigOff:"الفحص التلقائي غير مثبّت بعد",trigOn:"يُفحص Drive تلقائياً كل 15 دقيقة",syncNow:"افحص Drive الآن",reloadData:"تحديث البيانات",syncing:"جاري الفحص…",syncBusy:"فحص آخر يعمل الآن، أعد المحاولة بعد قليل",syncDone:"تم الفحص · {n} ملف جديد",
   dismissAllInv:"تجاهل كل الفواتير ({n})",noPending:"لا يوجد ما يحتاج مراجعة",noGaps:"لا نواقص",gapDocsT:"التوثيق",gapEvT:"الشواهد (آخر 7 أيام)",gapInvT:"الفواتير",
@@ -2247,7 +2276,7 @@ Object.assign(I18N.ar,{dToday:"اليوم",dYesterday:"أمس",healthScore:"اك
   newUpdates:"وصلت {n} تحديثات جديدة",dataRefreshed:"تم تحديث البيانات",has_invoice:"هذا القيد له فاتورة مرفقة",
   act2_create:"إضافة",act2_update:"تعديل",act2_delete:"حذف",act2_upload:"رفع ملف",act2_approve:"اعتماد",act2_reject:"رفض",act2_request:"طلب صلاحية",act2_dismiss:"تجاهل",act2_user_update:"تعديل مستخدم",act2_user_create:"مستخدم جديد",act2_login:"دخول",
   tbl_expenses:"المصروفات",tbl_receipts:"الدفعات",tbl_mistries:"المعلمون",tbl_notes:"الملاحظات",tbl_projects:"المشاريع العامة",tbl_projpay:"دفعات المشاريع",tbl_wells:"توثيق المشاريع",tbl_evidence:"الشواهد",tbl_trips:"المشاوير",tbl_users:"المستخدمون",tbl_files:"الفواتير",tbl_accreq:"طلبات الصلاحيات",tbl_updates:"تحديثات Drive",tbl_mosques:"الجوامع"});
-Object.assign(I18N.en,{dToday:"Today",dYesterday:"Yesterday",healthScore:"Follow-up completeness",healthSub:"Average of the three indicators",mDoc:"Documentation",mDocSub:"Stages of completed projects",mInv:"Invoices",mInvSub:"Expenses with an invoice",mEv:"Evidence",mEvSub:"Days documented (7 days)",rf_all:"All",rf_invoice:"Invoices",rf_docs:"Documentation",tab_updates:"Updates & notes",agoNow:"just now",agoMin:"{n} min ago",agoHour:"{n} h ago",openDrive:"Open in Drive",pickExp:"Choose the expense this invoice belongs to",linkInv:"Link",pickStage:"Choose stage",addToStage:"Add to stage",dismiss:"Dismiss",
+Object.assign(I18N.en,{tg_acc:"Accounts",tg_proj:"General projects",tg_field:"Field",tg_admin:"Administration",dToday:"Today",dYesterday:"Yesterday",healthScore:"Follow-up completeness",healthSub:"Average of the three indicators",mDoc:"Documentation",mDocSub:"Stages of completed projects",mInv:"Invoices",mInvSub:"Expenses with an invoice",mEv:"Evidence",mEvSub:"Days documented (7 days)",rf_all:"All",rf_invoice:"Invoices",rf_docs:"Documentation",tab_updates:"Updates & notes",agoNow:"just now",agoMin:"{n} min ago",agoHour:"{n} h ago",openDrive:"Open in Drive",pickExp:"Choose the expense this invoice belongs to",linkInv:"Link",pickStage:"Choose stage",addToStage:"Add to stage",dismiss:"Dismiss",
   lastSync:"Last Drive check",syncRes:"{d} docs · {e} evidence · {i} invoices",neverSync:"Not checked yet",needReview:"Needs review",fromDrive:"Files that came from Drive",autoGaps:"Missing items",gapsSub:"Computed automatically",todayUpd:"Today's updates",sysAndDrive:"System and Drive",
   trigOff:"Automatic check not installed yet",trigOn:"Drive is checked every 15 minutes",syncNow:"Check Drive now",reloadData:"Refresh data",syncing:"Checking…",syncBusy:"Another check is running, try again shortly",syncDone:"Checked · {n} new files",
   dismissAllInv:"Dismiss all invoices ({n})",noPending:"Nothing needs review",noGaps:"Nothing missing",gapDocsT:"Documentation",gapEvT:"Evidence (last 7 days)",gapInvT:"Invoices",
@@ -2256,7 +2285,7 @@ Object.assign(I18N.en,{dToday:"Today",dYesterday:"Yesterday",healthScore:"Follow
   newUpdates:"{n} new updates arrived",dataRefreshed:"Data refreshed",has_invoice:"This expense already has an invoice",
   act2_create:"Added",act2_update:"Edited",act2_delete:"Deleted",act2_upload:"Uploaded",act2_approve:"Approved",act2_reject:"Rejected",act2_request:"Access request",act2_dismiss:"Dismissed",act2_user_update:"User edited",act2_user_create:"New user",act2_login:"Login",
   tbl_expenses:"Expenses",tbl_receipts:"Payments",tbl_mistries:"Contractors",tbl_notes:"Notes",tbl_projects:"General projects",tbl_projpay:"Project payments",tbl_wells:"Project documentation",tbl_evidence:"Evidence",tbl_trips:"Trips",tbl_users:"Users",tbl_files:"Invoices",tbl_accreq:"Access requests",tbl_updates:"Drive updates",tbl_mosques:"Mosques"});
-Object.assign(I18N.bn,{dToday:"আজ",dYesterday:"গতকাল",healthScore:"ফলো-আপ সম্পূর্ণতা",healthSub:"তিন সূচকের গড়",mDoc:"নথিভুক্তি",mDocSub:"সম্পন্ন প্রকল্পের ধাপ",mInv:"চালান",mInvSub:"চালানসহ খরচ",mEv:"প্রমাণ",mEvSub:"নথিভুক্ত দিন (৭ দিন)",rf_all:"সব",rf_invoice:"চালান",rf_docs:"নথি",tab_updates:"হালনাগাদ ও নোট",agoNow:"এইমাত্র",agoMin:"{n} মিনিট আগে",agoHour:"{n} ঘণ্টা আগে",openDrive:"Drive-এ খুলুন",pickExp:"চালানটি কোন খরচের তা বাছুন",linkInv:"যুক্ত করুন",pickStage:"ধাপ বাছুন",addToStage:"ধাপে যোগ",dismiss:"উপেক্ষা",
+Object.assign(I18N.bn,{tg_acc:"হিসাব",tg_proj:"সাধারণ প্রকল্প",tg_field:"মাঠ",tg_admin:"প্রশাসন",dToday:"আজ",dYesterday:"গতকাল",healthScore:"ফলো-আপ সম্পূর্ণতা",healthSub:"তিন সূচকের গড়",mDoc:"নথিভুক্তি",mDocSub:"সম্পন্ন প্রকল্পের ধাপ",mInv:"চালান",mInvSub:"চালানসহ খরচ",mEv:"প্রমাণ",mEvSub:"নথিভুক্ত দিন (৭ দিন)",rf_all:"সব",rf_invoice:"চালান",rf_docs:"নথি",tab_updates:"হালনাগাদ ও নোট",agoNow:"এইমাত্র",agoMin:"{n} মিনিট আগে",agoHour:"{n} ঘণ্টা আগে",openDrive:"Drive-এ খুলুন",pickExp:"চালানটি কোন খরচের তা বাছুন",linkInv:"যুক্ত করুন",pickStage:"ধাপ বাছুন",addToStage:"ধাপে যোগ",dismiss:"উপেক্ষা",
   lastSync:"শেষ Drive যাচাই",syncRes:"{d} নথি · {e} প্রমাণ · {i} চালান",neverSync:"এখনো যাচাই হয়নি",needReview:"পর্যালোচনা দরকার",fromDrive:"Drive থেকে আসা ফাইল",autoGaps:"ঘাটতি",gapsSub:"স্বয়ংক্রিয় হিসাব",todayUpd:"আজকের হালনাগাদ",sysAndDrive:"সিস্টেম ও Drive",
   trigOff:"স্বয়ংক্রিয় যাচাই এখনো চালু হয়নি",trigOn:"প্রতি ১৫ মিনিটে Drive যাচাই হয়",syncNow:"এখন Drive যাচাই",reloadData:"তথ্য রিফ্রেশ",syncing:"যাচাই চলছে…",syncBusy:"আরেকটি যাচাই চলছে, একটু পরে চেষ্টা করুন",syncDone:"যাচাই শেষ · {n}টি নতুন ফাইল",
   dismissAllInv:"সব চালান উপেক্ষা ({n})",noPending:"পর্যালোচনার কিছু নেই",noGaps:"কোনো ঘাটতি নেই",gapDocsT:"নথিভুক্তি",gapEvT:"প্রমাণ (শেষ ৭ দিন)",gapInvT:"চালান",
